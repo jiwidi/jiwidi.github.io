@@ -1,0 +1,191 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from jaime.space/css/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Oct 2022 14:08:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="utf-8">
+	<title>&#402;disk:
+	The css bits.
+
+	</title>
+	<meta name="description" content="">
+	<meta name="author" content="Fred Bednarski">
+	<meta name="searchmysite-verification" content="le5wbyqi2yKpGLW2B0yal7cPllGi1305d0a57KjCRj">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/styles.css">
+	<link rel="icon" type="image/png" href="../assets/icons/favicon.png"/>
+	<style>
+		::-moz-selection { /* Code for Firefox */
+		  background: var(--cyan);
+
+		  color: var(--bg);
+
+		}
+
+		::selection {
+		  background: var(--cyan);
+
+		  color: var(--bg);
+
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+     <a href="../index.html" class="shadow logo"><img src="../assets/icons/fb_logo.svg" width="40px" class="bg1" /></a>
+      <div class="top-bar shadow">
+		<nav>
+
+
+			//<a class="text3" href="../index.html">jaime</a>/<a class="text2" href="../digital/index.html">digital</a>/<a class="text1" href="../grimoire/index.html">grimoire</a>/.css:<span class="blink_me">_</span>
+		</nav>
+      </div>
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<main class="shadow shadowPlus4">
+	<div style="margin-bottom:1px; margin: -3px 0 2px 10px;"><span style="font-size: 12px;">
+	~ contents of .css:    <span class="bg1"><a href="../category/web/index.html">[web]</a></span>     <span class="bg2"><a href="../category/tech/index.html">[tech]</a></span>     <span class="bg1"><a href="../category/info-dump/index.html">[info-dump]</a></span>  <a href="#nav" class="nav-arrow text1">&#9660;</a></div>
+	<hr/>
+
+
+	<article>
+
+
+
+		<h1>
+		  The css bits.
+
+		   <span>a cheatsheet of handy css solutions.</span>
+		</h1>
+
+
+
+		<h2 id="responsive-text-size">Responsive text size <a class="direct-link" href="#responsive-text-size">#</a></h2>
+<pre>font-size:clamp(--min, (X)vw, --max)</pre>
+<p>Clamping the value of font sizes is a really simple way for making text be pleasant to read at different resolution/devices. It is also a godsend for headers, so they change their size instead of breaking into new lines (and generally look huge) on smaller resolutions. It takes some trial and error to get the size based on vw (% of the width of the viewport) value just right, but it's worth it.</p>
+<p>The only drawback is that both clamp() and vw are relatively new additions to css, so older browsers might revert to default sizes. This can be avoided by adding another <code>font-size</code> rule before the clamp and using one of the supported units.</p>
+<h2 id="js-free-load-image(s)-on-click">js free load image(s) on click <a class="direct-link" href="#js-free-load-image(s)-on-click">#</a></h2>
+<p>Here's a great solution if you want to keep the site light on kb, but would still want to include a gallery. Original code courtesy of <a href="https://0xff.nu/">Paul Glushak</a>, you can test it on <a href="https://codepen.io/nocte/pen/wvGpOyE">codepen.io</a></p>
+<pre><code>----------css----------
+.fig {
+  display: inline;
+}
+
+.fig label {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fig input {
+  display: none;
+}
+
+.fig img {
+  position: absolute;
+  left: -9999px;
+  display: none;
+}
+
+.fig input:checked ~ img {
+  position: relative;
+  left: 0;
+  display: block;
+}
+
+----------html----------
+&lt;div class=&quot;container&quot;&gt;
+  Please click the link to &lt;div class=&quot;fig&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; id=&quot;loadimage&quot; name=&quot;loadimage&quot;&gt;
+    &lt;label for=&quot;loadimage&quot;&gt;Load Image&lt;/label&gt;
+  &lt;img src=&quot;----FILE URL-----&quot; loading=&quot;lazy&quot; alt=&quot;&quot;&gt;
+  &lt;/div&gt;
+  &lt;p&gt;This is some other text&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<h2 id="external-resources%3A">External Resources: <a class="direct-link" href="#external-resources%3A">#</a></h2>
+<ul>
+<li><a href="https://thomasorus.com/html-tips.html">thomasorus' html-tips</a> - a great html+css primer from a fellow merveillalite.</li>
+</ul>
+
+	</article>
+
+
+
+
+
+
+
+
+
+
+	<nav id="nav"><ul>
+		<hr/>
+
+
+
+
+
+
+
+			<a href="../grimoire/index.html" ><li class="bg3"><img src="../assets/icons/ico_back.png" />&nbsp;.. /</li></a>
+
+
+
+		</ul></nav>
+
+
+
+
+	<hr/>
+	<div style="margin-bottom:1px; margin-top: -2px; margin-left:10px;"><span style="font-size: 12px;">
+	>> page created on 220316 &Delta; 210101
+	</span><a href="#" class="nav-arrow text2">&#9650;</a></div>
+</main>
+
+
+
+
+
+
+
+
+
+
+	<footer>
+		<section>
+			<div style="float: left; margin-top: -3px; ">
+			Made with <span title="...and a lot of trial and error">&#9825</span> by Fred Bednarski &copy; 2021
+			</div>
+			<div style="float: right; margin-top: 0px;">
+			<a class="icon" href="http://webring.xxiivv.com/"><img  src="../assets/icons/rotonde.svg" /></a>
+			<a class="icon" rel="me" href=https://merveilles.town/@FredBednarski><img src="../assets/icons/merveilles.svg" /></a>
+			 <link rel="authorization_endpoint" href="https://indieauth.com/auth">
+			</div>
+		</section>
+	</footer>
+
+</body>
+
+<!-- Mirrored from jaime.space/css/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Oct 2022 14:08:25 GMT -->
+</html>
