@@ -11,7 +11,10 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/styles.css">
-	<link rel="icon" type="image/png" href="assets/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="assets/icons/favicon.ico" />
+	<script type="module"
+		src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js">
+	</script>
 	<style>
 		::-moz-selection {
 			/* Code for Firefox */
@@ -36,8 +39,7 @@
 	<main class="shadow shadowPlus4">
 		<div class="topnav">
 			<span>
-				//<a class="text1"
-					href="../index.html">jaime</a>/keyboards:<span
+				//<a class="text1" href="..">jaime</a>/keyboards:<span
 					class="blink_me">_</span>
 		</div>
 
@@ -45,13 +47,35 @@
 			<h1>
 				Many keyboards!
 			</h1>
-			<p>Storage for creative stuff.</p>
+			<p> As a computer guy I spend tons of time attached to a keyboard.
+				The keyboard is basically an extension of me while working on
+				the computer. Most common keyboards are nice and do
+				the job, but you can get *pretty overkill* if you want to
+				perfectionize your typing experience. These overkilled keyboards
+				dont have any special functionality and do the same as a plain
+				old keyboard, but they just feel nice to type on and often
+				easier to use for longer periods of time without fatigue on your
+				hands The soldering, choosing different parts and putting it all
+				together just brings the engineer inside of me.</p>
 			</p>
-
+			<div class="md">
+				<zero-md src="/keyboards/keyboards.md">
+					<!-- Wrap with a <template> tag -->
+					<template>
+						<!-- Load external stylesheets with a `<link rel="stylesheet">` tag -->
+						<link rel="stylesheet" href="/static/styles.css" />
+					</template>
+				</zero-md>
+			</div>
 		</article>
 		<nav id="nav">
 			<ul>
 				<hr />
+				<a href="../">
+					<li class="bg2"><img
+							src="../../assets/icons/ico_back.png" />&nbsp;.. /
+					</li>
+				</a>
 				<a href="https://futuretage.tumblr.com/">
 					<li class="bg2">
 						<img src="../assets/icons/ico_file.png" height="24px"

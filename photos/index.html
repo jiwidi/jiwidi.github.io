@@ -11,7 +11,10 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/styles.css">
-	<link rel="icon" type="image/png" href="assets/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="assets/icons/favicon.ico" />
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+	</script>
 	<style>
 		::-moz-selection {
 			/* Code for Firefox */
@@ -36,21 +39,28 @@
 	<main class="shadow shadowPlus4">
 		<div class="topnav">
 			<span>
-				//<a class="text1" href="../index.html">jaime</a>/photos:<span
+				//<a class="text1" href="..">jaime</a>/photos:<span
 					class="blink_me">_</span>
 		</div>
-
 		<article>
 			<h1>
 				Photography
 			</h1>
-			<p>Storage for creative stuff.</p>
+			Some of my photos in no particular order, click to load full size
+			images.
 			</p>
 
+			<div id="photos"></div>
+			<hr>
 		</article>
 		<nav id="nav">
 			<ul>
 				<hr />
+				<a href="../">
+					<li class="bg2"><img
+							src="../../assets/icons/ico_back.png" />&nbsp;.. /
+					</li>
+				</a>
 				<a href="https://futuretage.tumblr.com/">
 					<li class="bg2">
 						<img src="../assets/icons/ico_file.png" height="24px"
@@ -63,6 +73,63 @@
 			</ul>
 		</nav>
 	</main>
+
+
+	<script>
+		/**
+		 * Shuffles array in place. ES6 version
+		 * @param {Array} a items An array containing the items.
+		 */
+		function shuffle(a) {
+			for (let i = a.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[a[i], a[j]] = [a[j], a[i]];
+			}
+			return a;
+		}
+
+		var allImages = "";
+
+		N = 42;
+		var order = Array.apply(null, {
+			length: N,
+		}).map(Number.call, Number);
+		order = shuffle(order);
+		for (var i = 0; i < N - 1; i++) {
+			allImages +=
+				'<img data-enlargable src="images/image' +
+				order[i] +
+				'.jpg" >';
+		}
+
+		$("#photos").append(allImages);
+		// Compressed pics at https://www.compresss.com/compress-webp.html#, resize at https://bulkresizephotos.com/en?value=30
+		$("img[data-enlargable]")
+			.addClass("img-enlargable")
+			.click(function () {
+				$(this).attr("src", $(this).attr("src").replace(".jpg", '.webp'));
+				var src = $(this).attr("src");
+				$("<div>")
+					.css({
+						background: "RGBA(0,0,0,.2) url(" + src +
+							") no-repeat center",
+						backgroundSize: "contain",
+						width: "100%",
+						height: "100%",
+						position: "fixed",
+						zIndex: "100",
+						top: "0",
+						left: "0",
+						cursor: "zoom-out",
+					})
+					.click(function () {
+						$(this).remove();
+					})
+					.appendTo("body");
+			});
+
+	</script>
 </body>
+
 
 </html>
