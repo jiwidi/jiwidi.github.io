@@ -2,12 +2,6 @@
 <html lang="en">
 
 <head>
-    <style>
-        html {
-            visibility: hidden;
-            opacity: 0;
-        }
-    </style>
     <meta charset="utf-8">
     <title>Hello there!
     </title>
@@ -44,9 +38,8 @@
 
             <div class="right-half">
                 <a onclick="toggle(this)" class="theme-toggle" id="theme-toggle" title="Toggles light & dark" aria-label="auto" aria-live="polite">
-					<g transform="scale(0.1)">
-						<svg class="sun-and-moon" aria-hidden="true" width="20"
-							height="20" viewBox="0 0 24 24">
+                    <g transform="scale(0.1)">
+                        <svg class="sun-and-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
 							<mask class="moon" id="moon-mask">
 								<rect x="0" y="0" width="100%" height="100%"
 									fill="white"></rect>
@@ -58,8 +51,8 @@
 								onload="this.fill=get_color();">
 							</circle>
 						</svg>
-					</g>
-				</a>
+                    </g>
+                </a>
             </div>
 
             </form>

@@ -116,7 +116,7 @@ header nav {
     display: flex;
     flex: 20;
     justify-content: space-between;
-    padding:  2px 0;
+    padding: 2px 0;
     background: var(--fg);
     color: var(--bg);
     padding-left: 40px;
@@ -487,7 +487,7 @@ details {
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-    outline-offset: 5px
+    outline-offset: 5px;
     margin-right: 5px;
 }
 
