@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+    <style>
+        html {
+            visibility: hidden;
+            opacity: 0;
+        }
+    </style>
     <meta charset="utf-8">
     <title>Hello there!
     </title>
@@ -17,7 +23,7 @@
             color: var(--bg);
         }
         
-        ::selection {
+         ::selection {
             background: var(--cyan);
             color: var(--bg);
         }
@@ -54,8 +60,6 @@
                     </g>
                 </a>
             </div>
-
-            </form>
         </div>
 
         <article>
@@ -122,5 +126,12 @@
     <script>
     </script>
 </body>
+
+<style>
+    html {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 
 </html>

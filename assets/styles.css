@@ -488,7 +488,7 @@ details {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     outline-offset: 5px;
-    margin-right: 5px;
+    margin-right: 40px;
 }
 
 .theme-toggle>svg {
