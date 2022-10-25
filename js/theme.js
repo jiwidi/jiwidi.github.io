@@ -89,37 +89,3 @@ window
         theme.value = isDark ? 'dark' : 'light'
         setPreference()
     })
-
-
-function toggle(a) {
-    var theme = localStorage.getItem('data-theme');
-
-    if (theme == 'light') {
-        document.documentElement.classList.add('transition');
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('data-theme', 'dark');
-    } else if (theme == 'dark') {
-        document.documentElement.classList.add('transition');
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('data-theme', 'light');
-    } else {
-        document.documentElement.classList.add('transition');
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('data-theme', 'light');
-    }
-    set_theme(a)
-};
-
-// Helper function
-let domReady = (cb) => {
-    document.readyState === 'interactive' || document.readyState ===
-        'complete' ?
-        cb() :
-        document.addEventListener('DOMContentLoaded', cb);
-};
-
-domReady(() => {
-    // Display body when DOM is loaded
-    document.body.style.visibility = 'visible';
-    // document.body.style.opacity = '1';
-});
