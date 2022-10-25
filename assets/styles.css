@@ -507,10 +507,55 @@ details {
 }
 
 
-/* * {
-    box-sizing: border-box;
-    margin: 0
-} */
+/* Icons */
+
+.document_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/document-text-outline.svg) no-repeat center;
+    mask: url(/assets/icons/document-text-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
+
+.folder_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/folder-outline.svg) no-repeat center;
+    mask: url(/assets/icons/folder-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
+
+.camera_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/camera-outline.svg) no-repeat center;
+    mask: url(/assets/icons/camera-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
+
+.link_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/link-outline.svg) no-repeat center;
+    mask: url(/assets/icons/link-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
+
+.newspaper_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/newspaper-outline.svg) no-repeat center;
+    mask: url(/assets/icons/newspaper-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
+
+.arrow_back_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/assets/icons/arrow-back-outline.svg) no-repeat center;
+    mask: url(/assets/icons/arrow-back-outline.svg) no-repeat center;
+    height: 24px;
+    width: 24px;
+}
 
 html {
     /* Taken from dracula pro theme */
