@@ -513,17 +513,28 @@ details {
 } */
 
 html {
-    block-size: 100%;
-    color-scheme: light;
+    /* Taken from dracula pro theme */
+    --bg: #f7f8f1;
+    --fg: #23212d;
+    --bg_acc: #e0e0e0;
+    --magenta: #ff77c1;
+    --cyan: #38ffea;
+    --green: #55ff6d;
+    --yellow: #ffff68;
 }
 
-
-/* html[data-theme=dark] {
-    color-scheme: dark
+html[data-theme=dark] {
+    --bg: #101b37;
+    --fg: #01c8ee;
+    --bg_acc: #e0e0e0;
+    --magenta: #ff77c1;
+    --cyan: #38ffea;
+    --green: #55ff6d;
+    --yellow: #ffff68;
 }
 
 @supports not (color-scheme: dark) {
     html[data-theme=dark] {
         background: #111
     }
-} */
+}
