@@ -73,6 +73,7 @@ main {
     border: 2px solid var(--fg);
     margin: 16px auto;
     background-color: var(--bg);
+    border-top: 0;
 }
 
 main img {
@@ -114,7 +115,8 @@ header nav {
     max-height: 20px;
     display: flex;
     flex: 20;
-    /* align-items: center; */
+    justify-content: space-between;
+    padding:  2px 0;
     background: var(--fg);
     color: var(--bg);
     padding-left: 40px;
@@ -486,6 +488,7 @@ details {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     outline-offset: 5px
+    margin-right: 5px;
 }
 
 .theme-toggle>svg {
