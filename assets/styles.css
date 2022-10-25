@@ -245,9 +245,7 @@ footer section img {
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0;
-    }
+    50% {}
 }
 
 .text1:hover {
