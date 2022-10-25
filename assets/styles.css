@@ -511,18 +511,18 @@ details {
     margin: 0
 } */
 
-
-/* html {
+html {
     block-size: 100%;
-    color-scheme: light
+    color-scheme: light;
+    visibility: visible;
+    opacity: 1;
 }
 
-html[data-theme=dark] {
+
+/* html[data-theme=dark] {
     color-scheme: dark
-} */
+}
 
-
-/*
 @supports not (color-scheme: dark) {
     html[data-theme=dark] {
         background: #111
