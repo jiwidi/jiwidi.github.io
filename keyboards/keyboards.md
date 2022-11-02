@@ -61,10 +61,10 @@ Details:
 ## Satan GH60
 Satan 60 generic pcb along with a low profile walnut wooden case.
 
-<img data-enlargable align="right" width="250" height="200"  src="/keyboards/photos/satan.png">
+<img data-enlargable align="right" width="250" height="150"  src="/keyboards/photos/satan2.png">
 
 Details:
-* Currently without keycaps
+* SA blue/white keycaps
 * Walnut case
 * Marshmallow switches
 * Polycarbonate plate
