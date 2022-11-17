@@ -25,7 +25,6 @@ def main(args):
     for pic in tqdm(all_pics):
         if (pic not in seen):
             try:
-                print(i, "goes to", pic)
                 im = Image.open(pic)
                 im.convert('RGB').save(os.path.join(fullsize_path, f"{i}.jpg"), 'jpeg')
                 im.thumbnail(max_size)
