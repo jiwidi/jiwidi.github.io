@@ -101,22 +101,22 @@
 
         var allImages = "";
 
-        N = 42;
+        N = 76;
         var order = Array.apply(null, {
             length: N,
         }).map(Number.call, Number);
         order = shuffle(order);
         for (var i = 0; i < N - 1; i++) {
             allImages +=
-                '<img data-enlargable src=" images/image' + order[i] +
+                '<img data-enlargable src=" images/thumbnails/' + order[i] +
                 '.jpg" >';
         }
         $("#photos").append(allImages);
-        // Compressed pics at https://www.compresss.com/compress-webp.html#, resize at https://bulkresizephotos.com/en?value=30
         $("img[data-enlargable]")
             .addClass("img-enlargable")
             .click(function() {
-                $(this).attr("src", $(this).attr("src").replace(".jpg", '.webp'));
+                $(this).attr("src", $(this).attr("src").replace("thumbnails",
+                    'fullsize'));
                 var src = $(this).attr("src");
                 $("<div>")
                     .css({
