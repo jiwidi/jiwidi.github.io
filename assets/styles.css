@@ -10,9 +10,8 @@ header {
 }
 
 body {
-    /* transition: background-color 0.25s ease-in-out, color 0.2s ease-in-out; */
+    transition: background-color 0.25s ease-in-out, color 0.2s ease-in-out;
     font-family: var(--font_sans);
-    /* 75% of page */
     max-width: 75%;
     padding: 0 15px;
     margin: 8px auto;
@@ -169,24 +168,34 @@ main nav ul {
     white-space: nowrap;
 }
 
-main nav span {
-    font-weight: 400;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.folder_icon {
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+    margin-right: 0.5em;
 }
 
-main nav time {
-    margin-left: auto;
-    font-weight: 400;
-    font-size: 14px;
-    display: block;
+.link_icon {
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+    margin-right: 0.5em;
 }
 
 main nav li {
     display: flex;
+    align-items: center;
     padding: 2px 8px;
+}
+
+main nav span,
+main nav time {
+    font-weight: 400;
+    font-size: 14px;
+}
+
+main nav time {
+    margin-left: auto;
 }
 
 hr {
@@ -454,7 +463,6 @@ details {
         transition-duration: .15s
     }
     [data-theme=dark] .sun-and-moon>.moon>circle {
-        transition-delay: .25s;
         transition-duration: .5s
     }
     [data-theme=light] .sun-and-moon>.sun {
@@ -467,7 +475,6 @@ details {
         transition-duration: .15s
     }
     [data-theme=light] .sun-and-moon>.moon>circle {
-        transition-delay: .25s;
         transition-duration: .5s
     }
 }
@@ -582,4 +589,8 @@ html[data-theme=dark] {
     html[data-theme=dark] {
         background: #111
     }
+}
+
+main nav a {
+    text-decoration: none;
 }
