@@ -1,147 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="/js/theme.js"></script>
 
 <head>
+	<meta charset="utf-8">
+	<title>Photography</title>
+	<meta name="description" content="">
+	<link rel="stylesheet" href="/assets/styles.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script async
+		src="https://www.googletagmanager.com/gtag/js?id=G-TZV09JLMEW"></script>
+	<link rel="icon" type="image/png" href="assets/icons/favicon.ico" />
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+	</script>
+	<style>
+		::-moz-selection {
+			background: var(--cyan);
+			color: var(--bg);
+		}
 
-    <meta charset="utf-8">
-    <title>
-        Photography
+		::selection {
+			background: var(--cyan);
+			color: var(--bg);
+		}
 
-    </title>
-    <meta name="description" content="">
-
-    <link rel="stylesheet" href="/assets/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TZV09JLMEW">
-    </script>
-    <link rel="icon" type="image/png" href="assets/icons/favicon.ico" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-    </script>
-    <style>
-         ::-moz-selection {
-            /* Code for Firefox */
-            background: var(--cyan);
-            color: var(--bg);
-        }
-        
-        ::selection {
-            background: var(--cyan);
-            color: var(--bg);
-        }
-    </style>
+	</style>
 </head>
 
 <body>
-    <main class="shadow shadowPlus4">
-        <div class="topnav">
-            <span>
+	<main class="shadow shadowPlus4">
+		<div class="topnav">
+			<span>
 				//<a class="text1" href="..">jaime</a>/photos:<span
 					class="blink_me">_</span>
-            </span>
+			</span>
+			<div class="right-half">
+				<!-- Theme toggle button and other HTML content -->
+			</div>
+		</div>
+		<article>
+			<h1>Photography</h1>
+			<p>
+				In our fast-moving, digital age, the power of photography to
+				make us pause and reflect amazes me. It gives us a tangible,
+				physical way to remember how fleeting moments can be. There's
+				something incredibly beautiful about how quickly life's moments
+				flash
+				by.
+			</p>
+			<p>
+				Photography stands out to me as a refreshing break from the
+				ordered, logical aspects of my daily life and work. It's my
+				escape into a realm not bound by rules.
+			</p>
+			<div id="photos"></div>
+			<hr>
+		</article>
+		<nav id="nav">
+			<ul>
+				<a href="../">
+					<div class="arrow_back_icon"></div>
+				</a>
+			</ul>
+		</nav>
+	</main>
+	<script>
+		$(document).ready(function () {
+			$.ajax({
+				url: 'find_photos.php', // Make sure this path is correct
+				type: 'GET',
+				dataType: 'json',
+				success: function (data) {
+					var allImages = '';
+					$.each(data, function (i, filename) {
+						allImages +=
+							'<img data-enlargable src="images/fullsize/' +
+							filename + '" >';
+					});
+					$("#photos").append(allImages);
+					$("img[data-enlargable]").addClass(
+						"img-enlargable").click(function () {
+						var src = $(this).attr("src")
+							.replace("thumbnails",
+								'fullsize');
+						$("<div>")
+							.css({
+								background: "RGBA(0,0,0,.5) url(" +
+									src +
+									") no-repeat center",
+								backgroundSize: "contain",
+								width: "100%",
+								height: "100%",
+								position: "fixed",
+								zIndex: "10000",
+								top: "0",
+								left: "0",
+								cursor: "zoom-out",
+							})
+							.click(function () {
+								$(this).remove();
+							})
+							.appendTo("body");
+					});
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log('Error loading images: ' +
+						textStatus, errorThrown);
+				}
+			});
+		});
 
-            <div class="right-half">
-                <a onclick="toggle(this)" class="theme-toggle" id="theme-toggle" title="Toggles light & dark" aria-label="auto" aria-live="polite">
-                    <g transform="scale(0.1)">
-                        <svg class="sun-and-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24">
-							<mask class="moon" id="moon-mask">
-								<rect x="0" y="0" width="100%" height="100%"
-									fill="white"></rect>
-								<circle cx="24" cy="10" r="6" fill="black">
-								</circle>
-							</mask>
-							<circle class="sun" cx="12" cy="12" r="6" id="sun"
-								mask="url(#moon-mask)"
-								onload="this.fill=get_color();">
-							</circle>
-						</svg>
-                    </g>
-                </a>
-            </div>
-        </div>
-        <article>
-            <h1>
-                Photography
-            </h1>
-            <p>
-                In an increasingly computerized and fast-paced world, photography's ability to slow us down dazes me. We seek the physical, tactile reminder of how fragile moments are. And one of the most beautiful things about life is how quickly moments come and go.
-            </p>
-            <p>
-                Those moments can be captured and frozen through photography, allowing us to return to them repeatedly. It's also comforting to have something to cling to in a world which is constantly changing.
-            </p>
-            <p>
-                For me, photography provides a counterpoint to the mathematical, structured worlds where I work and live. It is the only thing I do that is not bound by rules.
-            </p>
-            <div id="photos"></div>
-            <hr>
-        </article>
-        <nav id="nav">
-            <ul>
-                <a href="../">
-                    <div class="arrow_back_icon"></div>
-                    </li>
-                </a>
-            </ul>
-        </nav>
-    </main>
-
-
-    <script>
-        /**
-         * Shuffles array in place. ES6 version
-         * @param {Array} a items An array containing the items.
-         */
-        function shuffle(a) {
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
-            1
-            return a;
-        }
-
-        var allImages = "";
-
-        N = 92;
-        var order = Array.apply(null, {
-            length: N,
-        }).map(Number.call, Number);
-        order = shuffle(order);
-        for (var i = 0; i < N - 1; i++) {
-            allImages +=
-                '<img data-enlargable src=" images/thumbnails/' + order[i] +
-                '.jpg" >';
-        }
-        $("#photos").append(allImages);
-        $("img[data-enlargable]")
-            .addClass("img-enlargable")
-            .click(function() {
-                $(this).attr("src", $(this).attr("src").replace("thumbnails",
-                    'fullsize'));
-                var src = $(this).attr("src");
-                $("<div>")
-                    .css({
-                        background: "RGBA(0,0,0,.2) url(" + src +
-                            ") no-repeat center",
-                        backgroundSize: "contain",
-                        width: "100%",
-                        height: "100%",
-                        position: "fixed",
-                        zIndex: "100",
-                        top: "0",
-                        left: "0",
-                        cursor: "zoom-out",
-                    })
-                    .click(function() {
-                        $(this).remove();
-                    })
-                    .appendTo("body");
-            });
-    </script>
-
-    <script>
-    </script>
+	</script>
 </body>
-
 
 </html>
