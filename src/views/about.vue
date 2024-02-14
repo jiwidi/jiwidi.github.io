@@ -19,7 +19,7 @@
   </template>
 
 <script>
-import ListDisplay from '../components/ListDisplay.vue';
+import ListDisplay from '/src/components//ListDisplay.vue';
 
 export default {
     name: 'About',

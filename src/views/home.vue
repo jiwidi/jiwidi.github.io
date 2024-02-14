@@ -14,7 +14,7 @@
   </template>
 
 <script>
-import ListDisplay from '../components/listDisplay.vue'; // Make sure the path is correct
+import ListDisplay from '/src/components//listDisplay.vue'; // Make sure the path is correct
 
 export default {
     name: 'Home',

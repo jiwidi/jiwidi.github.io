@@ -14,7 +14,7 @@
 <script>
 import { marked } from 'marked';
 import ListDisplay
-    from '../components/ListDisplay.vue';
+    from '/src/components//ListDisplay.vue';
 export default {
     name: 'Creative',
     components: {

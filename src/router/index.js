@@ -2,13 +2,13 @@ import {
 	createRouter,
 	createWebHistory
 } from 'vue-router';
-import Home from '../views/Home.vue';
-import Writing from '../views/Writing.vue';
-import Keyboard from '../views/Keyboards.vue';
-import Creative from '../views/Creative.vue';
-import About from '../views/About.vue';
-import Photography from '../views/Photography.vue';
-import Faroe from '../views/photo_categories/faroe.vue';
+import Home from '/src/views/Home.vue';
+import Writing from '/src/views/Writing.vue';
+import Keyboard from '/src/views/Keyboards.vue';
+import Creative from '/src/views/Creative.vue';
+import About from '/src/views/About.vue';
+import Photography from '/src/views/Photography.vue';
+import Faroe from '/src/views//photo_categories/faroe.vue';
 
 
 const photo_sections = ['faroe', 'family', 'life', 'me&tim', 'milu', 'nature',
@@ -47,7 +47,7 @@ const routes = [{
 		return {
 			path: `/photography/${section}`,
 			component: () =>
-				import(`../views/photo_categories/${section}.vue`)
+				import(`/src/views//photo_categories/${section}.vue`)
 		}
 	}),
 
