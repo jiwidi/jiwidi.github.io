@@ -5,18 +5,29 @@
           <h1>Many keyboards!</h1>
           <p>As someone who spends a lot of time at a keyboard, I consider it an extension of myself. Most keyboards are functional and get the job done, but if you want to improve your typing experience, you can go pretty overkill. These over-the-top keyboards don't offer any special features, but they are comfortable to use for long periods of time without causing hand strain. Building them from scratch by soldering, picking out components, and assembling them is a satisfying engineering challenge for me.</p>
           <section>
+
             <h2>Zoom 65</h2>
             <p>DIY Kit from <a href="https://zoom65.com/">https://zoom65.com/</a>.</p>
             <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/zoom65.jpg">
             <p>Details:</p>
             <ul>
-              <li>Dracula knock off keycaps</li>
+              <li>Dracula GMK keycaps</li>
               <li>Zoom65 cnc case</li>
               <li>67 Tangerines</li>
               <li>Brass plate</li>
-              <li>Cherry screw stabilizers</li>
+              <li>Durock v2 stabilizers</li>
             </ul>
-
+            <h2>Tofu Jr</h2>
+            <p>DIY Kit from <a href="https://kbdfans.com/products/tofu-jr">kbdfans</a>.</p>
+            <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/tofujr.jpg">
+            <p>Details:</p>
+            <ul>
+              <li>Striker GMK keycaps</li>
+              <li>Tofu cnc case</li>
+              <li>67 Gateron Oil King switches</li>
+              <li>Polycarbonate Plate</li>
+              <li>Durock v2 stabilizers</li>
+            </ul>
             <h2>Discipline 65</h2>
             <p>A custom discipline 65 <a href="https://github.com/coseyfannitutti/discipline">https://github.com/coseyfannitutti/discipline</a>.</p>
             <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/discipline.png">
