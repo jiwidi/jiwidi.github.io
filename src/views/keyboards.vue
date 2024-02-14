@@ -19,7 +19,7 @@
             </ul>
             <h2>Tofu Jr</h2>
             <p>DIY Kit from <a href="https://kbdfans.com/products/tofu-jr">kbdfans</a>.</p>
-            <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/tofujr.jpg">
+            <!-- <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/tofujr.jpg"> -->
             <p>Details:</p>
             <ul>
               <li>Striker GMK keycaps</li>
