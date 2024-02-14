@@ -20,7 +20,7 @@ const original_base_path = basePath + 'original/';
 const medium_res_base_path = basePath + 'medium_res/';
 const thumbnailsPath = basePath + 'thumbnails';
 
-const image_dict_path = "assets/img/photography/original/";
+const image_dict_path = "/assets/img/photography/original/";
 
 // Ensure the thumbnails directory exists
 if (!fs.existsSync(thumbnailsPath)) {
