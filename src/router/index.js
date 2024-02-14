@@ -15,6 +15,10 @@ const photo_sections = ['faroe', 'family', 'life', 'me&tim', 'milu', 'nature',
 	'street', 'valencia', 'portraits'
 ]
 const routes = [{
+		path: '/index.html',
+		redirect: '/'
+	},
+	{
 		path: '/',
 		component: Home
 	},
