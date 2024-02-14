@@ -1,0 +1,73 @@
+/* Icons */
+
+.document_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/document-text-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/document-text-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.folder_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/folder-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/folder-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.camera_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/camera-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/camera-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.link_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/link-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/link-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.newspaper_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/newspaper-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/newspaper-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.arrow_back_icon {
+    background-color: var(--fg);
+    -webkit-mask: url(/src/assets/icons/arrow-back-outline.svg) no-repeat center;
+    mask: url(/src/assets/icons/arrow-back-outline.svg) no-repeat center;
+    background-size: contain;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
