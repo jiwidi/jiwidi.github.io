@@ -29,22 +29,6 @@ export default {
         };
     },
     mounted() {
-        this.loadPhotos();
     },
-    methods: {
-        loadPhotos() {
-            fetch('/api/photos')
-                .then(response => response.json())
-                .then(data => {
-                    // Assuming 'data' is an array of objects with 'src' and 'title'
-                    this.photos = data.map(photo => ({
-                        src: photo.src,
-                        caption: photo.title,
-                        thumbnail: photo.src // If you have thumbnails, replace `photo.src` with the thumbnail path
-                    }));
-                })
-                .catch(error => console.error('Error loading photos:', error));
-        }
-    }
 };
 </script>
