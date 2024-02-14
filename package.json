@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "node src/assets/generate_imageDictionary.js && vite build && cp -r src/assets/img dist/assets/",
+        "build": "node src/assets/generate_imageDictionary.js && vite build && cp -r src/assets/img dist/assets/ && cp -r src/assets/thumbnails dist/assets/",
         "preview": "vite preview"
     },
     "dependencies": {

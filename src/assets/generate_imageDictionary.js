@@ -16,7 +16,7 @@ const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.bmp',
 ]);
 
 const basePath = __dirname + '/img/photography/';
-const image_base_path = '/dist/assets/img/photography/';
+const image_base_path = '/assets/img/photography/';
 const thumbnailsPath = path.join(__dirname, 'thumbnails');
 
 // Ensure the thumbnails directory exists
