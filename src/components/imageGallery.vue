@@ -31,7 +31,6 @@ export default {
     },
     mounted() {
         window.addEventListener('keydown', this.handleKeydown);
-        this.preloadImages();
     },
     beforeDestroy() {
         window.removeEventListener('keydown', this.handleKeydown);
