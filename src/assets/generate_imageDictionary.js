@@ -16,12 +16,22 @@ const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.bmp',
 ]);
 
 const basePath = __dirname + '/img/photography/';
-const image_base_path = '/assets/img/photography/';
-const thumbnailsPath = path.join(__dirname, 'thumbnails');
+const original_base_path = basePath + 'original/';
+const medium_res_base_path = basePath + 'medium_res/';
+const thumbnailsPath = basePath + 'thumbnails';
+
+const image_dict_path = "assets/img/photography/original/";
 
 // Ensure the thumbnails directory exists
 if (!fs.existsSync(thumbnailsPath)) {
 	fs.mkdirSync(thumbnailsPath, {
+		recursive: true
+	});
+}
+
+// Ensure the medium_res directory exists
+if (!fs.existsSync(medium_res_base_path)) {
+	fs.mkdirSync(medium_res_base_path, {
 		recursive: true
 	});
 }
@@ -43,6 +53,14 @@ const generateImageDictionary = (basePath) => {
 					relativePath, file);
 				if (!fs.existsSync(subDirPath)) {
 					fs.mkdirSync(subDirPath, {
+						recursive: true
+					});
+				}
+				const subDirPathMediumRes = path.join(
+					medium_res_base_path, relativePath, file
+				);
+				if (!fs.existsSync(subDirPathMediumRes)) {
+					fs.mkdirSync(subDirPathMediumRes, {
 						recursive: true
 					});
 				}
@@ -73,14 +91,24 @@ const generateImageDictionary = (basePath) => {
 						if (err) throw err;
 					});
 
-				// Add to image dictionary
-				imageDictionary[key].push(image_base_path +
+
+				// Convert to jpeg for size efficency, save and store in dictionary.
+				sharp(filePath)
+					.jpeg({
+						quality: 50
+					})
+					.toFile(medium_res_base_path +
+						relativeFilePath),
+					(err, info) => {
+						if (err) throw err;
+					}
+				imageDictionary[key].push(image_dict_path +
 					relativeFilePath);
 			}
 		});
 	};
 
-	walkSync(basePath, '');
+	walkSync(original_base_path, '');
 
 	return imageDictionary;
 };

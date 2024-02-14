@@ -4,14 +4,16 @@
         <img :src="getThumbnail(image)" :alt="`Image ${index + 1}`" class="responsive-img" />
       </div>
       <div v-if="isViewerOpen" class="image-viewer" @click.self="closeViewer">
-        <img :src="images[currentImageIndex]" :alt="`Image ${currentImageIndex + 1}`" class="full-image" />
+        <img :src="getMediumResImage(images[currentImageIndex])" :alt="`Image ${currentImageIndex + 1}`" class="full-image" />
         <div class="image-row">
-          <img v-for="(img, index) in images" :key="`thumb-${index}`" :src="img" @click.stop="navigateTo(index)" class="thumb" :class="{ active: currentImageIndex === index }">
+          <img v-for="(img, index) in images" :key="`thumb-${index}`" :src="getThumbnail(img)" @click.stop="navigateTo(index)" class="thumb" :class="{ active: currentImageIndex === index }">
         </div>
         <span class="close-btn" @click.stop="closeViewer">&times;</span>
+        <button class="download-btn" @click.stop="downloadImage(images[currentImageIndex])">Download</button>
       </div>
     </div>
   </template>
+
 <script>
 export default {
     props: {
@@ -36,14 +38,16 @@ export default {
     },
     methods: {
         getThumbnail(imageSrc) {
-            // Initially, display thumbnails
-            return this.loadedImages[imageSrc] || imageSrc.replace('/img/photography/', '/thumbnails/');
+            return this.loadedImages[imageSrc] || imageSrc.replace('/original/', '/thumbnails/');
+        },
+        getMediumResImage(imageSrc) {
+            return imageSrc.replace('/original/', '/medium_res/');
         },
         preloadImages() {
             this.images.forEach(imageSrc => {
                 const img = new Image();
                 img.onload = () => {
-                    this.$set(this.loadedImages, imageSrc, imageSrc); // Replace thumbnail with original image
+                    this.$set(this.loadedImages, imageSrc, imageSrc); // Track loaded original image
                 };
                 img.src = imageSrc; // Start loading the original image
             });
@@ -79,10 +83,17 @@ export default {
                 this.currentImageIndex = nextIndex;
             }
         },
+        downloadImage(imageSrc) {
+            const link = document.createElement('a');
+            link.href = imageSrc; // Direct link to the original image
+            link.download = 'Download'; // Optional: you can give the file a default name for downloading
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
     },
 };
 </script>
-
 
 <style scoped>
 .image-gallery {
@@ -144,6 +155,15 @@ export default {
     right: 25px;
     font-size: 40px;
     color: white;
+    cursor: pointer;
+}
+
+.download-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 </style>
