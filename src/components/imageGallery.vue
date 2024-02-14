@@ -9,7 +9,7 @@
           <img v-for="(img, index) in images" :key="`thumb-${index}`" :src="getThumbnail(img)" @click.stop="navigateTo(index)" class="thumb" :class="{ active: currentImageIndex === index }">
         </div>
         <span class="close-btn" @click.stop="closeViewer">&times;</span>
-        <button class="download-btn" @click.stop="downloadImage(images[currentImageIndex])">Download</button>
+        <button class="download-btn" @click.stop="downloadImage(images[currentImageIndex])">Download full size.</button>
       </div>
     </div>
   </template>
@@ -84,8 +84,8 @@ export default {
         },
         downloadImage(imageSrc) {
             const link = document.createElement('a');
-            link.href = imageSrc; // Direct link to the original image
-            link.download = 'Download'; // Optional: you can give the file a default name for downloading
+            link.href = imageSrc;
+            link.download = 'Download';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
