@@ -11,8 +11,9 @@
 <script>
 import Navbar from './components/Navbar.vue';
 import { inject } from '@vercel/analytics';
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { injectSpeedInsights } from '@vercel/speed-insights';
 inject();
+injectSpeedInsights();
 
 
 export default {
