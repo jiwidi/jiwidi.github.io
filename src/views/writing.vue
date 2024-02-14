@@ -4,18 +4,18 @@
         <article>
           <h1>Things I have written</h1>
         </article>
-        <ListDisplay :listItems="writings" />
+        <listDisplay :listItems="writings" />
       </main>
     </div>
   </template>
 
 <script>
-import ListDisplay from '/src/components//listDisplay.vue'; // Make sure the path is correct
+import listDisplay from '/src/components/listDisplay.vue'; // Make sure the path is correct
 
 export default {
     name: 'Home',
     components: {
-        ListDisplay
+        listDisplay
     },
     data() {
         return {

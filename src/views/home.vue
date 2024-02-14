@@ -8,18 +8,18 @@
           </p>
           <p>This page contains a summary of my work, interests, and some of my writings. Browse around and feel free to learn a bit about me.</p>
         </article>
-        <ListDisplay :listItems="pages" />
+        <listDisplay :listItems="pages" />
       </main>
     </div>
   </template>
 
 <script>
-import ListDisplay from '/src/components//listDisplay.vue'; // Make sure the path is correct
+import listDisplay from '/src/components/listDisplay.vue'; // Make sure the path is correct
 
 export default {
     name: 'Home',
     components: {
-        ListDisplay
+        listDisplay
     },
     data() {
         return {

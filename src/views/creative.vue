@@ -5,18 +5,18 @@
           <h1>Creative stuff</h1>
           <p>Storage for creative stuff.</p>
         </article>
-        <ListDisplay :listItems="creativeItems" />
+        <listDisplay :listItems="creativeItems" />
       </main>
     </div>
   </template>
 
 <script>
-import ListDisplay from '/src/components//ListDisplay.vue';
+import listDisplay from '/src/components/listDisplay.vue';
 
 export default {
     name: 'Creative',
     components: {
-        ListDisplay
+        listDisplay
     },
     data() {
         return {

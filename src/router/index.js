@@ -2,12 +2,12 @@ import {
 	createRouter,
 	createWebHistory
 } from 'vue-router';
-import Home from '../views/Home.vue'; // Adjusted to relative path
-import Writing from '../views/Writing.vue'; // Adjusted to relative path
-import Keyboard from '../views/Keyboards.vue'; // Adjusted to relative path
-import Creative from '../views/Creative.vue'; // Adjusted to relative path
-import About from '../views/About.vue'; // Adjusted to relative path
-import Photography from '../views/Photography.vue'; // Adjusted to relative path
+import Home from '../views/home.vue'; // Adjusted to relative path
+import Writing from '../views/writing.vue'; // Adjusted to relative path
+import Keyboard from '../views/keyboards.vue'; // Adjusted to relative path
+import Creative from '../views/creative.vue'; // Adjusted to relative path
+import About from '../views/about.vue'; // Adjusted to relative path
+import Photography from '../views/photography.vue'; // Adjusted to relative path
 import Faroe from '../views/photo_categories/faroe.vue'; // Adjusted to relative path
 
 const photo_sections = [

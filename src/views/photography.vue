@@ -16,7 +16,7 @@
   </template>
 
 <script>
-import photoGrid from '/src/components//photoGrid.vue';
+import photoGrid from '/src/components/photoGrid.vue';
 
 export default {
     name: 'PhotosView',

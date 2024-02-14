@@ -13,18 +13,18 @@
 				<div style="margin-left: 50%; text-align:right; "> <img
 						src="/src/assets/img/about/author.jpg" width="50%"> </div>
                     </article>
-      <ListDisplay :listItems="pages" />
+      <listDisplay :listItems="pages" />
       </main>
     </div>
   </template>
 
 <script>
-import ListDisplay from '/src/components//ListDisplay.vue';
+import listDisplay from '/src/components/listDisplay.vue';
 
 export default {
     name: 'About',
     components: {
-        ListDisplay
+        listDisplay
     },
     methods: {
         toggleTheme() {
