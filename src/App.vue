@@ -7,6 +7,7 @@
 
 <script>
 import Navbar from './components/Navbar.vue';
+// import { init } from '@vercel/analytics';
 
 export default {
     name: 'App',

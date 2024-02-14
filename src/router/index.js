@@ -2,18 +2,18 @@ import {
 	createRouter,
 	createWebHistory
 } from 'vue-router';
-import Home from '/src/views/Home.vue';
-import Writing from '/src/views/Writing.vue';
-import Keyboard from '/src/views/Keyboards.vue';
-import Creative from '/src/views/Creative.vue';
-import About from '/src/views/About.vue';
-import Photography from '/src/views/Photography.vue';
-import Faroe from '/src/views//photo_categories/faroe.vue';
+import Home from '../views/Home.vue'; // Adjusted to relative path
+import Writing from '../views/Writing.vue'; // Adjusted to relative path
+import Keyboard from '../views/Keyboards.vue'; // Adjusted to relative path
+import Creative from '../views/Creative.vue'; // Adjusted to relative path
+import About from '../views/About.vue'; // Adjusted to relative path
+import Photography from '../views/Photography.vue'; // Adjusted to relative path
+import Faroe from '../views/photo_categories/faroe.vue'; // Adjusted to relative path
 
-
-const photo_sections = ['faroe', 'family', 'life', 'me&tim', 'milu', 'nature',
-	'street', 'valencia', 'portraits'
-]
+const photo_sections = [
+	'faroe', 'family', 'life', 'me&tim', 'milu', 'nature', 'street',
+	'valencia', 'portraits'
+];
 const routes = [{
 		path: '/index.html',
 		redirect: '/'
@@ -47,7 +47,7 @@ const routes = [{
 		return {
 			path: `/photography/${section}`,
 			component: () =>
-				import(`/src/views//photo_categories/${section}.vue`)
+				import(`../views/photo_categories/${section}.vue`)
 		}
 	}),
 
