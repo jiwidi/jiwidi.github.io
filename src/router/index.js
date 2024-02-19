@@ -9,6 +9,7 @@ import Creative from '../views/creative.vue'; // Adjusted to relative path
 import About from '../views/about.vue'; // Adjusted to relative path
 import Photography from '../views/photography.vue'; // Adjusted to relative path
 import Faroe from '../views/photo_categories/faroe.vue'; // Adjusted to relative path
+import Projects from '../views/projects.vue'; // Adjusted to relative path
 
 const photo_sections = [
 	'faroe', 'family', 'life', 'me&tim', 'milu', 'nature', 'street',
@@ -39,6 +40,10 @@ const routes = [{
 		component: About
 	},
 	{
+		path: '/projects',
+		component: Projects
+	},
+	{
 		path: '/photography',
 		component: Photography
 	},
@@ -55,13 +60,14 @@ const routes = [{
 	// 	path: '/creative/photos/watermelon',
 	// 	redirect: 'src/assets/photos/creative/watermelon.jpg'
 	// },
-	// {
-	// 	path: '/:catchAll(.*)',
-	// 	redirect: '/'
-	// }
+	{
+		path: '/:catchAll(.*)',
+		redirect: '/'
+	}
 ];
 
 const router = createRouter({
+	mode: 'history',
 	history: createWebHistory(),
 	routes,
 });

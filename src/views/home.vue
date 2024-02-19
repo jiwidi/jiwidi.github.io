@@ -25,6 +25,11 @@ export default {
         return {
             pages: [
                 {
+                    title: "Projects",
+                    link: "/projects", // Make sure this link is handled by your Vue router
+                    icon: "folder_icon",
+                },
+                {
                     title: "Writing",
                     link: "/writing",
                     icon: "folder_icon",
