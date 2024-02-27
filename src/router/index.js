@@ -55,7 +55,46 @@ const routes = [{
 				import(`../views/photo_categories/${section}.vue`)
 		}
 	}),
-
+	{
+		path: '/writing/twitter_open_source_algorithm',
+		component: () =>
+			import('../views/writing/twitteralgorithm.vue')
+	},
+	{
+		path: '/writing/gpt4_release',
+		component: () =>
+			import('../views/writing/gpt4_release.vue')
+	},
+	{
+		path: '/writing/llama_size_isnt_everything',
+		component: () =>
+			import('../views/writing/llama_size_isnt_everything.vue')
+	},
+	{
+		path: '/writing/search_google_vs_microsoft',
+		component: () =>
+			import('../views/writing/search_google_vs_microsoft.vue')
+	},
+	{
+		path: '/writing/feeds_worse_overtime',
+		component: () =>
+			import('../views/writing/feeds_worse_overtime.vue')
+	},
+	{
+		path: '/writing/browser_behavior_language',
+		component: () =>
+			import('../views/writing/browser_behavior_language.vue')
+	},
+	{
+		path: '/writing/takeaways_nvidia_22',
+		component: () =>
+			import('../views/writing/takeaways_nvidia_22.vue')
+	},
+	{
+		path: '/writing/recsys_2022',
+		component: () =>
+			import('../views/writing/recsys22.vue')
+	},
 	// {
 	// 	path: '/creative/photos/watermelon',
 	// 	redirect: 'src/assets/photos/creative/watermelon.jpg'
