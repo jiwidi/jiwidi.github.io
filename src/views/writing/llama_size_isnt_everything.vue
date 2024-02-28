@@ -141,7 +141,7 @@
     </tbody>
 </table>
 <!-- END: ed8c6549bwf9 -->
-Zero-shot performance on Common Sense Reasoning tasks. Higher scores are better.
+<p class="centered">Zero-shot performance on Common Sense Reasoning tasks. Higher scores are better.</p>
 
 <h2>Why bigger is not better?</h2>
 <p>Achieving state-of-the-art results with magnitude less of parameter sizes is a huge accomplishment and is beneficial for both research and industry use cases. By reducing the computational resources required for training and inference, smaller models are more accessible to researchers and practitioners with limited resources. This means that language models can become a part of our daily workflows with ease. Do you want ChatGPT integrated into your home assistant? This is what we need to make that happen.</p>
@@ -373,3 +373,13 @@ export default {
     name: 'BlogPostLLaMA',
 }
 </script>
+
+<style>
+.table {
+    width: 100%;
+    border: 1px solid black;
+    text-align: center;
+    margin: auto;
+    background-color: #f40000;
+}
+</style>

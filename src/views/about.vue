@@ -11,7 +11,7 @@
 					<p> - I care about what people make, not what they own.</p>
 				</div>
 				<div style="margin-left: 50%; text-align:right; "> <img
-						src="/src/assets/img/about/author.jpg" width="50%"> </div>
+						src="/src/assets/img/about/author_feroe.jpeg" width="50%"> </div>
                     </article>
       <listDisplay :listItems="pages" />
       </main>

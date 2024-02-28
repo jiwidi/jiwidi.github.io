@@ -95,10 +95,11 @@ const routes = [{
 		component: () =>
 			import('../views/writing/recsys22.vue')
 	},
-	// {
-	// 	path: '/creative/photos/watermelon',
-	// 	redirect: 'src/assets/photos/creative/watermelon.jpg'
-	// },
+	{
+		path: '/creative/watermelon',
+		component: () =>
+			import('../views/creative/watermelon.vue')
+	},
 	{
 		path: '/:catchAll(.*)',
 		redirect: '/'

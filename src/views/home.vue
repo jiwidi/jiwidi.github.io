@@ -3,8 +3,8 @@
       <main class="shadowPlus4">
         <article>
           <h1>Hello there!</h1>
-          <p>I'm <a href="about/author/" class="abold">{Jaime}</a> a
-            <strike>data scientist, engineer, geek</strike> who likes to build stuff. I also enjoy running, natureboarding and taking photos.
+          <p>I'm <a href="about/" class="abold">{Jaime}</a> a
+            <strike>data scientist, engineer, geek</strike> who likes to build stuff. I also enjoy running, snowboarding and taking photos.
           </p>
           <p>This page contains a summary of my work, interests, and some of my writings. Browse around and feel free to learn a bit about me.</p>
         </article>

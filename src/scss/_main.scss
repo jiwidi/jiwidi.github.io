@@ -15,6 +15,10 @@ header {
     display: flex;
 }
 
+p.centered {
+    text-align: center;
+}
+
 main {
     margin: 16px auto;
     border: 2px solid var(--fg);

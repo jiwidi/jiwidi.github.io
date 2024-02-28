@@ -6,38 +6,80 @@ nav.articles-list ul {
     list-style-type: none;
     padding: 0;
     margin-top: 0;
-    display: flex;
-    flex-direction: column;
 }
 
 nav.articles-list li {
+    border-radius: 5px;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    /* Keep as column to prevent horizontal collision */
 }
 
-.icon,
+nav.articles-list li .link-content {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    flex-wrap: wrap;
+    /* Allow items to wrap if necessary */
+}
+
+.icon {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.text-title,
+.text-description {
+    display: block;
+    margin: 5px 0;
+}
+
 .text-title {
     font-weight: bold;
 }
 
-.text-description,
-.text-title,
+.text-description {
+    color: #666;
+    font-size: 0.9em;
+}
+
 .date {
-    display: inline-block;
-    vertical-align: middle;
-    align-items: center;
+    font-size: 0.8em;
+    color: #666;
+    align-self: flex-end;
+    margin-top: 5px;
 }
 
 .arrow_back_icon {
     margin-right: 0.5rem;
+    background: url('path-to-back-arrow-icon.png') no-repeat center center;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
 }
 
-.text-title {
-    font-weight: bold;
-    margin-left: 0.5rem;
-}
 
-.date {
-    margin-left: auto;
-    padding-left: 0.5rem;
+/* Responsive adjustments */
+
+@media (max-width: 600px) {
+    .icon {
+        margin-bottom: 5px;
+        /* Add space below icon on small screens */
+        margin-right: 0;
+        /* Remove right margin */
+    }
+    .date {
+        align-self: center;
+        /* Center-align date for small screens */
+        margin-top: 10px;
+        /* Increase space above the date */
+    }
+    nav.articles-list li .link-content {
+        flex-direction: column;
+        /* Stack items vertically on smaller screens */
+    }
 }

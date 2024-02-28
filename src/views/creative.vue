@@ -34,6 +34,12 @@ export default {
                     icon: "link_icon",
                 },
                 {
+                    title: "The world has become less colorful",
+                    description: "A study on color.",
+                    link: "https://www.archdaily.com/993197/is-the-world-less-colorful-highlighting-the-color-evolution-of-objects-and-spaces",
+                    icon: "link_icon",
+                },
+                {
                     title: "Scapes",
                     description: "Atop the tallest sky tower, hearing the streets breathe.",
                     link: "https://futuretage.tumblr.com/",
@@ -58,14 +64,13 @@ export default {
                 },
                 {
                     title: "The age of average",
-                    description: "An article on the concept of average.",
                     link: "https://www.alexmurrell.co.uk/articles/the-age-of-average",
                     icon: "link_icon",
                 },
                 {
                     title: "Tastiness of watermelon",
                     description: "A delicious summer treat.",
-                    link: "/creative/photos/watermelon",
+                    link: "/creative/watermelon",
                     icon: "link_icon",
                 }
             ],
