@@ -4,3 +4,4 @@ dist/
 src/assets/thumbnails/
 /src/assets/img/photography/medium_res/
 /src/assets/img/photography/thumbnails/
+.vercel

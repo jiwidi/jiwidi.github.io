@@ -13,21 +13,24 @@
             <ul>
               <li>Dracula GMK keycaps</li>
               <li>Zoom65 cnc case</li>
-              <li>67 Tangerines</li>
+              <li>67g Tangerines</li>
               <li>Brass plate</li>
               <li>Durock v2 stabilizers</li>
             </ul>
+
             <h2>Tofu Jr</h2>
             <p>DIY Kit from <a href="https://kbdfans.com/products/tofu-jr">kbdfans</a>.</p>
-            <!-- <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/tofujr.jpg"> -->
+            <!-- Rotate the image -->
+            <img align="right" width="250" height="150" src="/src/assets/img/keyboards/tofujr.png">
             <p>Details:</p>
             <ul>
               <li>Striker GMK keycaps</li>
               <li>Tofu cnc case</li>
-              <li>67 Gateron Oil King switches</li>
+              <li>67g Gateron Oil King switches</li>
               <li>Polycarbonate Plate</li>
               <li>Durock v2 stabilizers</li>
             </ul>
+
             <h2>Discipline 65</h2>
             <p>A custom discipline 65 <a href="https://github.com/coseyfannitutti/discipline">https://github.com/coseyfannitutti/discipline</a>.</p>
             <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/discipline.png">
@@ -39,6 +42,7 @@
               <li>No plate</li>
               <li>Durock stabilizers</li>
             </ul>
+
 
             <h2>Two idobao id80v2</h2>
             <p>Built two id80v2, one for me(black) and another one for my gf(white). First time I saw a case that acted as keyboard plate as well.</p>
@@ -52,6 +56,7 @@
               <li>Durock stabilizers</li>
             </ul>
 
+
             <h2>KBDfans 67 lite</h2>
             <p>DIY keyboard kit from kbdfans, easy to build and cheap.</p>
             <img data-enlargable align="right" width="250" height="200" src="/src/assets/img/keyboards/kbd67lite.png">
@@ -64,6 +69,7 @@
               <li>Kbdfans stock stabilizers</li>
             </ul>
 
+
             <h2>Satan GH60</h2>
             <p>Satan 60 generic pcb along with a low profile walnut wooden case.</p>
             <img data-enlargable align="right" width="250" height="150" src="/src/assets/img/keyboards/satan2.png">
@@ -75,6 +81,7 @@
               <li>Polycarbonate plate</li>
               <li>Cherry screw stabilizers</li>
             </ul>
+
 
             <h2>Tada68</h2>
             <p>First mechanical keyboard, prebuilt bought from kbdfans.</p>
