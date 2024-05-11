@@ -56,12 +56,11 @@ nav.articles-list li .link-content {
 
 .arrow_back_icon {
     margin-right: 0.5rem;
-    background: url('path-to-back-arrow-icon.png') no-repeat center center;
+    background: url("path-to-back-arrow-icon.png") no-repeat center center;
     display: inline-block;
     width: 24px;
     height: 24px;
 }
-
 
 /* Responsive adjustments */
 
@@ -77,9 +76,5 @@ nav.articles-list li .link-content {
         /* Center-align date for small screens */
         margin-top: 10px;
         /* Increase space above the date */
-    }
-    nav.articles-list li .link-content {
-        flex-direction: column;
-        /* Stack items vertically on smaller screens */
     }
 }
