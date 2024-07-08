@@ -4,9 +4,8 @@
         <article>
           <h1>Hello there!</h1>
           <p>I'm <a href="about/" class="abold">{Jaime}</a> a
-            <strike>data scientist, engineer, geek</strike> who likes to build stuff. I also enjoy running, snowboarding and taking photos.
-          </p>
-          <p>This page contains a summary of my work, interests, and some of my writings. Browse around and feel free to learn a bit about me.</p>
+            <strike>data scientist, engineer, geek</strike> who likes to build stuff at the computer. Apart from coding my interests include photography, snow sports and cycling.</p>
+          <p>I'm currently building <a href="https://ecomid.com" class="abold">eComID</a> as co-founder and head of AI.</p>
         </article>
         <listDisplay :listItems="pages" />
       </main>
@@ -14,7 +13,7 @@
   </template>
 
 <script>
-import listDisplay from '/src/components/listDisplay.vue'; // Make sure the path is correct
+import listDisplay from '/src/components/listDisplay.vue';
 
 export default {
     name: 'Home',
@@ -26,7 +25,7 @@ export default {
             pages: [
                 {
                     title: "Projects",
-                    link: "/projects", // Make sure this link is handled by your Vue router
+                    link: "/projects",
                     icon: "folder_icon",
                 },
                 {
@@ -36,22 +35,22 @@ export default {
                 },
                 {
                     title: "Creative",
-                    link: "/creative", // Make sure this link is handled by your Vue router
+                    link: "/creative",
                     icon: "folder_icon",
                 },
                 {
                     title: "Keyboards",
-                    link: "/keyboards", // Make sure this link is handled by your Vue router
+                    link: "/keyboards",
                     icon: "folder_icon",
                 },
                 {
                     title: "Photography",
-                    link: "/photography", // Make sure this link is handled by your Vue router
+                    link: "/photography",
                     icon: "folder_icon",
                 },
                 {
                     title: "About",
-                    link: "/about", // Make sure this link is handled by your Vue router
+                    link: "/about",
                     icon: "folder_icon",
                 }
             ],
