@@ -21,6 +21,12 @@ export default {
         return {
             writings: [
                 {
+                    title: "The AI Revolution: Interfaces, Not Intelligence",
+                    description: "Opinions",
+                    link: "writing/ai_revolution_interfaces",
+                    icon: "newspaper_icon"
+                },
+                {
                     title: "Explaining Preferences with Shapley Values",
                     description: "NeurIPS 2022",
                     link: "https://arxiv.org/pdf/2205.13662.pdf",

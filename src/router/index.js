@@ -55,6 +55,11 @@ const routes = [{
 				import(`../views/photo_categories/${section}.vue`)
 		}
 	}),
+    {
+        path: '/writing/ai_revolution_interfaces',
+        component: () =>
+            import('../views/writing/ai_revolution_interfaces.vue')
+    },
 	{
 		path: '/writing/twitter_open_source_algorithm',
 		component: () =>
