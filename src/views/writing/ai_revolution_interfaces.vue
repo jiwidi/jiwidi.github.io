@@ -2,7 +2,7 @@
 <div class="blog-container">
         <main class="blog-main">
             <article>
-                <h1>The AI Revolution: Interface, Not Intelligence</h1>
+                <h1>The AI Revolution: Human like interfaces, not intelligence</h1>
                 <hr>
                 <section>
                     <p>We're told we're on the brink of artificial general intelligence, but the real revolution is happening somewhere else entirely. I think we're missing the real story here. LLMs aren't getting us closer to human-level AGI, but they're doing something just as game-changing: becoming the most natural way we've ever had to interact with computers.</p>
