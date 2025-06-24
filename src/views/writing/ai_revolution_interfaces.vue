@@ -25,7 +25,7 @@
                     <p>It's like having instant access to the collective knowledge of humanity, but in conversation form. That's pretty incredible, even if it's not "thinking" in the human sense.</p>
 
                     <h2>The interface evolution</h2>
-                    <p>When you step back and look at history, each major leap forward has been about reducing the friction between humans and information. Writing let us store knowledge outside our heads. Printing made it shareable across distances and time. Libraries organized it systematically. Google made it instantly searchable.</p>
+                    <p>When you step back and look at history, we recall significant events that have been about reducing the friction between humans and information. Writing let us store knowledge outside our heads. Printing made it shareable across distances and time. Libraries organized it systematically. Google made it instantly searchable.</p>
 
                     <p>Each interface made information more accessible, but also required us to learn new skills: how to read, how to use a card catalog, how to craft search queries.</p>
 
