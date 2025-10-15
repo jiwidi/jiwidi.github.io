@@ -9,7 +9,7 @@
         <p>Society's immersion in the internet redirects our focus towards ephemeral trends, creating needs for the new and the now. Photography beckons us to decelerate, to cherish the present, and to look around, offering a gentle reminder of life's depth beyond the transient chase.  </p>
 <photoGrid/>
         </article>
-
+        <BackButton />
       </main>
     </div>
     </div>
@@ -17,11 +17,13 @@
 
 <script>
 import photoGrid from '/src/components/photoGrid.vue';
+import BackButton from '/src/components/BackButton.vue';
 
 export default {
     name: 'PhotosView',
     components: {
         photoGrid,
+        BackButton,
     },
     data() {
         return {

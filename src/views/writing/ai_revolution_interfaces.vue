@@ -65,12 +65,18 @@
                     <p>[1] - https://sciendo.com/article/10.2478/jagi-2014-0001</p>
                 </section>
             </article>
+            <BackButton />
         </main>
     </div>
   </template>
 
   <script>
+import BackButton from '/src/components/BackButton.vue';
+
 export default {
     name: 'BlogPostAIReflection',
+    components: {
+        BackButton
+    },
 }
 </script>

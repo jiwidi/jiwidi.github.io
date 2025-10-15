@@ -96,17 +96,17 @@
             </ul>
           </section>
         </article>
-        <listDisplay />
+        <BackButton />
       </main>
     </div>
 </template>
 
 <script>
-import listDisplay from '/src/components/listDisplay.vue';
+import BackButton from '/src/components/BackButton.vue';
 export default {
     name: 'Creative',
     components: {
-        listDisplay
+        BackButton
     },
 };
 </script>

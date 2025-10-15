@@ -1,7 +1,12 @@
 <template>
     <div id="app">
+      <LoadingBar />
       <Navbar />
-      <router-view />
+      <router-view v-slot="{ Component, route }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </transition>
+      </router-view>
     </div>
 
     <SpeedInsights />
@@ -10,6 +15,7 @@
 
 <script>
 import Navbar from './components/Navbar.vue';
+import LoadingBar from './components/LoadingBar.vue';
 import { inject } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 inject();
@@ -19,7 +25,8 @@ injectSpeedInsights();
 export default {
     name: 'App',
     components: {
-        Navbar
+        Navbar,
+        LoadingBar
     },
     metaInfo: {
         title: 'Jaime Ferrando Huertas - Personal Page',
@@ -43,4 +50,23 @@ export default {
 
 <style>
 /* Global styles */
+
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
 </style>
