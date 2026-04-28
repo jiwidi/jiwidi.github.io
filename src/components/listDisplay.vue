@@ -1,40 +1,55 @@
 <template>
-    <nav class="articles-list" id="nav">
-      <hr />
-      <ul>
-        <li>
-          <router-link to=".."> <!-- Adjust the path as needed -->
-            <div class="arrow_back_icon"></div>
-          </router-link>
-        </li>
-        <li v-for="item in listItems" :key="item.title" class="bg2">
-          <component :is="getLinkComponent(item.link)" :href="item.link" :to="item.link" class="link-content">
-            <span :class="item.icon + ' icon'"></span>
-            <span class="text-title">{{ item.title }}</span>
-            <span v-if="item.description" class="text-description"> — {{ item.description }}</span>
-            <time v-if="item.date" class="date">{{ item.date }}</time>
-          </component>
-        </li>
-      </ul>
-    </nav>
-  </template>
+  <nav class="articles-list" aria-label="Directory">
+    <component
+      v-for="(item, index) in listItems"
+      :key="item.title"
+      :is="getLinkComponent(item.link)"
+      :to="!isExternal(item.link) ? item.link : null"
+      :href="isExternal(item.link) ? item.link : null"
+      :target="isExternal(item.link) ? '_blank' : null"
+      :rel="isExternal(item.link) ? 'noopener' : null"
+      class="row"
+    >
+      <span class="l">
+        <span v-if="showIco(item, index)" class="ico">{{ formatIco(item, index) }}</span>
+        <span class="name">{{ item.title }}</span>
+      </span>
+      <span class="l" style="gap: 14px">
+        <span v-if="item.description" class="meta">{{ item.description }}</span>
+        <span v-if="item.date" class="date">{{ item.date }}</span>
+        <span class="arrow">→</span>
+      </span>
+    </component>
+  </nav>
+</template>
 
 <script>
 export default {
-    name: 'listDisplay',
-    props: {
-        listItems: {
-            type: Array,
-            required: true,
-        },
+  name: 'listDisplay',
+  props: {
+    listItems: {
+      type: Array,
+      required: true,
     },
-    methods: {
-        isExternal(link) {
-            return /^(https?:|mailto:|tel:)/.test(link);
-        },
-        getLinkComponent(link) {
-            return this.isExternal(link) ? 'a' : 'router-link';
-        }
+    numbered: {
+      type: Boolean,
+      default: false,
     },
+  },
+  methods: {
+    isExternal(link) {
+      return /^(https?:|mailto:|tel:)/.test(link || '');
+    },
+    getLinkComponent(link) {
+      return this.isExternal(link) ? 'a' : 'router-link';
+    },
+    showIco(item, index) {
+      return this.numbered || (item.icoLabel != null);
+    },
+    formatIco(item, index) {
+      if (item.icoLabel != null) return item.icoLabel;
+      return String(index + 1).padStart(2, '0');
+    },
+  },
 };
 </script>

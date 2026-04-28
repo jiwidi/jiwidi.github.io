@@ -39,8 +39,8 @@ export default {
       pages: [
         {
           title: 'Curriculum Vitae',
+          description: 'pdf · github',
           link: 'https://github.com/jiwidi/CurriculumVitae/blob/master/JaimeFerrandoHuertas_CV.pdf',
-          icon: 'newspaper_icon',
         },
       ],
     };

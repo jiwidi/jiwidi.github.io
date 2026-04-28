@@ -3,6 +3,8 @@
       <main class="shadowPlus4">
         <article>
           <h1>Things I have written</h1>
+          <p>A mix of opinions, papers and notes — mostly about AI, recommender systems, and the interfaces we build on top of them. Some pieces are short reactions to things in the news; others are longer reads or academic work I've been part of.</p>
+          <p>Older posts sit toward the bottom; the most recent thinking is at the top.</p>
         </article>
         <listDisplay :listItems="writings" />
       </main>
@@ -22,71 +24,59 @@ export default {
             writings: [
                 {
                     title: "The AI Revolution: Interfaces, Not Intelligence",
-                    description: "Opinions",
-                    link: "writing/ai_revolution_interfaces",
-                    icon: "newspaper_icon"
+                    description: "opinions",
+                    link: "/writing/ai_revolution_interfaces",
                 },
                 {
                     title: "Explaining Preferences with Shapley Values",
-                    description: "NeurIPS 2022",
+                    description: "neurips 2022",
                     link: "https://arxiv.org/pdf/2205.13662.pdf",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Fashion recommender systems with focus on time and seasonability",
-                    description: "My Thesis",
+                    title: "Fashion Recommender Systems with Focus on Time and Seasonality",
+                    description: "thesis",
                     link: "https://github.com/jiwidi/MASTER_THESIS/blob/master/thesis.pdf",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Twitter's Open Source Algorithm - Unveiling the code, but not the secrets",
-                    description: "Opinions",
+                    title: "Twitter's Open Source Algorithm — Unveiling the Code, but Not the Secrets",
+                    description: "opinions",
                     link: "/writing/twitter_open_source_algorithm",
-                    icon: "newspaper_icon"
                 },
                 {
                     title: "GPT-4: A New Milestone in Scaling Up Deep Learning",
-                    description: "Opinions",
+                    description: "opinions",
                     link: "/writing/gpt4_release",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Size Isn't Everything - How LLaMA democratizes access to Large-Language-Models",
-                    description: "Opinions",
+                    title: "Size Isn't Everything — How LLaMA Democratizes Access to Large Language Models",
+                    description: "opinions",
                     link: "/writing/llama_size_isnt_everything",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Microsoft vs Google - ChatGPT taking over search?",
-                    description: "Opinions",
+                    title: "Microsoft vs Google — ChatGPT Taking Over Search?",
+                    description: "opinions",
                     link: "/writing/search_google_vs_microsoft",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Why your feeds are getting worse over time",
-                    description: "Opinions",
+                    title: "Why Your Feeds Are Getting Worse Over Time",
+                    description: "opinions",
                     link: "/writing/feeds_worse_overtime",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Your browsing behavior is being modeled as a language",
-                    description: "Opinions",
+                    title: "Your Browsing Behavior Is Being Modeled as a Language",
+                    description: "opinions",
                     link: "/writing/browser_behavior_language",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "Takeaways from the 2022 NVIDIA RecSys Worksop",
-                    description: "Opinions",
+                    title: "Takeaways from the 2022 NVIDIA RecSys Workshop",
+                    description: "notes",
                     link: "/writing/takeaways_nvidia_22",
-                    icon: "newspaper_icon"
                 },
                 {
-                    title: "RecSys 2022 - Favorite papers and talks",
-                    description: "Opinions",
+                    title: "RecSys 2022 — Favorite Papers and Talks",
+                    description: "notes",
                     link: "/writing/recsys_2022",
-                    icon: "newspaper_icon"
                 },
-
             ],
         };
     },
