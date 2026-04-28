@@ -21,6 +21,7 @@ export const lazyLoaders = {
 	'writing/takeaways_nvidia_22': () => import('../views/writing/takeaways_nvidia_22.vue'),
 	'writing/recsys_2022': () => import('../views/writing/recsys22.vue'),
 	'creative/watermelon': () => import('../views/creative/watermelon.vue'),
+	'creative/kipling_if': () => import('../views/creative/kipling_if.vue'),
 	'photography/faroe': () => import('../views/photo_categories/faroe.vue'),
 	'photography/family': () => import('../views/photo_categories/family.vue'),
 	'photography/life': () => import('../views/photo_categories/life.vue'),

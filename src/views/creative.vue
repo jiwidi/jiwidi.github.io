@@ -66,6 +66,11 @@ export default {
                     description: "internal",
                     link: "/creative/watermelon",
                 },
+                {
+                    title: "If— by Rudyard Kipling",
+                    description: "poem",
+                    link: "/creative/kipling_if",
+                },
             ],
         };
     },

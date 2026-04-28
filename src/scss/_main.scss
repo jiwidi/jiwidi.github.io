@@ -136,8 +136,17 @@ a:link, a:active, a:visited { color: inherit; }
     padding: 2px 8px;
     cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     line-height: 1.4;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.theme-btn {
+    min-width: 70px;
 }
 
 .back-btn:hover,
@@ -279,11 +288,13 @@ article details {
         display: grid;
         grid-template-columns: 3fr 1fr;
         gap: clamp(18px, 4%, 32px);
-        align-items: center;
+        align-items: start;
 
         .about-image {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
+            position: sticky;
+            top: 16px;
 
             img {
                 width: 100%;
