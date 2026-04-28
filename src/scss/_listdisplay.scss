@@ -1,81 +1,170 @@
-nav.articles-list hr {
-    margin-top: 0;
+/* Directory list — port of Claude Design dirlist */
+nav.articles-list {
+    border-top: 2px solid var(--fg);
+    display: flex;
+    flex-direction: column;
 }
 
+nav.articles-list hr,
 nav.articles-list ul {
-    list-style-type: none;
+    display: none;
+}
+
+/* ul fallback for the original markup that wraps rows in <li> */
+nav.articles-list ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
     padding: 0;
-    margin-top: 0;
 }
 
 nav.articles-list li {
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    transition: background-color 0.2s ease;
-    /* Keep as column to prevent horizontal collision */
+    display: contents;
 }
 
+/* The actual row anchor */
+nav.articles-list .row,
 nav.articles-list li .link-content {
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 14px clamp(22px, 7%, 42px);
+    border-bottom: 1px dotted var(--rule_soft);
+    cursor: pointer;
     text-decoration: none;
-    color: inherit;
+    color: var(--fg);
+    transition: background 0.12s, color 0.12s;
+    gap: 14px;
     width: 100%;
-    flex-wrap: wrap;
-    /* Allow items to wrap if necessary */
 }
 
-.icon {
+nav.articles-list li:last-child .link-content,
+nav.articles-list .row:last-child {
+    border-bottom: 0;
+}
+
+nav.articles-list .row:hover,
+nav.articles-list li .link-content:hover {
+    background: var(--fg);
+    color: var(--bg);
+    text-decoration: none;
+}
+
+nav.articles-list li .link-content:hover .text-description,
+nav.articles-list .row:hover .meta {
+    color: var(--bg);
+    opacity: 0.85;
+}
+
+nav.articles-list .row:hover .arrow,
+nav.articles-list li .link-content:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* Left/right groups */
+nav.articles-list .row .l {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-width: 0;
+}
+
+nav.articles-list .row .l:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+nav.articles-list .row .l:last-child {
+    flex: 0 1 auto;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+/* Numbering / icon */
+nav.articles-list .ico {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    opacity: 0.55;
+}
+
+nav.articles-list .row:hover .ico { opacity: 1; }
+
+/* Name (left) */
+nav.articles-list .name,
+nav.articles-list .text-title {
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+    margin: 0;
+}
+
+/* Meta (right) — used by both new .meta and legacy .text-description */
+nav.articles-list .meta,
+nav.articles-list .text-description {
+    font: 12px/1.35 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    opacity: 0.55;
+    text-transform: lowercase;
+    margin: 0;
+    text-align: right;
+    max-width: 38ch;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+nav.articles-list .arrow {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    margin-left: 8px;
     display: inline-block;
-    margin-right: 10px;
-    vertical-align: middle;
+    transition: transform 0.18s ease;
 }
 
-.text-title,
-.text-description {
-    display: block;
-    margin: 5px 0;
+nav.articles-list .date {
+    font: 12px/1 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    opacity: 0.45;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.text-title {
-    font-weight: bold;
+/* Hide the legacy SVG-mask icons inside list rows — design uses text icons */
+nav.articles-list li .link-content .icon {
+    display: none;
 }
 
-.text-description {
-    color: #666;
-    font-size: 0.9em;
-}
-
-.date {
-    font-size: 0.8em;
-    color: #666;
-    align-self: flex-end;
-    margin-top: 5px;
-}
-
-.arrow_back_icon {
-    margin-right: 0.5rem;
-    background: url("path-to-back-arrow-icon.png") no-repeat center center;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-}
-
-/* Responsive adjustments */
-
-@media (max-width: 600px) {
-    .icon {
-        margin-bottom: 5px;
-        /* Add space below icon on small screens */
-        margin-right: 0;
-        /* Remove right margin */
+@media (max-width: 520px) {
+    nav.articles-list .row,
+    nav.articles-list li .link-content {
+        padding: 12px 18px;
+        flex-wrap: wrap;
     }
-    .date {
-        align-self: center;
-        /* Center-align date for small screens */
-        margin-top: 10px;
-        /* Increase space above the date */
+
+    nav.articles-list .name,
+    nav.articles-list .text-title { font-size: 17px; }
+
+    nav.articles-list .row .l:last-child {
+        flex-basis: 100%;
+        justify-content: flex-start;
+        margin-top: 4px;
+    }
+
+    nav.articles-list .meta,
+    nav.articles-list .text-description {
+        text-align: left;
+        max-width: 100%;
     }
 }
