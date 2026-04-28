@@ -9,7 +9,7 @@
           <h2>Life principles</h2>
           <p>— Be kind.</p>
           <p>— Being normal is overrated.</p>
-          <p>— I care about what people make, not what they own.</p>
+          <p>— I believe people are defined by their actions and choices, not by their possessions.</p>
 
           <h2>Quotes I resonate with</h2>
           <p>— Above all, don't lie to yourself.</p>
