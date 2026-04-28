@@ -1,133 +1,58 @@
-import {
-	createRouter,
-	createWebHistory
-} from 'vue-router';
-import Home from '../views/home.vue'; // Adjusted to relative path
-import Writing from '../views/writing.vue'; // Adjusted to relative path
-import Keyboard from '../views/keyboards.vue'; // Adjusted to relative path
-import Creative from '../views/creative.vue'; // Adjusted to relative path
-import About from '../views/about.vue'; // Adjusted to relative path
-import Photography from '../views/photography.vue'; // Adjusted to relative path
-import Faroe from '../views/photo_categories/faroe.vue'; // Adjusted to relative path
-import Projects from '../views/projects.vue'; // Adjusted to relative path
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '../views/home.vue';
+import Writing from '../views/writing.vue';
+import Keyboard from '../views/keyboards.vue';
+import Creative from '../views/creative.vue';
+import About from '../views/about.vue';
+import Photography from '../views/photography.vue';
+import Projects from '../views/projects.vue';
 
-const photo_sections = [
-	'faroe', 'family', 'life', 'me&tim', 'milu', 'nature', 'street',
-	'valencia', 'portraits'
-];
-const routes = [{
-		path: '/index.html',
-		redirect: '/'
-	},
-	{
-		path: '/',
-		component: Home
-	},
-	{
-		path: '/writing',
-		component: Writing
-	},
-	{
-		path: '/keyboards',
-		component: Keyboard
-	},
-	{
-		path: '/creative',
-		component: Creative
-	},
-	{
-		path: '/about',
-		component: About
-	},
-	{
-		path: '/projects',
-		component: Projects
-	},
-	{
-		path: '/photography',
-		component: Photography
-	},
-	// Create a route for each photo section
-	...photo_sections.map(section => {
-		return {
-			path: `/photography/${section}`,
-			component: () =>
-				import(`../views/photo_categories/${section}.vue`)
-		}
-	}),
-    {
-        path: '/writing/ai_revolution_interfaces',
-        component: () =>
-            import('../views/writing/ai_revolution_interfaces.vue')
-    },
-	{
-		path: '/writing/twitter_open_source_algorithm',
-		component: () =>
-			import('../views/writing/twitteralgorithm.vue')
-	},
-	{
-		path: '/writing/gpt4_release',
-		component: () =>
-			import('../views/writing/gpt4_release.vue')
-	},
-	{
-		path: '/writing/llama_size_isnt_everything',
-		component: () =>
-			import('../views/writing/llama_size_isnt_everything.vue')
-	},
-	{
-		path: '/writing/search_google_vs_microsoft',
-		component: () =>
-			import('../views/writing/search_google_vs_microsoft.vue')
-	},
-	{
-		path: '/writing/feeds_worse_overtime',
-		component: () =>
-			import('../views/writing/feeds_worse_overtime.vue')
-	},
-	{
-		path: '/writing/browser_behavior_language',
-		component: () =>
-			import('../views/writing/browser_behavior_language.vue')
-	},
-	{
-		path: '/writing/takeaways_nvidia_22',
-		component: () =>
-			import('../views/writing/takeaways_nvidia_22.vue')
-	},
-	{
-		path: '/writing/recsys_2022',
-		component: () =>
-			import('../views/writing/recsys22.vue')
-	},
-	{
-		path: '/creative/watermelon',
-		component: () =>
-			import('../views/creative/watermelon.vue')
-	},
-	{
-		path: '/:catchAll(.*)',
-		redirect: '/'
-	}
+// All lazily-loaded route components live here so the prefetcher
+// (src/lib/prefetch.js) can warm them on idle without duplicating
+// the dynamic import paths.
+export const lazyLoaders = {
+	'writing/ai_revolution_interfaces': () => import('../views/writing/ai_revolution_interfaces.vue'),
+	'writing/twitter_open_source_algorithm': () => import('../views/writing/twitteralgorithm.vue'),
+	'writing/gpt4_release': () => import('../views/writing/gpt4_release.vue'),
+	'writing/llama_size_isnt_everything': () => import('../views/writing/llama_size_isnt_everything.vue'),
+	'writing/search_google_vs_microsoft': () => import('../views/writing/search_google_vs_microsoft.vue'),
+	'writing/feeds_worse_overtime': () => import('../views/writing/feeds_worse_overtime.vue'),
+	'writing/browser_behavior_language': () => import('../views/writing/browser_behavior_language.vue'),
+	'writing/takeaways_nvidia_22': () => import('../views/writing/takeaways_nvidia_22.vue'),
+	'writing/recsys_2022': () => import('../views/writing/recsys22.vue'),
+	'creative/watermelon': () => import('../views/creative/watermelon.vue'),
+	'photography/faroe': () => import('../views/photo_categories/faroe.vue'),
+	'photography/family': () => import('../views/photo_categories/family.vue'),
+	'photography/life': () => import('../views/photo_categories/life.vue'),
+	'photography/me&tim': () => import('../views/photo_categories/me&tim.vue'),
+	'photography/milu': () => import('../views/photo_categories/milu.vue'),
+	'photography/nature': () => import('../views/photo_categories/nature.vue'),
+	'photography/street': () => import('../views/photo_categories/street.vue'),
+	'photography/portraits': () => import('../views/photo_categories/portraits.vue'),
+};
+
+const routes = [
+	{ path: '/index.html', redirect: '/' },
+	{ path: '/', component: Home },
+	{ path: '/writing', component: Writing },
+	{ path: '/keyboards', component: Keyboard },
+	{ path: '/creative', component: Creative },
+	{ path: '/about', component: About },
+	{ path: '/projects', component: Projects },
+	{ path: '/photography', component: Photography },
+	...Object.entries(lazyLoaders).map(([slug, loader]) => ({
+		path: '/' + slug,
+		component: loader,
+	})),
+	{ path: '/:catchAll(.*)', redirect: '/' },
 ];
 
 const router = createRouter({
-	mode: 'history',
 	history: createWebHistory(),
 	routes,
 	scrollBehavior(to, from, savedPosition) {
-		// If there's a saved position (like from back button), use it
-		if (savedPosition) {
-			return savedPosition;
-		}
-		// If navigating to a hash, scroll to that element
-		if (to.hash) {
-			return {
-				el: to.hash,
-				behavior: 'smooth',
-			};
-		}
-		// Otherwise, scroll to top
+		if (savedPosition) return savedPosition;
+		if (to.hash) return { el: to.hash, behavior: 'smooth' };
 		return { top: 0, behavior: 'smooth' };
 	},
 });

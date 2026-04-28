@@ -27,6 +27,7 @@ import Navbar from './components/Navbar.vue';
 import LoadingBar from './components/LoadingBar.vue';
 import { inject } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
+import { startBackgroundPrefetch, prefetchAllSectionThumbs } from './lib/prefetch.js';
 inject();
 injectSpeedInsights();
 
@@ -38,6 +39,20 @@ export default {
   },
   data() {
     return { year: new Date().getFullYear() };
+  },
+  mounted() {
+    startBackgroundPrefetch();
+    this.maybePrefetchPhotos(this.$route.path);
+    this.$router.afterEach((to) => this.maybePrefetchPhotos(to.path));
+  },
+  methods: {
+    maybePrefetchPhotos(path) {
+      if (path === '/photography' && !this._prefetchedPhotos) {
+        this._prefetchedPhotos = true;
+        const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 600));
+        idle(() => prefetchAllSectionThumbs(), { timeout: 3000 });
+      }
+    },
   },
   metaInfo: {
     title: '//jaime',
