@@ -3,8 +3,7 @@
       <main class="shadowPlus4">
         <article>
           <h1>Things I have written</h1>
-          <p>A mix of opinions, papers and notes — mostly about AI, recommender systems, and the interfaces we build on top of them. Some pieces are short reactions to things in the news; others are longer reads or academic work I've been part of.</p>
-          <p>Older posts sit toward the bottom; the most recent thinking is at the top.</p>
+          <p>A mix of opinions, papers and notes.</p>
         </article>
         <listDisplay :listItems="writings" />
       </main>
