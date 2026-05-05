@@ -1,6 +1,6 @@
 <template>
   <main class="terminal-main">
-    <div id="rterm" ref="termHost" class="rterm-host" tabindex="0" @click="focusTerminal" @click.capture="onHostClick"></div>
+    <div id="rterm" ref="termHost" class="rterm-host" tabindex="0" :style="hostStyle" @click="focusTerminal" @click.capture="onHostClick"></div>
     <section v-if="terminalState.previewPath" class="terminal-preview">
       <header class="preview-bar">
         <span class="preview-label">preview · {{ terminalState.previewPath }}</span>
@@ -45,6 +45,14 @@ export default {
       previewComponent: shallowRef(null),
       previewError: false,
     };
+  },
+  computed: {
+    hostStyle() {
+      const h = this.terminalState.lockedHeight;
+      // terminal-main has a 2px bottom border; subtract so the outer
+      // box matches the previously rendered <main> exactly.
+      return h ? { height: Math.max(120, h - 2) + 'px' } : null;
+    },
   },
   watch: {
     'terminalState.previewPath'(path) {
