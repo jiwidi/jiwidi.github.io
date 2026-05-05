@@ -49,7 +49,7 @@ export default {
       return this.theme === 'dark' ? '☼ light' : '☾ dark';
     },
     terminalLabel() {
-      return this.terminalState.active ? '× tui' : '> tui';
+      return this.terminalState.active ? '× cli' : '> cli';
     },
   },
   methods: {
