@@ -16,6 +16,9 @@
         :to="parentPath"
         class="back-btn"
       >← back</router-link>
+      <button class="theme-btn term-btn" type="button" @click="onToggleTerminal">
+        {{ terminalLabel }}
+      </button>
       <button class="theme-btn" type="button" @click="toggleTheme">
         {{ themeLabel }}
       </button>
@@ -24,11 +27,14 @@
 </template>
 
 <script>
+import { terminalState, toggleTerminal } from '/src/lib/terminalMode.js';
+
 export default {
   name: 'Navbar',
   data() {
     return {
       theme: 'light',
+      terminalState,
     };
   },
   computed: {
@@ -42,6 +48,9 @@ export default {
     themeLabel() {
       return this.theme === 'dark' ? '☼ light' : '☾ dark';
     },
+    terminalLabel() {
+      return this.terminalState.active ? '× tui' : '> tui';
+    },
   },
   methods: {
     getPathUpToSegment(index) {
@@ -54,6 +63,9 @@ export default {
     },
     toggleTheme() {
       this.applyTheme(this.theme === 'dark' ? 'light' : 'dark');
+    },
+    onToggleTerminal() {
+      toggleTerminal();
     },
   },
   mounted() {

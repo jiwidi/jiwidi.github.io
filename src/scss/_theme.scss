@@ -8,6 +8,15 @@
     --cyan: #38ffea;
     --magenta: #ff77c1;
 
+    /* terminal accents (light) */
+    --term-user: #1f7a3a;
+    --term-host: #1f7a3a;
+    --term-path: #1d4ed8;
+    --term-sigil: #6b6577;
+    --term-folder: #1d4ed8;
+    --term-link: #b8336a;
+    --term-error: #b30b0b;
+
     --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", "Fira Code", Monaco, Consolas, monospace;
 
@@ -21,6 +30,15 @@
     --fg: #01c8ee;
     --bg_acc: #0a1226;
     --rule_soft: rgba(1, 200, 238, 0.22);
+
+    /* terminal accents (dark) */
+    --term-user: #5cf08a;
+    --term-host: #5cf08a;
+    --term-path: #ffe14a;
+    --term-sigil: #8aa3d4;
+    --term-folder: #7fb3ff;
+    --term-link: #ff77c1;
+    --term-error: #ff6b6b;
 
     color-scheme: dark;
 }

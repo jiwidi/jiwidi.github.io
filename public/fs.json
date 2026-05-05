@@ -1,0 +1,54 @@
+{
+  "upstart": [
+    "whoami",
+    "ls",
+    "echo type 'help' or 'list' to see commands. cd into folders, cat files."
+  ],
+  "startblog": [
+    "cd writing",
+    "ls"
+  ],
+  "startphotos": [
+    "cd photography",
+    "ls"
+  ],
+  "startkeyboards": [
+    "cd keyboards",
+    "ls"
+  ],
+  "uname": "Linux jiwidi 5.15.0-jaime #1 SMP x86_64 GNU/Linux",
+  "whoami": [
+    "jaime ferrando huertas",
+    "data scientist · engineer · geek",
+    "co-founder &amp; head of AI at <a class=\"link\" href=\"https://ecomid.com\" target=\"_blank\">eComID</a>",
+    "interests: photography, snow sports, cycling",
+    "type 'help' or 'list' for commands"
+  ],
+  "pepe": [
+    "         .--.        ",
+    "        |o_o |       ",
+    "        |:_/ |       ",
+    "       //   \\ \\      ",
+    "      (|     | )     ",
+    "     /'\\_   _/`\\     ",
+    "     \\___)=(___/     "
+  ],
+  "tragedy": [
+    "Did you ever hear the tragedy of Darth Plagueis the wise?",
+    "I thought not. It's not a story the Jedi would tell you."
+  ],
+  "fs": {
+    "home": {
+      "jiwidi": {
+        "about.md": "_ilink:/about",
+        "projects": "_ilink:/projects",
+        "writing": "_ilink:/writing",
+        "creative": "_ilink:/creative",
+        "keyboards": "_ilink:/keyboards",
+        "photography": "_ilink:/photography",
+        "contact.txt": "email: hi@imjai.me · github: jiwidi · ecomid.com",
+        ".secret": "you found it. cat .secret/wise to see something old."
+      }
+    }
+  }
+}
