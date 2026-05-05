@@ -2,7 +2,8 @@
   <div id="app">
     <LoadingBar />
     <Navbar />
-    <router-view v-slot="{ Component, route }">
+    <Terminal v-if="terminalState.active" />
+    <router-view v-else v-slot="{ Component, route }">
       <transition name="fade" mode="out-in">
         <component :is="Component" :key="route.path" />
       </transition>
@@ -25,6 +26,8 @@
 <script>
 import Navbar from './components/Navbar.vue';
 import LoadingBar from './components/LoadingBar.vue';
+import Terminal from './components/Terminal.vue';
+import { terminalState } from './lib/terminalMode.js';
 import { inject } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { startBackgroundPrefetch, prefetchAllSectionThumbs } from './lib/prefetch.js';
@@ -36,9 +39,10 @@ export default {
   components: {
     Navbar,
     LoadingBar,
+    Terminal,
   },
   data() {
-    return { year: new Date().getFullYear() };
+    return { year: new Date().getFullYear(), terminalState };
   },
   mounted() {
     startBackgroundPrefetch();

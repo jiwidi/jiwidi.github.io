@@ -44,6 +44,7 @@
 
 <script>
 import listDisplay from '/src/components/listDisplay.vue';
+import { aboutPages } from '/src/lib/siteContent.js';
 
 export default {
   name: 'About',
@@ -57,13 +58,7 @@ export default {
   data() {
     return {
       spoilerOpen: false,
-      pages: [
-        {
-          title: 'Curriculum Vitae',
-          description: 'pdf · github',
-          link: 'https://github.com/jiwidi/CurriculumVitae/blob/master/JaimeFerrandoHuertas_CV.pdf',
-        },
-      ],
+      pages: aboutPages,
     };
   },
 };

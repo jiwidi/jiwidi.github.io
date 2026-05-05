@@ -12,6 +12,7 @@
 
 <script>
 import listDisplay from '/src/components/listDisplay.vue';
+import { homePages } from '/src/lib/siteContent.js';
 
 export default {
     name: 'Home',
@@ -20,14 +21,7 @@ export default {
     },
     data() {
         return {
-            pages: [
-                { title: "Projects",    link: "/projects",    description: "12 repos" },
-                { title: "Writing",     link: "/writing",     description: "11 pieces" },
-                { title: "Creative",    link: "/creative",    description: "9 finds" },
-                { title: "Keyboards",   link: "/keyboards",   description: "7 builds" },
-                { title: "Photography", link: "/photography", description: "8 sets" },
-                { title: "About",       link: "/about",       description: "readme" },
-            ],
+            pages: homePages,
         };
     },
 };
