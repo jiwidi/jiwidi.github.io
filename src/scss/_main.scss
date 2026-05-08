@@ -14,7 +14,7 @@ body {
     line-height: 1.55;
     color: var(--fg);
     background: var(--bg);
-    transition: background 0.25s ease, color 0.2s ease;
+    transition: background 0.25s ease, color 0.2s ease, max-width 480ms cubic-bezier(0.65, 0, 0.35, 1);
     padding: 8px 15px;
     margin: 8px auto;
     max-width: 95%;
@@ -27,6 +27,15 @@ body {
 
 @media (min-width: 1024px) {
     body { max-width: 960px; }
+}
+
+/* Widen the page when the terminal opens a side preview (toggled by
+   Terminal.vue via a body class). */
+@media (min-width: 1024px) {
+    body.split-cli { max-width: 1320px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    body.split-cli { max-width: 96%; }
 }
 
 /* Links */
@@ -90,6 +99,15 @@ a:link, a:active, a:visited { color: inherit; }
     gap: 0;
     flex-wrap: wrap;
     min-width: 0;
+}
+
+.topnav .crumb-cli {
+    opacity: 0.6;
+    padding: 0 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 32ch;
 }
 
 .topnav .crumbs a {

@@ -1,17 +1,33 @@
 <template>
-  <main class="terminal-main">
-    <div id="rterm" ref="termHost" class="rterm-host" tabindex="0" :style="hostStyle" @click="focusTerminal" @click.capture="onHostClick"></div>
-    <section v-if="terminalState.previewPath" class="terminal-preview">
-      <header class="preview-bar">
-        <span class="preview-label">preview · {{ terminalState.previewPath }}</span>
-        <button type="button" class="preview-close" @click="closePreview">close ×</button>
-      </header>
-      <div class="preview-body">
-        <component v-if="previewComponent" :is="previewComponent" />
-        <p v-else-if="previewError" class="preview-error">could not load preview for {{ terminalState.previewPath }}</p>
-        <p v-else class="preview-loading">loading…</p>
+  <main class="terminal-main" :class="{ split: hasPreview }" :style="shellStyle">
+    <div class="term-col">
+      <div
+        id="rterm"
+        ref="termHost"
+        class="rterm-host"
+        tabindex="0"
+        @click="focusTerminal"
+        @click.capture="onHostClick"
+      ></div>
+    </div>
+    <aside class="side" aria-hidden="!hasPreview">
+      <div class="side-inner">
+        <header class="side-bar">
+          <span class="side-chip">{{ sideChip }}</span>
+          <span class="side-path">{{ sidePath }}</span>
+          <span class="side-spacer"></span>
+          <span class="side-key">esc</span>
+          <button type="button" class="side-close" @click="closePreview">close ×</button>
+        </header>
+        <div class="side-body">
+          <component v-if="previewComponent" :is="previewComponent" />
+          <p v-else-if="previewError" class="side-msg side-error">
+            could not load preview for {{ terminalState.previewPath }}
+          </p>
+          <p v-else class="side-msg side-loading">loading…</p>
+        </div>
       </div>
-    </section>
+    </aside>
   </main>
 </template>
 
@@ -47,21 +63,40 @@ export default {
     };
   },
   computed: {
-    hostStyle() {
+    hasPreview() {
+      return !!this.terminalState.previewPath;
+    },
+    shellStyle() {
       const h = this.terminalState.lockedHeight;
-      // terminal-main has a 2px bottom border; subtract so the outer
-      // box matches the previously rendered <main> exactly.
+      // terminal-main has a 2px bottom border; subtract so the outer box
+      // matches the previously rendered <main> exactly.
       return h ? { height: Math.max(120, h - 2) + 'px' } : null;
+    },
+    sidePath() {
+      return this.terminalState.previewPath || '';
+    },
+    sideChip() {
+      const p = this.terminalState.previewPath || '';
+      // surface section as the chip label: writing/foo → 'md', creative/x → 'md',
+      // photography/x → 'set', projects → 'repo', etc. Default 'doc'.
+      if (p.startsWith('/writing/') || p.startsWith('/creative/')) return 'md';
+      if (p.startsWith('/photography')) return 'set';
+      if (p.startsWith('/projects')) return 'repo';
+      if (p.startsWith('/keyboards')) return 'kb';
+      if (p.startsWith('/about')) return 'me';
+      return 'doc';
     },
   },
   watch: {
     'terminalState.previewPath'(path) {
       this.loadPreview(path);
+      this.applyBodyClass();
     },
   },
   mounted() {
     document.addEventListener('keydown', this.onKey);
     document.addEventListener('keydown', this.onTab, true);
+    this.applyBodyClass();
     loadScript().then(() => {
       this.boot();
       this.attachAutoScroll();
@@ -77,8 +112,12 @@ export default {
     document.removeEventListener('keydown', this.onTab, true);
     if (this._termObserver) this._termObserver.disconnect();
     if (this.$refs.termHost) this.$refs.termHost.innerHTML = '';
+    document.body.classList.remove('split-cli');
   },
   methods: {
+    applyBodyClass() {
+      document.body.classList.toggle('split-cli', this.hasPreview);
+    },
     boot() {
       if (typeof window.rTerm !== 'function') return;
       const data = buildTerminalData();
@@ -111,13 +150,11 @@ export default {
       scrollToBottom();
     },
     onHostClick(ev) {
-      // Intercept clicks on internal _ilink anchors rendered by `ls`,
-      // route them through the preview pane instead of full navigation.
       const a = ev.target.closest && ev.target.closest('a.link');
       if (!a) return;
       const target = a.getAttribute('target');
       const href = a.getAttribute('href') || '';
-      if (target === '_blank') return; // external — let it open
+      if (target === '_blank') return;
       if (!href || href.startsWith('http')) return;
       ev.preventDefault();
       ev.stopPropagation();
@@ -151,18 +188,16 @@ export default {
       const last = tokens[lastIdx];
 
       if (lastIdx === 0) {
-        // command-name completion
         const cmds = Object.keys(term.funcMap).sort();
         this.applyCompletion(term, cmds, last, ' ');
         return;
       }
 
-      // path completion against the fake fs
       let dirPart = '';
       let prefix = last;
       const slash = last.lastIndexOf('/');
       if (slash >= 0) {
-        dirPart = last.slice(0, slash + 1); // include trailing /
+        dirPart = last.slice(0, slash + 1);
         prefix = last.slice(slash + 1);
       }
       const lookupPath = dirPart || term.cdir || '.';
@@ -180,7 +215,6 @@ export default {
       const matches = entries.filter((k) => k.startsWith(prefix)).sort();
       if (matches.length === 0) return;
 
-      // append a / suffix when single match resolves to a directory
       let suffix = '';
       if (matches.length === 1) {
         const v = dirData[matches[0]];
@@ -194,7 +228,6 @@ export default {
         term.updateTerm();
         return;
       }
-      // multiple — extend by longest common prefix; if no progress, list them
       let lcp = matches[0];
       for (const m of matches) {
         while (m.indexOf(lcp) !== 0) lcp = lcp.slice(0, -1);
@@ -226,7 +259,6 @@ export default {
           return;
         }
         let comp = compOrLoader;
-        // Async/lazy route components are functions returning a promise.
         if (typeof comp === 'function' && !comp.render && !comp.setup) {
           const mod = await comp();
           comp = mod && (mod.default || mod);
@@ -247,20 +279,40 @@ export default {
 </script>
 
 <style>
+/* ───────────────────────────────────────────────
+   Shell — flex container that owns the term column
+   and the side preview column.
+   ─────────────────────────────────────────────── */
 .terminal-main {
   border: 2px solid var(--fg);
   border-top: 0;
   background: var(--bg);
   margin-bottom: 16px;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  display: flex;
+  overflow: hidden;
+  /* Fixed shell height — prevents the side preview's content from
+     pushing the box taller. Inline lockedHeight from JS overrides this. */
+  height: clamp(360px, 55vh, 560px);
+}
+
+.term-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid transparent;
+  transition: border-right-color 240ms ease;
+}
+
+.terminal-main.split .term-col {
+  border-right-color: var(--fg);
 }
 
 .rterm-host {
+  flex: 1;
+  min-height: 0;
   padding: 8px 10px;
-  /* roughly match the height of the regular page's <main> article
-     (h1 + paragraphs + listDisplay) so toggling TUI doesn't change
-     the outer box height. Internal scroll prevents growth. */
-  height: clamp(360px, 55vh, 560px);
   overflow-y: auto;
   outline: none;
   font-size: 14px;
@@ -270,63 +322,113 @@ export default {
   color: var(--fg);
 }
 
-.terminal-preview {
-  border-top: 1px dashed var(--fg);
+/* ───────────────────────────────────────────────
+   Side pane — width animates 0 → 54%.
+   ─────────────────────────────────────────────── */
+.side {
+  width: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
-  font-family: var(--font-sans);
+  overflow: hidden;
+  transition: width 480ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.preview-bar {
+.terminal-main.split .side {
+  width: 54%;
+}
+
+.side-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  opacity: 0;
+  transform: translateX(12px);
+  transition:
+    opacity 320ms 160ms cubic-bezier(0.65, 0, 0.35, 1),
+    transform 320ms 160ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.terminal-main.split .side-inner {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.side-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 10px;
+  gap: 10px;
+  padding: 8px 14px;
   background: var(--fg);
   color: var(--bg);
   font: 12px/1.4 var(--font-mono);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
-.preview-label { opacity: 0.95; }
+.side-chip {
+  background: var(--bg);
+  color: var(--fg);
+  padding: 1px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
 
-.preview-close {
+.side-path {
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-spacer { flex: 1; }
+
+.side-key {
+  border: 1px solid var(--bg);
+  opacity: 0.7;
+  padding: 1px 6px;
+  font-size: 10px;
+}
+
+.side-close {
   background: transparent;
   border: 1px solid var(--bg);
   color: var(--bg);
   font: inherit;
   font-size: 11px;
-  letter-spacing: 0.06em;
-  padding: 2px 8px;
+  letter-spacing: 0.08em;
+  padding: 2px 10px;
   cursor: pointer;
+  text-transform: uppercase;
+}
+.side-close:hover { background: var(--bg); color: var(--fg); }
+
+.side-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-family: var(--font-sans);
 }
 
-.preview-close:hover {
-  background: var(--bg);
-  color: var(--fg);
-}
-
-.preview-body {
-  padding: 0;
-  max-height: 70vh;
-  overflow: auto;
-}
-
-/* Strip nested `main` framing inside the preview so it doesn't double-border.
-   Article padding is preserved. */
-.preview-body main {
+/* Strip the inner main border/background so it doesn't double-frame. */
+.side-body main {
   border: 0 !important;
   margin: 0 !important;
   background: transparent !important;
 }
-.preview-body .home-container,
-.preview-body .projects-container,
-.preview-body .creative-container,
-.preview-body .about-container,
-.preview-body .photos-container { background: transparent; }
+.side-body .home-container,
+.side-body .projects-container,
+.side-body .creative-container,
+.side-body .about-container,
+.side-body .photos-container { background: transparent; }
 
-.preview-loading,
-.preview-error {
+.side-msg {
   padding: 16px;
   margin: 0;
   font-family: var(--font-mono);
@@ -334,6 +436,27 @@ export default {
   opacity: 0.7;
 }
 
+/* ───────────────────────────────────────────────
+   Mobile — stack vertically.
+   ─────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .terminal-main {
+    flex-direction: column;
+  }
+  .terminal-main.split .term-col {
+    border-right-color: transparent;
+    border-bottom: 2px solid var(--fg);
+    flex: 1 1 50%;
+  }
+  .terminal-main.split .side {
+    width: 100% !important;
+    flex: 1 1 50%;
+  }
+}
+
+/* ───────────────────────────────────────────────
+   rTerm output coloring (unchanged)
+   ─────────────────────────────────────────────── */
 #term { color: var(--fg); }
 
 #term b {
