@@ -24,7 +24,7 @@ window.rTerm = function (options) {
 	// Username
 	this.username = options.username || 'user';
 	// Hostname
-	this.hostname = options.hostname || 'hostname';
+	this.hostname = options.hostname != null ? options.hostname : 'hostname';
 	// Optional callback for internal links — receives the path string.
 	// When provided, _ilink targets are forwarded here instead of
 	// triggering window.open(..., '_self').

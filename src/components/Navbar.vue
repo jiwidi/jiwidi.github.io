@@ -6,6 +6,10 @@
         <span class="sep">/</span>
         <router-link :to="getPathUpToSegment(index)">{{ segment }}</router-link>
       </template>
+      <template v-for="(segment, index) in cliCrumbs" :key="'cli-' + index">
+        <span class="sep">/</span>
+        <span class="crumb-cli">{{ segment }}</span>
+      </template>
       <span>:</span>
       <span class="blink_me">_</span>
     </span>
@@ -40,6 +44,16 @@ export default {
   computed: {
     pathSegments() {
       return this.$route.path.split('/').filter(Boolean);
+    },
+    cliCrumbs() {
+      // When the terminal has a side preview open, append its path
+      // segments as dim crumbs so the topnav reflects what's on screen.
+      const p = this.terminalState.previewPath;
+      if (!this.terminalState.active || !p) return [];
+      const previewSegs = p.split('/').filter(Boolean);
+      // Skip segments already covered by the route (cd writing on /writing).
+      const route = new Set(this.pathSegments);
+      return previewSegs.filter((s) => !route.has(s));
     },
     parentPath() {
       if (this.pathSegments.length <= 1) return '/';
