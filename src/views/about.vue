@@ -7,16 +7,16 @@
           <p>I was born in Spain and have been tinkering with computers since I was 8 years old.</p>
 
           <h2>Life principles</h2>
+          <p>— Be honest with yourself, first.</p>
           <p>— Be kind.</p>
-          <p>— Being normal is overrated.</p>
-          <p>— I believe people are defined by their actions and choices, not by their possessions.</p>
+          <p>— There's no prize for blending in.</p>
+          <p>— What you do means more than what you say or own.</p>
 
           <h2>Quotes I resonate with</h2>
-          <p>— Above all, don't lie to yourself.</p>
           <p>— If nothing happens, nothing happens.</p>
           <p>— Those who cannot remember the past are condemned to repeat it.</p>
-          <p>— Do not get stuck in the past.</p>
-          <p>— Fear is the greatest teacher, and I'm not skipping class.</p>
+          <p>— Learn from it. Don't live in it.</p>
+          <p>— Fear is a teacher worth showing up for.</p>
           <p>
             — There is a battle of two wolves: one represents despair and darkness,
             the other hope and light. Which one wins?
