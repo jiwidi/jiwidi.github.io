@@ -50,6 +50,7 @@ export const creativeItems = [
   { title: "The Age of Average",                  description: "alex murrell",  link: "https://www.alexmurrell.co.uk/articles/the-age-of-average" },
   { title: "Tastiness of Watermelon",             description: "internal",      link: "/creative/watermelon" },
   { title: "If— by Rudyard Kipling",              description: "poem",          link: "/creative/kipling_if" },
+  { title: "First season of True Detective",      description: "a masterpiece", link: "https://www.imdb.com/title/tt2356777/" },
 ];
 
 export const photoCategories = [

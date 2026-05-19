@@ -3,10 +3,10 @@
         <div class="home-container">
       <main class="shadowPlus4">
         <article>
-          <h1>To capture life</h1>
-            <p>Photography stands as life's pause button, captivating the fleeting essence of life's moments. It offers a tangible reminder of the transient beauty that surrounds us, a beauty that flashes by in the blink of an eye.</p>
+          <h1>To notice life</h1>
+            <p>I've always liked paying attention to the small signs of life scattered everywhere, in people, places, animals, movement, stillness, and texture.</p>
 
-        <p>Society's immersion in the internet redirects our focus towards ephemeral trends, creating needs for the new and the now. Photography beckons us to decelerate, to cherish the present, and to look around, offering a gentle reminder of life's depth beyond the transient chase.  </p>
+        <p>Photography lets me take the things I notice and give them a place to remain. A movement, a texture, a person, an animal, a quiet corner of a place. They might only exist like that for a moment, but a photograph keeps a trace of them.</p>
 <photoGrid/>
         </article>
         <BackButton />
