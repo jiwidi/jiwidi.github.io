@@ -1,121 +1,130 @@
+// Build-time photo pipeline.
+//
+// Walks src/assets/img/photography/original/ and produces, per image:
+//   thumbnails/  — 800px wide, q75 (gallery grid)
+//   medium_res/  — max 2048px wide, q75 (lightbox)
+// plus two manifests next to this file:
+//   imageDictionary.json — { section: [originalPath, ...] } (unchanged format)
+//   imageMeta.json       — { originalPath: { w, h } } for aspect-ratio
+//                          placeholders (no layout shift while lazy-loading)
+//
+// Generation is incremental: outputs newer than their source are skipped, so
+// local runs and CI builds only pay for new or changed photos.
+
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import {
-	fileURLToPath
-} from 'url';
-import {
-	dirname
-} from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const __filename = fileURLToPath(
-	import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.bmp',
-	'.svg'
-]);
 
-const basePath = __dirname + '/img/photography/';
-const original_base_path = basePath + 'original/';
-const medium_res_base_path = basePath + 'medium_res/';
-const thumbnailsPath = basePath + 'thumbnails';
+const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg']);
 
-const image_dict_path = "/assets/img/photography/original/";
+const basePath = path.join(__dirname, 'img/photography');
+const originalPath = path.join(basePath, 'original');
+const mediumPath = path.join(basePath, 'medium_res');
+const thumbnailsPath = path.join(basePath, 'thumbnails');
 
-// Ensure the thumbnails directory exists
-if (!fs.existsSync(thumbnailsPath)) {
-	fs.mkdirSync(thumbnailsPath, {
-		recursive: true
-	});
-}
+const PUBLIC_PREFIX = '/assets/img/photography/original/';
 
-// Ensure the medium_res directory exists
-if (!fs.existsSync(medium_res_base_path)) {
-	fs.mkdirSync(medium_res_base_path, {
-		recursive: true
-	});
-}
+const THUMB_WIDTH = 800;
+const MEDIUM_WIDTH = 2048;
+const JPEG_QUALITY = 75;
+const CONCURRENCY = 4;
 
-const generateImageDictionary = (basePath) => {
-	const imageDictionary = {
-		".": []
-	};
+const isUpToDate = (src, out) =>
+	fs.existsSync(out) && fs.statSync(out).mtimeMs >= fs.statSync(src).mtimeMs;
 
-	const walkSync = (dir, relativePath) => {
-		const files = fs.readdirSync(dir);
-
-		files.forEach((file) => {
-			const filePath = path.join(dir, file);
-			const fileStat = fs.statSync(filePath);
-
-			if (fileStat.isDirectory()) {
-				const subDirPath = path.join(thumbnailsPath,
-					relativePath, file);
-				if (!fs.existsSync(subDirPath)) {
-					fs.mkdirSync(subDirPath, {
-						recursive: true
-					});
-				}
-				const subDirPathMediumRes = path.join(
-					medium_res_base_path, relativePath, file
-				);
-				if (!fs.existsSync(subDirPathMediumRes)) {
-					fs.mkdirSync(subDirPathMediumRes, {
-						recursive: true
-					});
-				}
-				walkSync(filePath, path.join(relativePath,
-					file)); // Recursive call for subdirectories
-			} else if (imageExtensions.has(path.extname(file)
-					.toLowerCase())) {
-				const key = relativePath === '' ? '.' :
-					relativePath;
-				if (!imageDictionary[key]) {
-					imageDictionary[key] = [];
-				}
-				const relativeFilePath = key === '.' ? file :
-					path.join(key, file);
-				const thumbnailFilePath = path.join(
-					thumbnailsPath, relativeFilePath);
-
-
-				// Generate thumbnail
-				sharp(filePath)
-					.resize({
-						width: 800
-					})
-					.toFormat(
-						'jpeg'
-					) // Convert to jpeg for size efficiency
-					.toFile(thumbnailFilePath, (err, info) => {
-						if (err) throw err;
-					});
-
-
-				// Convert to jpeg for size efficency, save and store in dictionary.
-				sharp(filePath)
-					.jpeg({
-						quality: 50
-					})
-					.toFile(medium_res_base_path +
-						relativeFilePath),
-					(err, info) => {
-						if (err) throw err;
-					}
-				imageDictionary[key].push(image_dict_path +
-					relativeFilePath);
-			}
-		});
-	};
-
-	walkSync(original_base_path, '');
-
-	return imageDictionary;
+// Collect every image under original/, keyed by section (subdirectory).
+const collectImages = (dir, relativePath = '') => {
+	const entries = [];
+	for (const file of fs.readdirSync(dir).sort()) {
+		const filePath = path.join(dir, file);
+		const rel = relativePath === '' ? file : path.posix.join(relativePath, file);
+		if (fs.statSync(filePath).isDirectory()) {
+			entries.push(...collectImages(filePath, rel));
+		} else if (imageExtensions.has(path.extname(file).toLowerCase())) {
+			entries.push({ filePath, rel, section: relativePath === '' ? '.' : relativePath });
+		}
+	}
+	return entries;
 };
 
-// Get current image dictionary
-const imageDictionary = generateImageDictionary(basePath);
+const processImage = async ({ filePath, rel }, meta) => {
+	const thumbOut = path.join(thumbnailsPath, rel);
+	const mediumOut = path.join(mediumPath, rel);
+	fs.mkdirSync(path.dirname(thumbOut), { recursive: true });
+	fs.mkdirSync(path.dirname(mediumOut), { recursive: true });
 
-// Write the dictionary to a JSON file
-fs.writeFileSync(path.join(__dirname, 'imageDictionary.json'), JSON.stringify(
-	imageDictionary, null, 2), 'utf-8');
+	// Dimensions as displayed (swap when EXIF orientation rotates the image).
+	const md = await sharp(filePath).metadata();
+	let { width, height } = md;
+	if (md.orientation && md.orientation >= 5) [width, height] = [height, width];
+	meta[PUBLIC_PREFIX + rel] = { w: width, h: height };
+
+	if (!isUpToDate(filePath, thumbOut)) {
+		await sharp(filePath)
+			.rotate() // bake EXIF orientation
+			.resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+			.jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+			.toFile(thumbOut);
+	}
+
+	if (!isUpToDate(filePath, mediumOut)) {
+		await sharp(filePath)
+			.rotate()
+			.resize({ width: MEDIUM_WIDTH, withoutEnlargement: true })
+			.jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+			.toFile(mediumOut);
+	}
+};
+
+const run = async () => {
+	const images = collectImages(originalPath);
+
+	const dictionary = { '.': [] };
+	for (const { rel, section } of images) {
+		if (!dictionary[section]) dictionary[section] = [];
+		dictionary[section].push(PUBLIC_PREFIX + rel);
+	}
+
+	const meta = {};
+	const queue = [...images];
+	let failures = 0;
+	await Promise.all(
+		Array.from({ length: CONCURRENCY }, async () => {
+			while (queue.length) {
+				const job = queue.pop();
+				try {
+					await processImage(job, meta);
+				} catch (err) {
+					failures += 1;
+					console.error(`[images] failed on ${job.rel}: ${err.message}`);
+				}
+			}
+		})
+	);
+
+	// Stable key order so the committed manifests diff cleanly.
+	const sortedMeta = Object.fromEntries(
+		Object.keys(meta).sort().map((k) => [k, meta[k]])
+	);
+
+	fs.writeFileSync(
+		path.join(__dirname, 'imageDictionary.json'),
+		JSON.stringify(dictionary, null, 2),
+		'utf-8'
+	);
+	fs.writeFileSync(
+		path.join(__dirname, 'imageMeta.json'),
+		JSON.stringify(sortedMeta, null, 2),
+		'utf-8'
+	);
+
+	console.log(`[images] ${images.length} photos, ${failures} failures`);
+	if (failures > 0) process.exitCode = 1;
+};
+
+run();

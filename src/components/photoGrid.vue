@@ -1,26 +1,50 @@
 <template>
-    <div class="category-grid">
-      <div class="category-card" v-for="category in categories" :key="category.name" @click="goToCategory(category.link)">
-        <img :src="category.image" :alt="category.name" class="category-image">
-        <div class="category-name">{{ category.name }}</div>
-      </div>
-    </div>
+    <nav class="category-grid" aria-label="Photo categories">
+      <router-link
+        v-for="category in categories"
+        :key="category.name"
+        :to="category.link"
+        class="category-card"
+        @pointerenter="warm(category)"
+        @focus="warm(category)"
+      >
+        <span class="category-frame">
+          <img
+            :src="category.image"
+            :alt="category.name + ' photos'"
+            class="category-image"
+            decoding="async"
+          >
+        </span>
+        <span class="category-name">
+          <span>{{ category.name }}</span>
+          <span class="category-arrow" aria-hidden="true">→</span>
+        </span>
+      </router-link>
+    </nav>
   </template>
 
 <script>
 import { photoCategories } from '/src/lib/siteContent.js';
+import { prefetchSectionThumbs } from '/src/lib/prefetch.js';
 
 export default {
     name: 'CategoryGrid',
     data() {
         return {
             categories: photoCategories,
+            warmed: {},
         };
     },
     methods: {
-        goToCategory(link) {
-            this.$router.push(link);
-        }
-    }
+        // Hovering a card warms that section's gallery thumbnails so the
+        // category page paints instantly on click.
+        warm(category) {
+            const section = category.link.split('/').pop();
+            if (this.warmed[section]) return;
+            this.warmed = { ...this.warmed, [section]: true };
+            prefetchSectionThumbs(section);
+        },
+    },
 };
 </script>
