@@ -6,7 +6,9 @@
 
 html, body { margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+/* No global smooth scrolling: it animates the router's scroll-to-top on
+   every navigation, which reads as lag. Anchor links opt in via the
+   router's scrollBehavior instead. */
 
 body {
     font-family: var(--font-sans);
@@ -19,6 +21,11 @@ body {
     margin: 8px auto;
     max-width: 95%;
     overflow-y: scroll;
+}
+
+/* Lock page scroll while the photo lightbox is open. */
+body.viewer-open {
+    overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -224,7 +231,8 @@ article p {
 
 article p:last-child { margin-bottom: 0; }
 
-article strike {
+article strike,
+article s {
     color: var(--fg);
     opacity: 0.65;
     text-decoration-thickness: 2px;
@@ -380,22 +388,107 @@ footer.site-footer a:hover {
 }
 
 /* ============================================================
-   ROUTE TRANSITION (article + dirlist crossfade)
+   ROUTE TRANSITION — View Transitions API
+   The DOM swaps instantly; the browser crossfades snapshots on the
+   compositor. Chrome stays put: topnav, main and footer each get their
+   own snapshot so only page content visibly changes.
    ============================================================ */
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 160ms ease;
+@supports (view-transition-name: none) {
+    .topnav { view-transition-name: topnav; }
+    main { view-transition-name: page-main; }
+    footer.site-footer { view-transition-name: site-footer; }
 }
 
-.fade-enter-from,
-.fade-leave-to { opacity: 0; }
+@supports (view-transition-name: none) {
+    /* Keep every layer's lifetime aligned: the overlay tears down when the
+       longest animation ends, so nothing may outlive the fades. */
+    ::view-transition-group(*) {
+        animation-duration: 160ms;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.fade-enter-to,
-.fade-leave-from { opacity: 1; }
+    /* The command bar must feel bolted to the page: crossfading its old/new
+       snapshots double-exposes the breadcrumb and back button (the content
+       that differs between routes) and reads as flicker. Swap it instantly —
+       new bar fully opaque from the first frame, no fade, no geometry tween. */
+    ::view-transition-group(topnav) {
+        animation: none;
+    }
+
+    ::view-transition-image-pair(topnav) {
+        animation: none;
+    }
+
+    ::view-transition-old(topnav) {
+        animation: none;
+        opacity: 0;
+    }
+
+    ::view-transition-new(topnav) {
+        animation: none;
+        opacity: 1;
+        mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 140ms;
+    }
+
+    /* No geometry morphs: animating the box's size/position detaches its
+       frame from the command bar (sliding side borders, a flashing seam),
+       especially when the old page was scrolled. Geometry snaps; only the
+       pixels crossfade. The bar and box frame are identical between pages,
+       and the browser's plus-lighter blend keeps identical pixels constant
+       through a matched crossfade — so the chrome holds perfectly still
+       while the content inside fades. */
+    ::view-transition-group(page-main),
+    ::view-transition-group(site-footer) {
+        animation: none;
+    }
+
+    ::view-transition-old(page-main),
+    ::view-transition-new(page-main),
+    ::view-transition-old(site-footer),
+    ::view-transition-new(site-footer) {
+        animation-duration: 160ms;
+        animation-timing-function: ease;
+        /* `animation: none` on the parent group resets the fill-mode these
+           images normally inherit — without `both`, the old snapshot pops
+           back to full opacity after its fade-out ends and the previous
+           page flashes for the overlay's remaining frames. */
+        animation-fill-mode: both;
+    }
+}
 
 @media (prefers-reduced-motion: reduce) {
-    .fade-enter-active,
-    .fade-leave-active { transition: none !important; }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
+
+/* ============================================================
+   INTERACTION STATES — keyboard focus + press feedback
+   ============================================================ */
+:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+}
+
+.topnav :focus-visible {
+    outline-color: var(--bg);
+    outline-offset: 1px;
+}
+
+nav.articles-list .row:active {
+    transform: translateY(1px);
+}
+
+.back-btn:active,
+.theme-btn:active {
+    transform: translateY(1px);
 }
 
 /* ============================================================
@@ -403,5 +496,16 @@ footer.site-footer a:hover {
    ============================================================ */
 @media (max-width: 520px) {
     .topnav { font-size: 12px; padding: 6px 10px; }
+
+    /* Long slugs (writing posts) would wrap the breadcrumb into the
+       buttons — ellipsize each segment instead. */
+    .topnav .crumbs a,
+    .topnav .crumb-cli {
+        max-width: 14ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     article { padding: 1.2em 18px; }
 }

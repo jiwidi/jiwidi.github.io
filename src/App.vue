@@ -3,11 +3,9 @@
     <LoadingBar />
     <Navbar />
     <Terminal v-if="terminalState.active" />
-    <router-view v-else v-slot="{ Component, route }">
-      <transition name="fade" mode="out-in">
-        <component :is="Component" :key="route.path" />
-      </transition>
-    </router-view>
+    <!-- Page changes animate via the View Transitions API (lib/viewTransitions.js)
+         instead of an out-in component transition, so the swap is instant. -->
+    <router-view v-else />
     <footer class="site-footer">
       <span>© {{ year }} jaime ferrando huertas</span>
       <span>
@@ -19,8 +17,6 @@
       </span>
     </footer>
   </div>
-
-  <SpeedInsights />
 </template>
 
 <script>

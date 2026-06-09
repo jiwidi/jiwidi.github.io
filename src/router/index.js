@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { installViewTransitions } from '../lib/viewTransitions.js';
 import Home from '../views/home.vue';
 import Writing from '../views/writing.vue';
 import Keyboard from '../views/keyboards.vue';
@@ -51,11 +52,15 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+	// Instant jumps: an animated scroll on every route change reads as lag.
+	// Smooth scrolling stays only for same-page anchor links.
 	scrollBehavior(to, from, savedPosition) {
 		if (savedPosition) return savedPosition;
 		if (to.hash) return { el: to.hash, behavior: 'smooth' };
-		return { top: 0, behavior: 'smooth' };
+		return { top: 0 };
 	},
 });
+
+installViewTransitions(router);
 
 export default router;

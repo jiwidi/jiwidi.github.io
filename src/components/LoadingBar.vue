@@ -3,24 +3,39 @@
 </template>
 
 <script>
+// Route chunks are prefetched on idle, so navigation is normally instant.
+// The bar only appears when a navigation genuinely stalls (cold chunk on a
+// slow connection) — showing it on every click makes fast pages feel slow.
+const SLOW_NAVIGATION_MS = 250;
+
 export default {
   name: 'LoadingBar',
   data() {
     return {
       isLoading: false,
+      showTimer: null,
     };
   },
   mounted() {
-    this.$router.beforeEach((to, from, next) => {
-      this.isLoading = true;
-      next();
-    });
-
-    this.$router.afterEach(() => {
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 200);
-    });
+    const finish = () => {
+      clearTimeout(this.showTimer);
+      this.isLoading = false;
+    };
+    this.stopGuards = [
+      this.$router.beforeEach((to, from, next) => {
+        clearTimeout(this.showTimer);
+        this.showTimer = setTimeout(() => {
+          this.isLoading = true;
+        }, SLOW_NAVIGATION_MS);
+        next();
+      }),
+      this.$router.afterEach(finish),
+      this.$router.onError(finish),
+    ];
+  },
+  beforeUnmount() {
+    clearTimeout(this.showTimer);
+    (this.stopGuards || []).forEach((stop) => stop());
   },
 };
 </script>
