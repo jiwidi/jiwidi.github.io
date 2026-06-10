@@ -199,6 +199,13 @@ main img {
 article {
     padding: 1.6em clamp(22px, 7%, 42px);
     min-height: 256px;
+    overflow-wrap: break-word;
+}
+
+/* The desktop min-height gives sparse pages presence, but on phones it
+   reads as dead space between the intro and the list below it. */
+@media (max-width: 767px) {
+    article { min-height: 0; }
 }
 
 article h1 {
@@ -307,6 +314,19 @@ article details {
 
 /* Topnav already provides "back" — hide the legacy in-content back arrow */
 .back-button-container { display: none; }
+
+/* Below the grid breakpoint the about portrait sits in normal flow —
+   cap it so it doesn't render full-width on phones. */
+@media (max-width: 599px) {
+    .about-article .about-image {
+        margin-top: 1.4em;
+
+        img {
+            max-width: min(62%, 240px);
+            border: 1px solid var(--fg);
+        }
+    }
+}
 
 /* About-page two-column grid (kept) */
 @media (min-width: 600px) {
@@ -495,10 +515,26 @@ nav.articles-list .row:active {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 520px) {
-    .topnav { font-size: 12px; padding: 6px 10px; }
+    /* Reclaim horizontal room: the desktop 95%-width + 15px padding
+       leaves only ~340px of content on a 390px phone. */
+    body {
+        max-width: 100%;
+        padding: 8px 10px;
+    }
 
-    /* Long slugs (writing posts) would wrap the breadcrumb into the
-       buttons — ellipsize each segment instead. */
+    .topnav {
+        font-size: 12px;
+        padding: 6px 10px;
+        gap: 10px;
+    }
+
+    /* Keep the breadcrumb on a single line: ellipsize each segment
+       instead of wrapping into the buttons. */
+    .topnav .crumbs {
+        flex-wrap: nowrap;
+        overflow: hidden;
+    }
+
     .topnav .crumbs a,
     .topnav .crumb-cli {
         max-width: 14ch;
@@ -506,6 +542,17 @@ nav.articles-list .row:active {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    .topnav .right { gap: 6px; }
+
+    .back-btn,
+    .theme-btn {
+        font-size: 10px;
+        padding: 3px 6px;
+        letter-spacing: 0.05em;
+    }
+
+    .theme-btn { min-width: 0; }
 
     article { padding: 1.2em 18px; }
 }
