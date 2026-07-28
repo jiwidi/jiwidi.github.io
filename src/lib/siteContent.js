@@ -6,7 +6,7 @@ export const homePages = [
   { title: 'Writing',     link: '/writing',     description: '11 pieces' },
   { title: 'Creative',    link: '/creative',    description: '9 finds' },
   { title: 'Keyboards',   link: '/keyboards',   description: '7 builds' },
-  { title: 'Photography', link: '/photography', description: '8 sets' },
+  { title: 'Photography', link: '/photography', description: '7 sets' },
   { title: 'About',       link: '/about',       description: 'readme' },
 ];
 
@@ -53,13 +53,18 @@ export const creativeItems = [
   { title: "First season of True Detective",      description: "a masterpiece", link: "https://www.imdb.com/title/tt2356777/" },
 ];
 
+// Ordered — the order defines set numbers (01, 02, …) across the
+// photography index, the set meta line, and prev/next navigation.
+// `size` curates the index mosaic: hero (4×2), tall (2×2, portrait
+// covers), half (3×1), std (2×1) on the 6-column desktop grid.
 export const photoCategories = [
-  { name: 'Family',    image: 'assets/img/photography/thumbnails/family/Paula Ferrando -82.jpg',           link: '/photography/family' },
-  { name: 'Nature',    image: 'assets/img/photography/thumbnails/nature/39225246575_678b236c4e_o.jpg',     link: '/photography/nature' },
-  { name: 'Milu',      image: 'assets/img/photography/thumbnails/milu/30_06_2023_0064.jpg',                link: '/photography/milu' },
-  { name: 'Life',      image: 'assets/img/photography/thumbnails/life/Paula Ferrando -3.jpg',              link: '/photography/life' },
-  { name: 'Street',    image: 'assets/img/photography/thumbnails/street/30_06_2023_0042-Enhanced.jpg',     link: '/photography/street' },
-  { name: 'Portraits', image: 'assets/img/photography/thumbnails/portraits/09_01_2024_0141.jpg',           link: '/photography/portraits' },
+  { name: 'Family',    slug: 'family',    size: 'hero', image: '/assets/img/photography/thumbnails/family/Paula Ferrando -82.jpg',       link: '/photography/family' },
+  { name: 'Portraits', slug: 'portraits', size: 'tall', image: '/assets/img/photography/thumbnails/portraits/09_01_2024_0141.jpg',       link: '/photography/portraits' },
+  { name: 'Street',    slug: 'street',    size: 'half', image: '/assets/img/photography/thumbnails/street/30_06_2023_0042-Enhanced.jpg', link: '/photography/street' },
+  { name: 'Nature',    slug: 'nature',    size: 'half', image: '/assets/img/photography/thumbnails/nature/39225246575_678b236c4e_o.jpg', link: '/photography/nature' },
+  { name: 'Milu',      slug: 'milu',      size: 'std',  image: '/assets/img/photography/thumbnails/milu/30_06_2023_0064.jpg',            link: '/photography/milu' },
+  { name: 'Life',      slug: 'life',      size: 'std',  image: '/assets/img/photography/thumbnails/life/Paula Ferrando -3.jpg',          link: '/photography/life' },
+  { name: 'Faroe',     slug: 'faroe',     size: 'std',  image: '/assets/img/photography/thumbnails/faroe/faroe_0233.jpg',                link: '/photography/faroe' },
 ];
 
 export const keyboards = [

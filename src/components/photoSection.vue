@@ -1,6 +1,6 @@
 <template>
-    <ImageGallery :images="images" :section="section_name" />
-  </template>
+  <ImageGallery :images="images" :section="section_name" />
+</template>
 
 <script>
 import ImageGallery from '/src/components/imageGallery.vue';

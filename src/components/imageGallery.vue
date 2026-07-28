@@ -20,6 +20,7 @@
           @load="markLoaded(index)"
           @error="markLoaded(index)"
         >
+        <span class="gallery-num" aria-hidden="true">{{ String(index + 1).padStart(2, '0') }}</span>
       </button>
 
       <Teleport to="body">
@@ -253,10 +254,28 @@ export default {
 .gallery-item {
     position: relative;
     padding: 0;
-    border: 0;
+    border: 1px solid var(--rule_soft);
     background: var(--bg_acc);
     cursor: zoom-in;
     overflow: hidden;
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.18s ease;
+}
+
+/* Prints lift off the sheet: hard offset shadow in ink, no blur —
+   the same box language as the rest of the site. */
+.gallery-item:hover,
+.gallery-item:focus-visible {
+    border-color: var(--fg);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--fg);
+    z-index: 1;
+}
+
+.gallery-item:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--fg);
 }
 
 .gallery-thumb {
@@ -265,15 +284,33 @@ export default {
     object-fit: cover;
     display: block;
     opacity: 0;
+    transform: translateY(8px);
     transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .gallery-thumb.is-loaded {
     opacity: 1;
+    transform: none;
 }
 
-.gallery-item:hover .gallery-thumb {
-    transform: scale(1.025);
+/* Contact-sheet frame number, revealed on hover/focus. */
+.gallery-num {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 2px 7px;
+    background: var(--fg);
+    color: var(--bg);
+    font: 600 10px/1.5 var(--font-mono);
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+
+.gallery-item:hover .gallery-num,
+.gallery-item:focus-visible .gallery-num {
+    opacity: 1;
 }
 
 /* ---------- lightbox ---------- */
@@ -415,10 +452,17 @@ export default {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .gallery-item,
     .gallery-thumb,
     .viewer-enter-active,
     .viewer-leave-active {
         transition: none !important;
+    }
+
+    .gallery-item:hover,
+    .gallery-item:focus-visible,
+    .gallery-thumb {
+        transform: none !important;
     }
 }
 </style>

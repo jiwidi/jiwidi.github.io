@@ -1,13 +1,21 @@
 /* ============================================================
-   PHOTO CATEGORY GRID (/photography)
-   Cards follow the site's box language: hard corners, 2px rules,
+   PHOTOGRAPHY — archive / contact-sheet treatment.
+   Follows the site's box language: hard corners, 2px rules,
    mono uppercase labels that invert on hover.
+   ============================================================ */
+
+/* ============================================================
+   CATEGORY MOSAIC (/photography)
+   Curated 6-column bento: one hero, one tall portrait tile,
+   two half-width tiles, three standard tiles. Spans are set by
+   the `size` field on photoCategories (siteContent.js).
    ============================================================ */
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin-top: 1.4em;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: clamp(92px, 16vw, 148px);
+    gap: 12px;
+    margin-top: 1.6em;
 }
 
 .category-card {
@@ -18,7 +26,12 @@
     text-decoration: none;
     color: var(--fg);
     overflow: hidden;
+    grid-column: span 2;
 }
+
+.category-card.is-hero { grid-column: span 4; grid-row: span 2; }
+.category-card.is-tall { grid-column: span 2; grid-row: span 2; }
+.category-card.is-half { grid-column: span 3; }
 
 .category-card:hover {
     background: var(--bg);
@@ -27,7 +40,8 @@
 
 .category-frame {
     display: block;
-    aspect-ratio: 4 / 3;
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
     background: var(--bg_acc);
 }
@@ -58,6 +72,33 @@
     transition: background 0.12s, color 0.12s;
 }
 
+.category-title,
+.category-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.category-title > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-num,
+.category-count {
+    opacity: 0.55;
+    transition: opacity 0.12s;
+}
+
+.category-card:hover .category-num,
+.category-card:hover .category-count,
+.category-card:focus-visible .category-num,
+.category-card:focus-visible .category-count {
+    opacity: 1;
+}
+
 .category-card:hover .category-name,
 .category-card:focus-visible .category-name {
     background: var(--fg);
@@ -71,3 +112,32 @@
 .category-card:hover .category-arrow {
     transform: translateX(4px);
 }
+
+/* Phones + narrow tablets: 2-column mosaic. The hero keeps its
+   double-height presence; everything else becomes a single cell,
+   with the last tile stretching full width to close the grid. */
+@media (max-width: 640px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: clamp(120px, 34vw, 170px);
+        gap: 10px;
+    }
+
+    .category-card,
+    .category-card.is-tall,
+    .category-card.is-half {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .category-card.is-hero {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .category-name {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
