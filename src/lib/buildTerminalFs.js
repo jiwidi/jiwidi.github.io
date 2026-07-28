@@ -46,17 +46,23 @@ function itemsToFolder(items, getName) {
 export function buildTerminalData() {
   const writingFolder = itemsToFolder(writings, (it) => slug(it.title));
   const projectFolder = itemsToFolder(projects, (it) => slug(it.title));
-  const creativeFolder = itemsToFolder(creativeItems, (it) => slug(it.title));
+  // Keyboards lives as a subfolder of creative — drop its list entry so the
+  // terminal shows a real keyboards/ directory instead of a duplicate link.
+  const creativeFolder = itemsToFolder(
+    creativeItems.filter((it) => it.link !== '/creative/keyboards'),
+    (it) => slug(it.title),
+  );
   const photoFolder = itemsToFolder(photoCategories, (it) => slug(it.name));
 
   // Keyboards: each entry becomes a "file" whose contents (cat) describe it,
-  // plus a top-level _ilink to the page itself.
+  // plus an _ilink to the page itself.
   const keyboardFolder = {
-    'README.md': '_ilink:/keyboards',
+    'README.md': '_ilink:/creative/keyboards',
   };
   for (const k of keyboards) {
     keyboardFolder[slug(k.name) + '.md'] = k.name + ' — ' + k.summary;
   }
+  creativeFolder['keyboards'] = keyboardFolder;
 
   // About: short text plus links.
   const aboutFolder = {
@@ -76,7 +82,6 @@ export function buildTerminalData() {
     'projects':    projectFolder,
     'writing':     writingFolder,
     'creative':    creativeFolder,
-    'keyboards':   keyboardFolder,
     'photography': photoFolder,
     'contact.txt': 'email: hi@imjai.me · github: <a class="link" href="https://github.com/jiwidi" target="_blank">jiwidi</a> · <a class="link" href="https://ecomid.com" target="_blank">ecomid.com</a>',
     '.secret':     'try: cat .secret/wise',
@@ -90,7 +95,7 @@ export function buildTerminalData() {
     ],
     startblog: ['cd writing', 'ls'],
     startphotos: ['cd photography', 'ls'],
-    startkeyboards: ['cd keyboards', 'ls'],
+    startkeyboards: ['cd creative/keyboards', 'ls'],
     uname: 'Linux jiwidi 5.15.0-jaime #1 SMP x86_64 GNU/Linux',
     whoami: [
       'jaime ferrando huertas',

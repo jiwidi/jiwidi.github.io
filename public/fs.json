@@ -13,7 +13,7 @@
     "ls"
   ],
   "startkeyboards": [
-    "cd keyboards",
+    "cd creative",
     "ls"
   ],
   "uname": "Linux jiwidi 5.15.0-jaime #1 SMP x86_64 GNU/Linux",
@@ -44,7 +44,6 @@
         "projects": "_ilink:/projects",
         "writing": "_ilink:/writing",
         "creative": "_ilink:/creative",
-        "keyboards": "_ilink:/keyboards",
         "photography": "_ilink:/photography",
         "contact.txt": "email: hi@imjai.me · github: jiwidi · ecomid.com",
         ".secret": "you found it. cat .secret/wise to see something old."

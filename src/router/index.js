@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { installViewTransitions } from '../lib/viewTransitions.js';
 import Home from '../views/home.vue';
 import Writing from '../views/writing.vue';
-import Keyboard from '../views/keyboards.vue';
 import Creative from '../views/creative.vue';
 import About from '../views/about.vue';
 import Photography from '../views/photography.vue';
@@ -23,6 +22,7 @@ export const lazyLoaders = {
 	'writing/recsys_2022': () => import('../views/writing/recsys22.vue'),
 	'creative/watermelon': () => import('../views/creative/watermelon.vue'),
 	'creative/kipling_if': () => import('../views/creative/kipling_if.vue'),
+	'creative/keyboards': () => import('../views/creative/keyboards.vue'),
 	'photography/faroe': () => import('../views/photo_categories/faroe.vue'),
 	'photography/family': () => import('../views/photo_categories/family.vue'),
 	'photography/life': () => import('../views/photo_categories/life.vue'),
@@ -37,7 +37,8 @@ const routes = [
 	{ path: '/index.html', redirect: '/' },
 	{ path: '/', component: Home },
 	{ path: '/writing', component: Writing },
-	{ path: '/keyboards', component: Keyboard },
+	// Keyboards moved under creative — keep old links working.
+	{ path: '/keyboards', redirect: '/creative/keyboards' },
 	{ path: '/creative', component: Creative },
 	{ path: '/about', component: About },
 	{ path: '/projects', component: Projects },

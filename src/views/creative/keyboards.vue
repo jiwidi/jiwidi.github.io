@@ -104,7 +104,7 @@
 <script>
 import BackButton from '/src/components/BackButton.vue';
 export default {
-    name: 'Creative',
+    name: 'Keyboards',
     components: {
         BackButton
     },
