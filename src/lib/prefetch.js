@@ -1,5 +1,6 @@
 import { lazyLoaders } from '../router/index.js';
 import imageDictionary from '../assets/imageDictionary.json';
+import { photoCategories } from './siteContent.js';
 
 const onIdle = (cb, timeout = 2000) => {
 	if (typeof window === 'undefined') return;
@@ -44,19 +45,8 @@ const prefetchUrl = (url) => {
 const toThumb = (url) => url.replace('/original/', '/thumbnails/');
 
 // Cover images shown by photoGrid on /photography — small, always worth prefetching.
-const PHOTO_GRID_COVERS = [
-	'family/Paula Ferrando -82.jpg',
-	'nature/39225246575_678b236c4e_o.jpg',
-	'milu/30_06_2023_0064.jpg',
-	'life/Paula Ferrando -3.jpg',
-	'street/30_06_2023_0042-Enhanced.jpg',
-	'portraits/09_01_2024_0141.jpg',
-];
-
 export const prefetchPhotoCovers = () => {
-	PHOTO_GRID_COVERS.forEach(p =>
-		prefetchUrl('/assets/img/photography/thumbnails/' + p)
-	);
+	photoCategories.forEach((category) => prefetchUrl(category.image));
 };
 
 // All gallery thumbnails for a given section. Used when the user is already on

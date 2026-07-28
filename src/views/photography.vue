@@ -3,10 +3,12 @@
         <div class="home-container">
       <main class="shadowPlus4">
         <article>
-          <h1>To notice life</h1>
-            <p>I've always liked paying attention to the small signs of life scattered everywhere, in people, places, animals, movement, stillness, and texture.</p>
+          <h1>The art of noticing</h1>
+            <p>I believe great photographs capture moments of life that awaken a memory or a feeling.</p>
 
-        <p>Photography lets me take the things I notice and give them a place to remain. A movement, a texture, a person, an animal, a quiet corner of a place. They might only exist like that for a moment, but a photograph keeps a trace of them.</p>
+        <p>These moments are everywhere. Most are brief and unplanned. Some happen every day, while others may happen only once. Together, they remember us something about life and who we are.</p>
+
+        <p>Noticing these moments and finding a way to preserve them is the part of photography I love most. The photograph keeps the moment, but the real art is noticing it in the first place.</p>
 <photoGrid/>
         </article>
         <BackButton />
