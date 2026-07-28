@@ -79,10 +79,10 @@ export default {
       const p = this.terminalState.previewPath || '';
       // surface section as the chip label: writing/foo → 'md', creative/x → 'md',
       // photography/x → 'set', projects → 'repo', etc. Default 'doc'.
+      if (p.startsWith('/creative/keyboards')) return 'kb';
       if (p.startsWith('/writing/') || p.startsWith('/creative/')) return 'md';
       if (p.startsWith('/photography')) return 'set';
       if (p.startsWith('/projects')) return 'repo';
-      if (p.startsWith('/keyboards')) return 'kb';
       if (p.startsWith('/about')) return 'me';
       return 'doc';
     },

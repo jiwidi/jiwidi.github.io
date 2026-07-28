@@ -5,7 +5,6 @@ export const homePages = [
   { title: 'Projects',    link: '/projects',    description: '12 repos' },
   { title: 'Writing',     link: '/writing',     description: '11 pieces' },
   { title: 'Creative',    link: '/creative',    description: '9 finds' },
-  { title: 'Keyboards',   link: '/keyboards',   description: '7 builds' },
   { title: 'Photography', link: '/photography', description: '7 sets' },
   { title: 'About',       link: '/about',       description: 'readme' },
 ];
@@ -51,6 +50,7 @@ export const creativeItems = [
   { title: "Tastiness of Watermelon",             description: "internal",      link: "/creative/watermelon" },
   { title: "If— by Rudyard Kipling",              description: "poem",          link: "/creative/kipling_if" },
   { title: "First season of True Detective",      description: "a masterpiece", link: "https://www.imdb.com/title/tt2356777/" },
+  { title: "Many Keyboards!",                     description: "7 builds",      link: "/creative/keyboards" },
 ];
 
 // Ordered — the order defines set numbers (01, 02, …) across the

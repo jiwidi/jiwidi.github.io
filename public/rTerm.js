@@ -65,10 +65,13 @@ window.rTerm = function (options) {
 			window.onfocus = function () { window.blurred = false; };
 
 			if (this.data.upstart !== "undefined") {
-				var path = (options.url || window.location.pathname || "").split("/").filter(Boolean)[0];
+				var segments = (options.url || window.location.pathname || "").split("/").filter(Boolean);
+				var path = segments[0];
+				var isKeyboards = path === "keyboards" ||
+					(path === "creative" && segments[1] === "keyboards");
 				if (path === "photography" && this.data.startphotos) {
 					this.callPhotos();
-				} else if (path === "keyboards" && this.data.startkeyboards) {
+				} else if (isKeyboards && this.data.startkeyboards) {
 					this.callKeyboard();
 				} else if (path === "writing" && this.data.startblog) {
 					this.callBlog();
