@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { installViewTransitions } from '../lib/viewTransitions.js';
 import Home from '../views/home.vue';
 import Writing from '../views/writing.vue';
 import Creative from '../views/creative.vue';
@@ -61,7 +60,5 @@ const router = createRouter({
 		return { top: 0 };
 	},
 });
-
-installViewTransitions(router);
 
 export default router;

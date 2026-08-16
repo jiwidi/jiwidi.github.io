@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <photoSection :section_name='name'></photoSection>
-    </div>
+  <article>
+    <photoSection :section_name='name'></photoSection>
+  </article>
 </template>
 
 <script>

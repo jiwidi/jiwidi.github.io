@@ -1,7 +1,5 @@
 <template>
-    <div class="about-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>
             Your browsing behavior is being modeled as a language</h1>
           <hr>
@@ -36,8 +34,6 @@
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>

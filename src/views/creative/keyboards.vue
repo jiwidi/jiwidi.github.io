@@ -1,7 +1,5 @@
 <template>
-    <div class="creative-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>Many keyboards!</h1>
           <p>As someone who spends a lot of time at a keyboard, I consider it an extension of myself. Most keyboards are functional and get the job done, but if you want to improve your typing experience, you can go pretty overkill. These over-the-top keyboards don't offer any special features, but they are comfortable to use for long periods of time without causing hand strain. Building them from scratch by soldering, picking out components, and assembling them is a satisfying engineering challenge for me.</p>
           <section>
@@ -97,8 +95,6 @@
           </section>
         </article>
         <BackButton />
-      </main>
-    </div>
 </template>
 
 <script>

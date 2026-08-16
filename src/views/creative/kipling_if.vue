@@ -1,7 +1,5 @@
 <template>
-  <div class="blog-container">
-    <main class="blog-main">
-      <article>
+  <article>
         <h1>If—</h1>
         <p class="poem-byline">Rudyard Kipling, 1895</p>
 
@@ -51,8 +49,6 @@
           </p>
         </section>
       </article>
-    </main>
-  </div>
 </template>
 
 <script>
