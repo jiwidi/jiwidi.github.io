@@ -181,16 +181,38 @@ a:link, a:active, a:visited { color: inherit; }
 }
 
 /* ============================================================
-   MAIN BOX
+   SITE SHELL — one persistent box (nav + page).
+   Views no longer render their own <main>, so the frame never
+   remounts and the side rules cannot slide or double-draw.
    ============================================================ */
-main {
+.site-shell {
     border: 2px solid var(--fg);
-    border-top: 0;
     background: var(--bg);
     margin-bottom: 16px;
 }
 
-main img {
+.site-main {
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.page {
+    position: relative;
+    min-width: 0;
+}
+
+/* Back-compat: leftover <main> wrappers (CLI preview, older posts). */
+.site-main > main,
+.page main,
+.side-body main {
+    border: 0;
+    margin: 0;
+    background: transparent;
+}
+
+.site-main img,
+.page img {
     max-width: 100%;
     height: auto;
     display: block;
@@ -198,14 +220,53 @@ main img {
 
 article {
     padding: 1.6em clamp(22px, 7%, 42px);
-    min-height: 256px;
     overflow-wrap: break-word;
 }
 
-/* The desktop min-height gives sparse pages presence, but on phones it
-   reads as dead space between the intro and the list below it. */
-@media (max-width: 767px) {
-    article { min-height: 0; }
+.page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(196px, 46%);
+    gap: clamp(16px, 4%, 32px);
+    align-items: center;
+    min-width: 0;
+}
+
+.page-hero .page-copy {
+    min-width: 0;
+}
+
+.page-hero .page-copy h1 {
+    margin-top: 0;
+}
+
+.page-hero .page-copy p {
+    text-align: left;
+}
+
+.ink-plate {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Home has no figure beside its copy — hold a readable measure rather than
+   letting the intro run the full width of the box. */
+.page-intro .page-copy {
+    max-width: 36em;
+}
+
+.page-intro .page-copy p {
+    text-align: left;
+}
+
+@media (max-width: 700px) {
+    .page-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .page-hero .ink-plate {
+        max-width: 400px;
+        margin: 0.4em auto 0;
+    }
 }
 
 article h1 {
@@ -319,11 +380,19 @@ article details {
    cap it so it doesn't render full-width on phones. */
 @media (max-width: 599px) {
     .about-article .about-image {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
         margin-top: 1.4em;
 
         img {
             max-width: min(62%, 240px);
             border: 1px solid var(--fg);
+        }
+
+        .ink-plate {
+            max-width: min(62%, 240px);
         }
     }
 }
@@ -338,7 +407,9 @@ article details {
 
         .about-image {
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
+            gap: 14px;
             position: sticky;
             top: 16px;
 
@@ -346,6 +417,11 @@ article details {
                 width: 100%;
                 max-width: 220px;
                 border: 1px solid var(--fg);
+            }
+
+            .ink-plate {
+                width: 100%;
+                max-width: 220px;
             }
         }
     }
@@ -408,84 +484,27 @@ footer.site-footer a:hover {
 }
 
 /* ============================================================
-   ROUTE TRANSITION — View Transitions API
-   The DOM swaps instantly; the browser crossfades snapshots on the
-   compositor. Chrome stays put: topnav, main and footer each get their
-   own snapshot so only page content visibly changes.
+   ROUTE TRANSITION
+   New page paints immediately (no enter fade — that felt like
+   a second load). The old page is taken out of flow and fades
+   off so the box never double-draws.
    ============================================================ */
-@supports (view-transition-name: none) {
-    .topnav { view-transition-name: topnav; }
-    main { view-transition-name: page-main; }
-    footer.site-footer { view-transition-name: site-footer; }
+.page-leave-active {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transition: opacity 90ms ease;
+    pointer-events: none;
 }
 
-@supports (view-transition-name: none) {
-    /* Keep every layer's lifetime aligned: the overlay tears down when the
-       longest animation ends, so nothing may outlive the fades. */
-    ::view-transition-group(*) {
-        animation-duration: 160ms;
-        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* The command bar must feel bolted to the page: crossfading its old/new
-       snapshots double-exposes the breadcrumb and back button (the content
-       that differs between routes) and reads as flicker. Swap it instantly —
-       new bar fully opaque from the first frame, no fade, no geometry tween. */
-    ::view-transition-group(topnav) {
-        animation: none;
-    }
-
-    ::view-transition-image-pair(topnav) {
-        animation: none;
-    }
-
-    ::view-transition-old(topnav) {
-        animation: none;
-        opacity: 0;
-    }
-
-    ::view-transition-new(topnav) {
-        animation: none;
-        opacity: 1;
-        mix-blend-mode: normal;
-    }
-
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation-duration: 140ms;
-    }
-
-    /* No geometry morphs: animating the box's size/position detaches its
-       frame from the command bar (sliding side borders, a flashing seam),
-       especially when the old page was scrolled. Geometry snaps; only the
-       pixels crossfade. The bar and box frame are identical between pages,
-       and the browser's plus-lighter blend keeps identical pixels constant
-       through a matched crossfade — so the chrome holds perfectly still
-       while the content inside fades. */
-    ::view-transition-group(page-main),
-    ::view-transition-group(site-footer) {
-        animation: none;
-    }
-
-    ::view-transition-old(page-main),
-    ::view-transition-new(page-main),
-    ::view-transition-old(site-footer),
-    ::view-transition-new(site-footer) {
-        animation-duration: 160ms;
-        animation-timing-function: ease;
-        /* `animation: none` on the parent group resets the fill-mode these
-           images normally inherit — without `both`, the old snapshot pops
-           back to full opacity after its fade-out ends and the previous
-           page flashes for the overlay's remaining frames. */
-        animation-fill-mode: both;
-    }
+.page-leave-to {
+    opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
+    .page-leave-active {
+        transition: none;
     }
 }
 

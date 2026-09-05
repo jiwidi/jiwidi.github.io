@@ -1,7 +1,5 @@
 <template>
-<div class="blog-container">
-        <main class="blog-main">
-            <article>
+<article>
                 <h1>The AI Revolution: Human like interfaces, not intelligence</h1>
                 <hr>
                 <section>
@@ -66,8 +64,6 @@
                 </section>
             </article>
             <BackButton />
-        </main>
-    </div>
   </template>
 
   <script>

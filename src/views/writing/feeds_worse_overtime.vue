@@ -1,7 +1,5 @@
 <template>
-    <div class="about-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>Why your feeds are getting worse over time</h1>
           <hr>
           <section>
@@ -64,8 +62,6 @@
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>

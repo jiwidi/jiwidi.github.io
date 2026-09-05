@@ -1,5 +1,5 @@
 <template>
-  <main class="terminal-main" :class="{ split: hasPreview }" :style="shellStyle">
+  <div class="terminal-main" :class="{ split: hasPreview }" :style="shellStyle">
     <div class="term-col">
       <div
         id="rterm"
@@ -28,7 +28,7 @@
         </div>
       </div>
     </aside>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -68,9 +68,7 @@ export default {
     },
     shellStyle() {
       const h = this.terminalState.lockedHeight;
-      // terminal-main has a 2px bottom border; subtract so the outer box
-      // matches the previously rendered <main> exactly.
-      return h ? { height: Math.max(120, h - 2) + 'px' } : null;
+      return h ? { height: Math.max(120, h) + 'px' } : null;
     },
     sidePath() {
       return this.terminalState.previewPath || '';
@@ -284,10 +282,9 @@ export default {
    and the side preview column.
    ─────────────────────────────────────────────── */
 .terminal-main {
-  border: 2px solid var(--fg);
-  border-top: 0;
-  background: var(--bg);
-  margin-bottom: 16px;
+  border: 0;
+  background: transparent;
+  margin: 0;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   display: flex;
   overflow: hidden;

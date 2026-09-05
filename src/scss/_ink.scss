@@ -1,0 +1,144 @@
+/* ============================================================
+   INK PLATES — drafting figures beside each section's copy.
+
+   One stroke vocabulary across all six plates: hairline for
+   annotation, line for structure, bold for the subject itself.
+   ============================================================ */
+
+.ink-plate {
+    min-width: 0;
+    max-width: 100%;
+    color: var(--fg);
+    pointer-events: none;
+    user-select: none;
+}
+
+.ink-plate__svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.ink-plate {
+    [stroke],
+    .ink-hair,
+    .ink-thin,
+    .ink-line,
+    .ink-bold,
+    .ink-script,
+    .ink-node,
+    .ink-glass {
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+    }
+
+    .ink-hair {
+        stroke-width: 0.6;
+        opacity: 0.5;
+    }
+
+    .ink-thin { stroke-width: 1; }
+    .ink-line { stroke-width: 1.4; }
+
+    .ink-bold {
+        stroke-width: 2.3;
+        stroke-linejoin: miter;
+    }
+
+    .ink-script {
+        stroke-width: 1.9;
+        opacity: 0.85;
+    }
+
+    .ink-dash {
+        stroke-dasharray: 4 4;
+    }
+
+    .ink-fill {
+        fill: currentColor;
+        stroke: none;
+    }
+
+    .ink-bar {
+        fill: currentColor;
+        opacity: 0.38;
+    }
+
+    /* Openings and nodes punch through whatever sits behind them. */
+    .ink-glass,
+    .ink-node {
+        fill: var(--bg);
+    }
+
+    .ink-node {
+        stroke-width: 1.6;
+        fill: currentColor;
+    }
+
+    .ink-node--open {
+        fill: var(--bg);
+    }
+
+    .ink-notch {
+        fill: var(--bg);
+        stroke: none;
+    }
+
+    .ink-track {
+        stroke: none;
+        fill: none;
+    }
+
+    .ink-patch-ghost { opacity: 0.5; }
+
+    .ink-rose { opacity: 0.55; }
+
+    .ink-needle {
+        fill: var(--bg);
+    }
+
+    /* Rotating assemblies resolve their origin in plate coordinates. */
+    .ink-pivot {
+        transform-box: view-box;
+    }
+}
+
+.ink-label {
+    fill: currentColor;
+    stroke: none;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    opacity: 0;
+}
+
+.ink-label--title { letter-spacing: 0.22em; }
+
+.ink-label--caption { opacity: 0; }
+
+.ink-label--sm {
+    font-size: 7px;
+    opacity: 0.75;
+}
+
+.ink-label--card {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+}
+
+.ink-label--invert { fill: var(--bg); }
+
+/* The about plate renders in a narrow column — hold the annotation legible. */
+.ink-plate--compact {
+    .ink-label { font-size: 10px; }
+    .ink-label--sm { font-size: 9px; }
+    .ink-label--card { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ink-label { opacity: 1; }
+}

@@ -1,6 +1,4 @@
 <template>
-  <div class="about-container">
-    <main class="shadowPlus4">
       <article class="about-article">
         <div>
           <h1>About me</h1>
@@ -35,21 +33,22 @@
 
         <div class="about-image">
           <img src="/src/assets/img/about/author_feroe.jpeg" />
+          <InkDiagram kind="about" />
         </div>
       </article>
       <listDisplay :listItems="pages" />
-    </main>
-  </div>
 </template>
 
 <script>
 import listDisplay from '/src/components/listDisplay.vue';
+import InkDiagram from '/src/components/ink/InkDiagram.vue';
 import { aboutPages } from '/src/lib/siteContent.js';
 
 export default {
   name: 'About',
   components: {
     listDisplay,
+    InkDiagram,
   },
   methods: {
     toggleTheme() {

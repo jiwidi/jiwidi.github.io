@@ -11,7 +11,7 @@ export const terminalState = reactive({
 
 export function toggleTerminal() {
   if (!terminalState.active) {
-    const main = document.querySelector('#app > main');
+    const main = document.querySelector('.site-main');
     if (main) terminalState.lockedHeight = Math.round(main.getBoundingClientRect().height);
   } else {
     terminalState.lockedHeight = null;

@@ -1,17 +1,10 @@
 <template>
-    <div class="photos-container">
-        <div class="home-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>Milu</h1>
           <p>My single cell brain cat.</p>
 
         <photoSection :section_name='name'></photoSection>
         </article>
-
-      </main>
-    </div>
-    </div>
 </template>
 
 <script>
