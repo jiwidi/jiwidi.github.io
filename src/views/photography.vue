@@ -13,7 +13,7 @@
 
 <script>
 import photoGrid from '/src/components/photoGrid.vue';
-import InkDiagram from '/src/components/InkDiagram.vue';
+import InkDiagram from '/src/components/ink/InkDiagram.vue';
 
 export default {
   name: 'PhotosView',

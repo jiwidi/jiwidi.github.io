@@ -11,7 +11,7 @@
 
 <script>
 import listDisplay from '/src/components/listDisplay.vue';
-import InkDiagram from '/src/components/InkDiagram.vue';
+import InkDiagram from '/src/components/ink/InkDiagram.vue';
 import { writings } from '/src/lib/siteContent.js';
 
 export default {

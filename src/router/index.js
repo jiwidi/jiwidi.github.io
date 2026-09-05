@@ -46,6 +46,10 @@ const routes = [
 		path: '/' + slug,
 		component: loader,
 	})),
+	// Proof sheet for the ink plates. Dev server only — never bundled.
+	...(import.meta.env.DEV
+		? [{ path: '/dev/plates', component: () => import('../views/dev/plates.vue') }]
+		: []),
 	{ path: '/:catchAll(.*)', redirect: '/' },
 ];
 

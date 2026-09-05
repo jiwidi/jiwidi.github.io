@@ -243,9 +243,19 @@ article {
     text-align: left;
 }
 
-.ink-diagram-wrap {
+.ink-plate {
     min-width: 0;
     max-width: 100%;
+}
+
+/* Home has no figure beside its copy — hold a readable measure rather than
+   letting the intro run the full width of the box. */
+.page-intro .page-copy {
+    max-width: 36em;
+}
+
+.page-intro .page-copy p {
+    text-align: left;
 }
 
 @media (max-width: 700px) {
@@ -253,9 +263,9 @@ article {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .page-hero .ink-diagram-wrap {
-        max-width: 340px;
-        margin: 0.2em auto 0;
+    .page-hero .ink-plate {
+        max-width: 400px;
+        margin: 0.4em auto 0;
     }
 }
 
@@ -381,7 +391,7 @@ article details {
             border: 1px solid var(--fg);
         }
 
-        .ink-diagram-wrap {
+        .ink-plate {
             max-width: min(62%, 240px);
         }
     }
@@ -409,7 +419,7 @@ article details {
                 border: 1px solid var(--fg);
             }
 
-            .ink-diagram-wrap {
+            .ink-plate {
                 width: 100%;
                 max-width: 220px;
             }
