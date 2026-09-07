@@ -1,8 +1,24 @@
-/* ============================================================
-   Box layout — port of Claude Design "//jaime" prototype
-   ============================================================ */
+/* Shared frame, typography, and interaction language. */
 
 * { box-sizing: border-box; }
+
+:root { --gutter: clamp(22px, 4.5vw, 48px); }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+.accent { color: var(--accent); }
+
+.skip-link {
+    position: fixed;
+    top: 8px;
+    left: 16px;
+    z-index: 10000;
+    padding: 10px 16px;
+    background: var(--bg);
+    transform: translateY(-150%);
+}
+
+.skip-link:focus { transform: translateY(0); }
 
 html, body { margin: 0; padding: 0; }
 
@@ -13,12 +29,12 @@ html, body { margin: 0; padding: 0; }
 body {
     font-family: var(--font-sans);
     font-size: 17px;
-    line-height: 1.55;
+    line-height: 1.65;
     color: var(--fg);
-    background: var(--bg);
-    transition: background 0.25s ease, color 0.2s ease, max-width 480ms cubic-bezier(0.65, 0, 0.35, 1);
-    padding: 8px 15px;
-    margin: 8px auto;
+    background: var(--canvas);
+    transition: background-color 220ms ease;
+    padding: 0 20px;
+    margin: 16px auto 24px;
     max-width: 95%;
     overflow-y: scroll;
 }
@@ -33,7 +49,7 @@ body.viewer-open {
 }
 
 @media (min-width: 1024px) {
-    body { max-width: 960px; }
+    body { max-width: 1040px; }
 }
 
 /* Widen the page when the terminal opens a side preview (toggled by
@@ -54,12 +70,9 @@ a {
 }
 
 a:hover {
-    background: var(--fg);
-    color: var(--bg);
-    text-decoration: none;
+    color: var(--accent);
+    text-decoration-color: var(--accent);
 }
-
-a:link, a:active, a:visited { color: inherit; }
 
 .abold {
     font-weight: 600;
@@ -68,9 +81,9 @@ a:link, a:active, a:visited { color: inherit; }
 }
 
 .abold:hover {
-    background: var(--fg);
-    color: var(--bg);
-    border-color: var(--fg);
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 /* ============================================================
@@ -80,23 +93,25 @@ a:link, a:active, a:visited { color: inherit; }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--fg);
-    color: var(--bg);
+    background: var(--nav-bg);
+    color: var(--nav-fg);
     font: 14px/1.4 var(--font-mono);
     padding: 6px 16px;
-    margin-bottom: 0;
+    gap: 20px;
+    // Cover the shell's top border so it adds no height to the command bar.
+    margin: -2px -2px 0;
     letter-spacing: 0.01em;
 }
 
 .topnav a {
-    color: var(--bg);
+    color: var(--nav-fg);
     text-decoration: none;
     font-weight: 500;
 }
 
 .topnav a:hover {
-    background: var(--bg);
-    color: var(--fg);
+    background: var(--nav-fg);
+    color: var(--nav-bg);
     text-decoration: none;
 }
 
@@ -123,9 +138,9 @@ a:link, a:active, a:visited { color: inherit; }
 }
 
 .topnav .crumbs a:hover {
-    border-bottom-color: var(--bg);
+    border-bottom-color: var(--nav-fg);
     background: transparent;
-    color: var(--bg);
+    color: var(--nav-fg);
 }
 
 .topnav .crumbs .sep {
@@ -141,7 +156,7 @@ a:link, a:active, a:visited { color: inherit; }
 }
 
 .topnav .blink_me {
-    animation: blinker 1.1s steps(2) infinite;
+    animation: blinker 1.4s steps(2) 4;
     margin-left: 4px;
 }
 
@@ -152,13 +167,14 @@ a:link, a:active, a:visited { color: inherit; }
 .back-btn,
 .theme-btn {
     background: transparent;
-    border: 1px solid var(--bg);
-    color: var(--bg);
+    border: 1px solid color-mix(in srgb, var(--nav-fg) 30%, transparent);
+    color: var(--nav-fg);
     font: inherit;
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 2px 8px;
+    transition: background-color 160ms ease, border-color 160ms ease;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
@@ -176,43 +192,146 @@ a:link, a:active, a:visited { color: inherit; }
 
 .back-btn:hover,
 .theme-btn:hover {
-    background: var(--bg);
-    color: var(--fg);
+    background: var(--nav-fg);
+    color: var(--nav-bg);
 }
 
 /* ============================================================
-   MAIN BOX
+   SITE SHELL — one persistent box (nav + page).
+   Views no longer render their own <main>, so the frame never
+   remounts and the side rules cannot slide or double-draw.
    ============================================================ */
-main {
+.site-shell {
     border: 2px solid var(--fg);
-    border-top: 0;
     background: var(--bg);
     margin-bottom: 16px;
+    box-shadow: 0 12px 40px -24px rgba(25, 30, 20, 0.22);
 }
 
-main img {
+.site-main {
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.page {
+    position: relative;
+    min-width: 0;
+}
+
+/* Back-compat: leftover <main> wrappers (CLI preview, older posts). */
+.site-main > main,
+.page main,
+.side-body main {
+    border: 0;
+    margin: 0;
+    background: transparent;
+}
+
+.site-main img,
+.page img {
     max-width: 100%;
     height: auto;
     display: block;
 }
 
 article {
-    padding: 1.6em clamp(22px, 7%, 42px);
-    min-height: 256px;
+    padding: 24px var(--gutter);
     overflow-wrap: break-word;
 }
 
-/* The desktop min-height gives sparse pages presence, but on phones it
-   reads as dead space between the intro and the list below it. */
-@media (max-width: 767px) {
-    article { min-height: 0; }
+.page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(196px, 0.85fr);
+    gap: clamp(24px, 5%, 52px);
+    align-items: start;
+    min-width: 0;
+}
+
+.page-hero .page-copy {
+    min-width: 0;
+}
+
+.page-hero .page-copy h1 {
+    margin-top: 0;
+}
+
+.page-hero .page-copy p {
+    text-align: left;
+}
+
+.ink-plate {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Home has no figure beside its copy — hold a readable measure rather than
+   letting the intro run the full width of the box. */
+.page-intro .page-copy {
+    max-width: 36em;
+}
+
+.page-intro .page-copy p {
+    text-align: left;
+}
+
+.page-intro {
+    padding-top: 24px;
+    padding-bottom: 28px;
+}
+
+.page-intro h1 {
+    font-size: clamp(2.8rem, 6vw, 4.2rem);
+    letter-spacing: -0.065em;
+    margin-bottom: 20px;
+}
+
+.page-intro .intro-lead {
+    font-size: clamp(1.05rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    letter-spacing: -0.015em;
+    margin-bottom: 18px;
+}
+
+.page-intro .current-work {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 22px;
+    font: 14px/1.65 var(--font-sans);
+    color: var(--muted);
+}
+
+.current-work a { color: var(--fg); }
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.page-hero { min-height: 0; }
+.page-hero .page-copy > p { color: var(--muted); font-size: 15px; }
+
+@media (max-width: 700px) {
+    .page-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .page-hero .ink-plate {
+        max-width: 400px;
+        margin: 0.4em auto 0;
+    }
 }
 
 article h1 {
-    font-size: clamp(1.6em, 6vw, 2.6em);
-    letter-spacing: -0.02em;
+    font-size: clamp(2em, 4.8vw, 3.05em);
+    letter-spacing: -0.055em;
     line-height: 1.1;
-    margin: 0 0 0.7em;
+    margin: 0 0 0.5em;
     font-weight: 700;
 }
 
@@ -275,7 +394,7 @@ article pre {
 article pre {
     overflow: auto;
     padding: 12px 14px;
-    line-height: 1.55;
+    line-height: 1.65;
 }
 
 article code { padding: 1px 5px; }
@@ -299,12 +418,7 @@ article details {
     margin: 1em 0;
 }
 
-@media (min-width: 600px) {
-    article p {
-        text-align: justify;
-        text-justify: inter-word;
-    }
-}
+article p { text-align: left; }
 
 /* Backwards-compat — older views wrap content in <main class="shadowPlus4">
    or .blog-main; both should look like the design's main box. */
@@ -319,11 +433,19 @@ article details {
    cap it so it doesn't render full-width on phones. */
 @media (max-width: 599px) {
     .about-article .about-image {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
         margin-top: 1.4em;
 
         img {
             max-width: min(62%, 240px);
             border: 1px solid var(--fg);
+        }
+
+        .ink-plate {
+            max-width: min(62%, 240px);
         }
     }
 }
@@ -338,7 +460,9 @@ article details {
 
         .about-image {
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
+            gap: 14px;
             position: sticky;
             top: 16px;
 
@@ -346,6 +470,11 @@ article details {
                 width: 100%;
                 max-width: 220px;
                 border: 1px solid var(--fg);
+            }
+
+            .ink-plate {
+                width: 100%;
+                max-width: 220px;
             }
         }
     }
@@ -387,13 +516,13 @@ footer.site-footer {
     font: 12px/1.5 var(--font-mono);
     margin-top: 24px;
     padding-top: 8px;
-    border-top: 1px dotted var(--fg);
+    border-top: 1px solid var(--rule_soft);
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
-    opacity: 0.7;
-    letter-spacing: 0.04em;
+    color: var(--muted);
+    letter-spacing: 0.01em;
     text-transform: uppercase;
 }
 
@@ -408,84 +537,43 @@ footer.site-footer a:hover {
 }
 
 /* ============================================================
-   ROUTE TRANSITION — View Transitions API
-   The DOM swaps instantly; the browser crossfades snapshots on the
-   compositor. Chrome stays put: topnav, main and footer each get their
-   own snapshot so only page content visibly changes.
+   ROUTE TRANSITION
+   New page paints immediately (no enter fade — that felt like
+   a second load). The old page is taken out of flow and fades
+   off so the box never double-draws.
    ============================================================ */
-@supports (view-transition-name: none) {
-    .topnav { view-transition-name: topnav; }
-    main { view-transition-name: page-main; }
-    footer.site-footer { view-transition-name: site-footer; }
+.page-leave-active {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transition: opacity 90ms ease;
+    pointer-events: none;
 }
 
-@supports (view-transition-name: none) {
-    /* Keep every layer's lifetime aligned: the overlay tears down when the
-       longest animation ends, so nothing may outlive the fades. */
-    ::view-transition-group(*) {
-        animation-duration: 160ms;
-        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
+.page-leave-to {
+    opacity: 0;
+}
 
-    /* The command bar must feel bolted to the page: crossfading its old/new
-       snapshots double-exposes the breadcrumb and back button (the content
-       that differs between routes) and reads as flicker. Swap it instantly —
-       new bar fully opaque from the first frame, no fade, no geometry tween. */
-    ::view-transition-group(topnav) {
-        animation: none;
-    }
+.page-enter-active {
+    transition: opacity 240ms ease, transform 320ms var(--ease-out);
+}
 
-    ::view-transition-image-pair(topnav) {
-        animation: none;
-    }
+.page-enter-from { opacity: 0; transform: translateY(6px); }
 
-    ::view-transition-old(topnav) {
-        animation: none;
-        opacity: 0;
-    }
+@keyframes row-arrive {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-    ::view-transition-new(topnav) {
-        animation: none;
-        opacity: 1;
-        mix-blend-mode: normal;
-    }
-
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-        animation-duration: 140ms;
-    }
-
-    /* No geometry morphs: animating the box's size/position detaches its
-       frame from the command bar (sliding side borders, a flashing seam),
-       especially when the old page was scrolled. Geometry snaps; only the
-       pixels crossfade. The bar and box frame are identical between pages,
-       and the browser's plus-lighter blend keeps identical pixels constant
-       through a matched crossfade — so the chrome holds perfectly still
-       while the content inside fades. */
-    ::view-transition-group(page-main),
-    ::view-transition-group(site-footer) {
-        animation: none;
-    }
-
-    ::view-transition-old(page-main),
-    ::view-transition-new(page-main),
-    ::view-transition-old(site-footer),
-    ::view-transition-new(site-footer) {
-        animation-duration: 160ms;
-        animation-timing-function: ease;
-        /* `animation: none` on the parent group resets the fill-mode these
-           images normally inherit — without `both`, the old snapshot pops
-           back to full opacity after its fade-out ends and the previous
-           page flashes for the overlay's remaining frames. */
-        animation-fill-mode: both;
-    }
+.home-directory .row {
+    animation: row-arrive 420ms var(--ease-out) backwards;
+    animation-delay: calc(60ms + var(--row-index) * 45ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
+    .page-leave-active {
+        transition: none;
     }
 }
 
@@ -498,7 +586,7 @@ footer.site-footer a:hover {
 }
 
 .topnav :focus-visible {
-    outline-color: var(--bg);
+    outline-color: var(--nav-fg);
     outline-offset: 1px;
 }
 
@@ -515,11 +603,16 @@ nav.articles-list .row:active {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 520px) {
+    :root { --gutter: 22px; }
+    .page-intro { padding-top: 22px; padding-bottom: 24px; }
+    .page-intro h1 { margin-bottom: 22px; }
+    .page-hero { min-height: 0; }
     /* Reclaim horizontal room: the desktop 95%-width + 15px padding
        leaves only ~340px of content on a 390px phone. */
     body {
         max-width: 100%;
-        padding: 8px 10px;
+        padding: 0 12px;
+        margin-top: 16px;
     }
 
     .topnav {
@@ -543,6 +636,8 @@ nav.articles-list .row:active {
         white-space: nowrap;
     }
 
+    .topnav .crumbs > a:first-child { flex-shrink: 0; }
+
     .topnav .right { gap: 6px; }
 
     .back-btn,
@@ -554,5 +649,15 @@ nav.articles-list .row:active {
 
     .theme-btn { min-width: 0; }
 
-    article { padding: 1.2em 18px; }
+    article { padding: 22px var(--gutter); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

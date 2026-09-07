@@ -1,17 +1,10 @@
 <template>
-    <div class="photos-container">
-        <div class="home-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>Faroe</h1>
           <p>Trip to Faroe islands.</p>
 
         <photoSection :section_name='name'></photoSection>
         </article>
-
-      </main>
-    </div>
-    </div>
 </template>
 
 <script>

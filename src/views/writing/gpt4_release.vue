@@ -1,7 +1,5 @@
 <template>
-    <div class="blog-container">
-      <main class="blog-main">
-        <article>
+    <article>
           <h1>GPT-4: A New Milestone in Scaling Up Deep Learning</h1>
           <hr>
           <section>
@@ -46,8 +44,6 @@
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>

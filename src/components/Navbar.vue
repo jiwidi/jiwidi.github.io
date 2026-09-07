@@ -20,10 +20,10 @@
         :to="parentPath"
         class="back-btn"
       >← back</router-link>
-      <button class="theme-btn term-btn" type="button" @click="onToggleTerminal">
+      <button class="theme-btn term-btn" type="button" :aria-pressed="terminalState.active" aria-label="Toggle terminal mode" @click="onToggleTerminal">
         {{ terminalLabel }}
       </button>
-      <button class="theme-btn" type="button" @click="toggleTheme">
+      <button class="theme-btn" type="button" :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`" @click="toggleTheme">
         {{ themeLabel }}
       </button>
     </span>

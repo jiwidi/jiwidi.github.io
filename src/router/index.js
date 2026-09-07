@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { installViewTransitions } from '../lib/viewTransitions.js';
 import Home from '../views/home.vue';
 import Writing from '../views/writing.vue';
 import Creative from '../views/creative.vue';
@@ -47,6 +46,10 @@ const routes = [
 		path: '/' + slug,
 		component: loader,
 	})),
+	// Proof sheet for the ink plates. Dev server only — never bundled.
+	...(import.meta.env.DEV
+		? [{ path: '/dev/plates', component: () => import('../views/dev/plates.vue') }]
+		: []),
 	{ path: '/:catchAll(.*)', redirect: '/' },
 ];
 
@@ -57,11 +60,12 @@ const router = createRouter({
 	// Smooth scrolling stays only for same-page anchor links.
 	scrollBehavior(to, from, savedPosition) {
 		if (savedPosition) return savedPosition;
-		if (to.hash) return { el: to.hash, behavior: 'smooth' };
+		if (to.hash) return {
+			el: to.hash,
+			behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+		};
 		return { top: 0 };
 	},
 });
-
-installViewTransitions(router);
 
 export default router;

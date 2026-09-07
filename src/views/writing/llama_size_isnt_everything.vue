@@ -1,7 +1,5 @@
 <template>
-    <div class="blog-container">
-      <main class="blog-main">
-        <article>
+    <article>
           <h1>Size Isn't Everything - How LLaMA democratizes access to Large-Language-Models</h1>
           <hr>
           <section>
@@ -364,8 +362,6 @@
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>

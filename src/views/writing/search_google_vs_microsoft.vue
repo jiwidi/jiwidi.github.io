@@ -1,7 +1,5 @@
 <template>
-    <div class="blog-container">
-      <main class="blog-main">
-        <article>
+    <article>
           <h1>Microsoft vs Google - ChatGPT taking over search?</h1>
           <hr>
           <section>
@@ -77,7 +75,5 @@
 
             </section>
             </article>
-        </main>
-        </div>
   </template>
 

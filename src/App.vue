@@ -1,11 +1,20 @@
 <template>
-  <div id="app">
+  <div class="site">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <LoadingBar />
-    <Navbar />
-    <Terminal v-if="terminalState.active" />
-    <!-- Page changes animate via the View Transitions API (lib/viewTransitions.js)
-         instead of an out-in component transition, so the swap is instant. -->
-    <router-view v-else />
+    <div class="site-shell">
+      <Navbar />
+      <main id="main-content" class="site-main" tabindex="-1">
+        <Terminal v-if="terminalState.active" />
+        <router-view v-else v-slot="{ Component }">
+          <transition name="page">
+            <div class="page" :key="$route.path">
+              <component :is="Component" />
+            </div>
+          </transition>
+        </router-view>
+      </main>
+    </div>
     <footer class="site-footer">
       <span>© {{ year }} jaime ferrando huertas</span>
       <span>

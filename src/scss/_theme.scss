@@ -1,9 +1,18 @@
-/* Design tokens — Claude Design "//jaime" box layout */
+/* Soft white and Phthalocyanine Green; the original blue palette after dark. */
 :root {
-    --bg: #f7f8f1;
-    --fg: #23212d;
-    --bg_acc: #ece9da;
-    --rule_soft: rgba(35, 33, 45, 0.18);
+    color-scheme: light;
+    --bg: #fafbf8;
+    --canvas: #f0f3ee;
+    --muted: #557060;
+    --accent: #1f5b46;
+    --accent-soft: #e7eee6;
+    --nav-bg: #123524;
+    --nav-fg: #fafbf8;
+    --control-red: #c52e32;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --fg: #123524;
+    --bg_acc: #e4ebe2;
+    --rule_soft: #cdd9cd;
     --yellow: #ffe14a;
     --cyan: #38ffea;
     --magenta: #ff77c1;
@@ -27,6 +36,13 @@
 
 [data-theme="dark"] {
     --bg: #101b37;
+    --canvas: #0a1226;
+    --muted: #79a7c0;
+    --accent: #01c8ee;
+    --accent-soft: #142d46;
+    --nav-bg: #01c8ee;
+    --nav-fg: #101b37;
+    --control-red: #ff6268;
     --fg: #01c8ee;
     --bg_acc: #0a1226;
     --rule_soft: rgba(1, 200, 238, 0.22);

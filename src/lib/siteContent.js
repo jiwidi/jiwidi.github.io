@@ -1,14 +1,6 @@
 // Single source of truth for site content. Used by both views and the
 // terminal mode so they always show the same data.
 
-export const homePages = [
-  { title: 'Projects',    link: '/projects',    description: '12 repos' },
-  { title: 'Writing',     link: '/writing',     description: '11 pieces' },
-  { title: 'Creative',    link: '/creative',    description: '9 finds' },
-  { title: 'Photography', link: '/photography', description: '7 sets' },
-  { title: 'About',       link: '/about',       description: 'readme' },
-];
-
 export const writings = [
   { title: "The AI Revolution: Interfaces, Not Intelligence",                       description: "opinions",     link: "/writing/ai_revolution_interfaces" },
   { title: "Explaining Preferences with Shapley Values",                            description: "neurips 2022", link: "https://arxiv.org/pdf/2205.13662.pdf" },
@@ -79,4 +71,12 @@ export const keyboards = [
 
 export const aboutPages = [
   { title: 'Curriculum Vitae', description: 'pdf · github', link: 'https://github.com/jiwidi/CurriculumVitae/blob/master/JaimeFerrandoHuertas_CV.pdf' },
+];
+
+export const homePages = [
+  { title: 'Projects', link: '/projects', description: `${projects.length} repos` },
+  { title: 'Writing', link: '/writing', description: `${writings.length} pieces` },
+  { title: 'Creative', link: '/creative', description: `${creativeItems.length} finds` },
+  { title: 'Photography', link: '/photography', description: `${photoCategories.length} sets` },
+  { title: 'About', link: '/about', description: 'readme' },
 ];

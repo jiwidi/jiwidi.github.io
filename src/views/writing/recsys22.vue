@@ -1,7 +1,5 @@
 <template>
-    <div class="blog-container">
-      <main class="blog-main">
-        <article>
+    <article>
           <h1>RecSys 22 - Favorite papers and talks</h1>
           <hr>
           <section>
@@ -339,8 +337,6 @@ Lab: Booking
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>

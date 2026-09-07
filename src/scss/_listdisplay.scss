@@ -1,6 +1,6 @@
-/* Directory list — port of Claude Design dirlist */
+/* Shared directory rows. */
 nav.articles-list {
-    border-top: 2px solid var(--fg);
+    border-top: 1px solid var(--rule_soft);
     display: flex;
     flex-direction: column;
 }
@@ -29,12 +29,12 @@ nav.articles-list li .link-content {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    padding: 14px clamp(22px, 7%, 42px);
-    border-bottom: 1px dotted var(--rule_soft);
+    padding: 18px var(--gutter);
+    border-bottom: 1px solid var(--rule_soft);
     cursor: pointer;
     text-decoration: none;
     color: var(--fg);
-    transition: background 0.12s, color 0.12s;
+    transition: background-color 180ms ease, color 180ms ease;
     gap: 14px;
     width: 100%;
 }
@@ -45,16 +45,16 @@ nav.articles-list .row:last-child {
 }
 
 nav.articles-list .row:hover,
+nav.articles-list .row:focus-visible,
 nav.articles-list li .link-content:hover {
-    background: var(--fg);
-    color: var(--bg);
+    background: var(--accent-soft);
+    color: var(--accent);
     text-decoration: none;
 }
 
 nav.articles-list li .link-content:hover .text-description,
 nav.articles-list .row:hover .meta {
-    color: var(--bg);
-    opacity: 0.85;
+    color: var(--accent);
 }
 
 nav.articles-list .row:hover .arrow,
@@ -88,7 +88,7 @@ nav.articles-list .ico {
     font-weight: 600;
     letter-spacing: 0.04em;
     flex-shrink: 0;
-    opacity: 0.55;
+    color: var(--muted);
 }
 
 nav.articles-list .row:hover .ico { opacity: 1; }
@@ -97,8 +97,8 @@ nav.articles-list .row:hover .ico { opacity: 1; }
 nav.articles-list .name,
 nav.articles-list .text-title {
     font-family: var(--font-sans);
-    font-size: 19px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 500;
     letter-spacing: -0.005em;
     line-height: 1.25;
     margin: 0;
@@ -110,7 +110,7 @@ nav.articles-list .text-description {
     font: 12px/1.35 var(--font-mono);
     letter-spacing: 0.04em;
     color: var(--fg);
-    opacity: 0.55;
+    color: var(--muted);
     text-transform: lowercase;
     margin: 0;
     text-align: right;
@@ -132,11 +132,20 @@ nav.articles-list .arrow {
     transition: transform 0.18s ease;
 }
 
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    nav.articles-list .row .arrow {
+        transform: translate(calc(var(--pointer-x, 0) * 6px), calc(var(--pointer-y, 0) * 4px));
+        transition: none;
+    }
+}
+
+nav.home-directory .name { font-size: 19px; letter-spacing: -0.035em; }
+nav.articles-list .row:focus-visible { outline-offset: -3px; }
+
 nav.articles-list .date {
     font: 12px/1 var(--font-mono);
     letter-spacing: 0.04em;
-    color: var(--fg);
-    opacity: 0.45;
+    color: var(--muted);
     text-transform: uppercase;
     white-space: nowrap;
 }
@@ -159,7 +168,7 @@ nav.articles-list li .link-content .icon {
         grid-template-columns: auto minmax(0, 1fr) auto;
         align-items: baseline;
         gap: 4px 0;
-        padding: 13px clamp(22px, 7%, 42px);
+        padding: 20px var(--gutter);
     }
 
     nav.articles-list .row .l { display: contents; }
@@ -204,6 +213,27 @@ nav.articles-list li .link-content .icon {
 @media (max-width: 520px) {
     nav.articles-list .row,
     nav.articles-list li .link-content {
-        padding: 13px 18px;
+        padding: 18px var(--gutter);
     }
+}
+
+/* Home metadata is a short count, so it can share the title's line on phones. */
+@media (max-width: 767px) {
+    nav.home-directory .row {
+        display: flex;
+        align-items: center;
+        min-height: 62px;
+        gap: 12px;
+        padding-block: 16px;
+    }
+
+    nav.home-directory .row .l { display: flex; gap: 12px; }
+    nav.home-directory .ico { margin-right: 0; }
+    nav.home-directory .name { font-size: 17px; }
+    nav.home-directory .meta { display: block; white-space: nowrap; font-size: 11px; }
+    nav.home-directory .arrow { margin-left: 0; }
+}
+
+@media (min-width: 768px) and (max-height: 800px) {
+    nav.home-directory .row { padding-block: 15px; }
 }

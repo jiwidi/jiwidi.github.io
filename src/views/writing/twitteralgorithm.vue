@@ -1,7 +1,5 @@
 <template>
-    <div class="about-container">
-      <main class="shadowPlus4">
-        <article>
+    <article>
           <h1>Twitter's Open Source Algorithm - Unveiling the code, but not the secrets</h1>
           <hr>
           <section>
@@ -44,8 +42,6 @@
 
         </section>
         </article>
-      </main>
-    </div>
   </template>
 
 <script>
