@@ -38,7 +38,7 @@
 import PlateCaption from './PlateCaption.vue';
 import RangefinderCamera from './RangefinderCamera.vue';
 import WritingDesk from './WritingDesk.vue';
-import CreativePlate from './plates/CreativePlate.vue';
+import WatchMovement from './WatchMovement.vue';
 import MarbleMaze from './MarbleMaze.vue';
 import AboutPlate from './plates/AboutPlate.vue';
 import { mountPlate } from '/src/lib/plateMotion.js';
@@ -68,7 +68,8 @@ const PLATES = {
     captionY: 217,
   },
   creative: {
-    component: CreativePlate,
+    component: WatchMovement,
+    interactive: true,
     title: 'MOVEMENT',
     fig: '03',
     caption: 'CALIBRE',
