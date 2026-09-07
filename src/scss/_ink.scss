@@ -9,8 +9,16 @@
     min-width: 0;
     max-width: 100%;
     color: var(--fg);
-    pointer-events: none;
     user-select: none;
+}
+
+.ink-plate .ink-pointer-only { opacity: var(--pointer-active, 0); }
+.ink-ambient-only { opacity: calc(1 - var(--pointer-active, 0)); }
+
+.ink-pointer-compass {
+    transform-origin: 120px 128px;
+    transform: rotate(var(--pointer-angle, 0deg));
+    color: var(--accent);
 }
 
 .ink-plate__svg {
@@ -53,6 +61,8 @@
         stroke-width: 1.9;
         opacity: 0.85;
     }
+
+    .ink-script, .ink-node, .ink-pivot { color: var(--accent); }
 
     .ink-dash {
         stroke-dasharray: 4 4;
@@ -113,12 +123,12 @@
     font-family: var(--font-mono);
     font-size: 8px;
     letter-spacing: 0.16em;
-    opacity: 0;
+    opacity: 1;
 }
 
 .ink-label--title { letter-spacing: 0.22em; }
 
-.ink-label--caption { opacity: 0; }
+.ink-label--caption { opacity: 1; }
 
 .ink-label--sm {
     font-size: 7px;

@@ -22,9 +22,13 @@
       text-anchor="middle"
     >{{ c.label }}</text>
 
-    <g ref="needle" class="ink-pivot" style="transform-origin: 120px 128px">
+    <g class="ink-ambient-only"><g ref="needle" class="ink-pivot" style="transform-origin: 120px 128px">
       <path class="ink-fill" d="M120 82l4.5 46h-9Z" data-fade />
       <path class="ink-thin ink-needle" d="M120 174l4.5-46h-9Z" data-draw="3" />
+    </g></g>
+    <g class="ink-pointer-only ink-pointer-compass">
+      <path class="ink-fill" d="M120 82l4.5 46h-9Z" />
+      <path class="ink-thin ink-needle" d="M120 174l4.5-46h-9Z" />
     </g>
 
     <path class="ink-thin ink-needle" :d="hubRing" data-draw="3" />

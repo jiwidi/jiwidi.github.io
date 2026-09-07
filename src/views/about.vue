@@ -32,7 +32,7 @@
         </div>
 
         <div class="about-image">
-          <img src="/src/assets/img/about/author_feroe.jpeg" />
+          <img src="/src/assets/img/about/author_feroe.jpeg" alt="Jaime in the Faroe Islands" />
           <InkDiagram kind="about" />
         </div>
       </article>
@@ -123,4 +123,3 @@ export default {
   filter: none;
 }
 </style>
-

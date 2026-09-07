@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
+  <div class="site">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <LoadingBar />
     <div class="site-shell">
       <Navbar />
-      <main class="site-main">
+      <main id="main-content" class="site-main" tabindex="-1">
         <Terminal v-if="terminalState.active" />
         <router-view v-else v-slot="{ Component }">
           <transition name="page">

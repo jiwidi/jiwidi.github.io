@@ -1,5 +1,7 @@
 <template>
+  <component v-if="plate.interactive" :is="plate.component" />
   <div
+    v-else
     ref="root"
     class="ink-plate"
     :class="{ 'ink-plate--compact': plate.compact }"
@@ -34,18 +36,20 @@
 
 <script>
 import PlateCaption from './PlateCaption.vue';
-import PhotographyPlate from './plates/PhotographyPlate.vue';
-import WritingPlate from './plates/WritingPlate.vue';
+import RangefinderCamera from './RangefinderCamera.vue';
+import WritingDesk from './WritingDesk.vue';
 import CreativePlate from './plates/CreativePlate.vue';
-import ProjectsPlate from './plates/ProjectsPlate.vue';
+import MarbleMaze from './MarbleMaze.vue';
 import AboutPlate from './plates/AboutPlate.vue';
 import { mountPlate } from '/src/lib/plateMotion.js';
+import { mountPointerMotion } from '/src/lib/pointerMotion.js';
 
 /* Each `box` hugs its drawing, leaving only enough room above and below for
    the title and the figure caption. No frame, so no dead margin either. */
 const PLATES = {
   photography: {
-    component: PhotographyPlate,
+    component: RangefinderCamera,
+    interactive: true,
     title: 'RANGEFINDER',
     fig: '01',
     caption: 'COINCIDENT IMAGE',
@@ -54,7 +58,8 @@ const PLATES = {
     captionY: 227,
   },
   writing: {
-    component: WritingPlate,
+    component: WritingDesk,
+    interactive: true,
     title: 'INK & LINE',
     fig: '02',
     caption: 'NIB / STROKE',
@@ -72,10 +77,11 @@ const PLATES = {
     captionY: 205,
   },
   projects: {
-    component: ProjectsPlate,
-    title: 'REPOSITORY',
+    component: MarbleMaze,
+    interactive: true,
+    title: 'TILT TABLE',
     fig: '04',
-    caption: 'COMMIT GRAPH',
+    caption: 'MARBLE MAZE',
     box: [12, 12, 372, 224],
     titleY: 25,
     captionY: 229,
@@ -110,10 +116,16 @@ export default {
     },
   },
   mounted() {
+    if (this.plate.interactive) return;
     this.motion = mountPlate(this.$refs.root, () => this.$refs.body?.ambient?.(this.$refs.root));
+    this.pointerMotion = mountPointerMotion(this.$refs.root, {
+      trigger: this.$refs.root.closest('article') || this.$refs.root,
+      onUpdate: (state) => this.$refs.body?.pointer?.(state),
+    });
   },
   beforeUnmount() {
     this.motion?.destroy();
+    this.pointerMotion?.destroy();
   },
 };
 </script>

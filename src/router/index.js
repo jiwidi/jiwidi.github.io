@@ -60,7 +60,10 @@ const router = createRouter({
 	// Smooth scrolling stays only for same-page anchor links.
 	scrollBehavior(to, from, savedPosition) {
 		if (savedPosition) return savedPosition;
-		if (to.hash) return { el: to.hash, behavior: 'smooth' };
+		if (to.hash) return {
+			el: to.hash,
+			behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+		};
 		return { top: 0 };
 	},
 });

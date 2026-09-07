@@ -6,20 +6,20 @@
       <p>These moments are everywhere. Most are brief and unplanned. Some happen every day, while others happen only once. Together, they remind us of something about life and who we are.</p>
       <p>Noticing these moments and finding a way to preserve them is the part of photography I love most. A photograph may keep the moment, but the real art is noticing it in the first place.</p>
     </div>
-    <InkDiagram kind="photography" />
+    <RangefinderCamera />
   </article>
   <photoGrid />
 </template>
 
 <script>
 import photoGrid from '/src/components/photoGrid.vue';
-import InkDiagram from '/src/components/ink/InkDiagram.vue';
+import RangefinderCamera from '/src/components/ink/RangefinderCamera.vue';
 
 export default {
   name: 'PhotosView',
   components: {
     photoGrid,
-    InkDiagram,
+    RangefinderCamera,
   },
 };
 </script>

@@ -139,7 +139,7 @@ export default {
     ambient() {
       const beat = { duration: BEAT, alternate: true, loop: true, delay: AMBIENT_START };
       const turn = (duration) => ({ duration, ease: 'linear', loop: true, delay: AMBIENT_START });
-      return [
+      this.gearLoops = [
         animate(this.$refs.barrel, { rotate: 360, ...turn(56000) }),
         animate(this.$refs.centre, { rotate: -360, ...turn(18000) }),
         animate(this.$refs.escape, {
@@ -152,6 +152,12 @@ export default {
         animate(this.$refs.fork, { rotate: [-7, 7], ease: 'inOut(3)', ...beat }),
         animate(this.$refs.balance, { rotate: [-135, 135], ease: 'inOutSine', ...beat }),
       ];
+      return this.gearLoops;
+    },
+    pointer({ x, active }) {
+      // Moving across the movement winds it up, keeping the train in sync.
+      const speed = 1 + active * (0.6 + x * 0.9);
+      this.gearLoops?.forEach((animation) => { animation.speed = speed; });
     },
   },
 };

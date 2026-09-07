@@ -10,7 +10,7 @@
         @click.capture="onHostClick"
       ></div>
     </div>
-    <aside class="side" aria-hidden="!hasPreview">
+    <aside class="side" :aria-hidden="!hasPreview" :inert="!hasPreview">
       <div class="side-inner">
         <header class="side-bar">
           <span class="side-chip">{{ sideChip }}</span>

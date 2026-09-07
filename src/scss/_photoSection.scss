@@ -12,7 +12,7 @@
    ============================================================ */
 .photo-index {
     padding: 0 0 1.6em;
-    border-top: 2px solid var(--fg);
+    border-top: 1px solid var(--rule_soft);
 }
 
 .category-grid {
@@ -21,13 +21,13 @@
     grid-auto-rows: clamp(92px, 16vw, 148px);
     gap: 12px;
     margin-top: 1.1em;
-    padding: 0 clamp(22px, 7%, 42px);
+    padding: 0 var(--gutter);
 }
 
 .category-card {
     display: flex;
     flex-direction: column;
-    border: 2px solid var(--fg);
+    border: 1px solid var(--rule_soft);
     background: var(--bg);
     text-decoration: none;
     color: var(--fg);
@@ -52,12 +52,12 @@
     background: var(--bg_acc);
 }
 
-.category-image {
+.site-main .category-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 600ms var(--ease-out);
 }
 
 .category-card:hover .category-image,
@@ -71,7 +71,7 @@
     align-items: center;
     gap: 8px;
     padding: 7px 12px;
-    border-top: 2px solid var(--fg);
+    border-top: 1px solid var(--rule_soft);
     font: 600 12px/1.4 var(--font-mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -141,6 +141,8 @@
         grid-row: span 2;
     }
 
+    .category-card:last-child:nth-child(odd) { grid-column: span 2; }
+
     .category-name {
         padding: 6px 10px;
         font-size: 11px;
@@ -153,7 +155,6 @@
     }
 
     .category-grid {
-        padding: 0 18px;
+        padding: 0 var(--gutter);
     }
 }
-

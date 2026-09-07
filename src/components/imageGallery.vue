@@ -203,7 +203,10 @@ export default {
         scrollStripToActive() {
             this.$nextTick(() => {
                 const el = (this.$refs.stripThumbs || [])[this.currentImageIndex];
-                if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                if (el) el.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+                    inline: 'center', block: 'nearest',
+                });
             });
         },
         handleKeydown(e) {
