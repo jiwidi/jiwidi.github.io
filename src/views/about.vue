@@ -7,7 +7,7 @@
           <h2>Life principles</h2>
           <p>— Be honest with yourself, first.</p>
           <p>— Be kind.</p>
-          <p>— There's no prize for blending in.</p>
+          <p>— Physics are the only laws, everything else is a suggestion.</p>
           <p>— What you do means more than what you say or own.</p>
 
           <h2>Quotes I resonate with</h2>
