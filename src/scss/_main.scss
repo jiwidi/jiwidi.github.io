@@ -314,6 +314,11 @@ article {
 }
 
 .page-hero { min-height: 0; }
+
+/* The photography camera sits in the side column until "Dig deeper"
+   expands it; then the hero stacks and the camera takes the full width. */
+.page-hero:has(> .m3.is-expanded) { grid-template-columns: minmax(0, 1fr); }
+.page-hero:has(> .m3.is-expanded) .page-copy { max-width: 40em; }
 .page-hero .page-copy > p { color: var(--muted); font-size: 15px; }
 
 @media (max-width: 700px) {
