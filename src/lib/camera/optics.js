@@ -10,7 +10,8 @@ export const PERF_PITCH = 4.75;     // 8 perforations per frame
 export const ROLL = 36;
 export const SCENE_EV = 12;         // bright overcast at ISO 100
 export const ISO = 400;
-export const APERTURES = [2, 2.8, 4, 5.6, 8, 11, 16];
+/* f/1 and f/1.4 go past the Summicron: that is Noctilux and Summilux ground. */
+export const APERTURES = [1, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16];
 export const SPEEDS = [1, 1 / 2, 1 / 4, 1 / 8, 1 / 15, 1 / 30, 1 / 60, 1 / 125, 1 / 250, 1 / 500, 1 / 1000];
 
 const inverse = (d) => (d === Infinity ? 0 : 1 / d);
@@ -35,9 +36,30 @@ export function blurMm(d, focus, n) {
   return (FOCAL ** 2 / n) * Math.abs(inverse(d) - inverse(focus)) / (1 - FOCAL * inverse(focus));
 }
 
-/* Stops of over (+) or under (−) exposure against the scene. */
+export const COC = 0.03;            // circle of confusion for 35 mm, mm
+export const SHAKE_RATE = 0.03;     // rad/s: a steady hand-held camera
+
+/* Near and far limits of acceptable sharpness. */
+export function depthOfField(focus, n) {
+  const h = FOCAL ** 2 / (n * COC) + FOCAL;
+  if (focus === Infinity) return [h - FOCAL, Infinity];
+  const near = (focus * (h - FOCAL)) / (h + focus - 2 * FOCAL);
+  const far = focus >= h ? Infinity : (focus * (h - FOCAL)) / (h - focus);
+  return [near, far];
+}
+
+/* Black-and-white film loses speed on long exposures: about one stop at
+   1 s, two at 10 s (Kodak Tri-X data). */
+export const reciprocityStops = (t) => (t > 0.1 ? 1 + Math.log10(t) : 0);
+
+/* Image movement on the film during the exposure. */
+export const shakeMm = (t) => FOCAL * SHAKE_RATE * t;
+export const motionMm = (filmSpeed, t) => filmSpeed * t;
+
+/* Stops of over (+) or under (−) exposure against the scene, after
+   reciprocity loss. */
 export function exposureError(n, t, sceneEv = SCENE_EV, iso = ISO) {
-  return sceneEv + Math.log2(iso / 100) - Math.log2((n * n) / t);
+  return sceneEv + Math.log2(iso / 100) - Math.log2((n * n) / t) - reciprocityStops(t);
 }
 
 /* Slit width and the slowed-down animation delay before the second curtain. */
@@ -59,6 +81,7 @@ export function formatDistance(d) {
   if (d === Infinity) return '∞';
   return d < 2000 ? `${(d / 1000).toFixed(2)} m` : d < 10000 ? `${(d / 1000).toFixed(1)} m` : `${Math.round(d / 1000)} m`;
 }
+export const formatMm = (mm) => `${mm < 0.095 ? mm.toFixed(2) : mm.toFixed(1)} mm`;
 export function formatStops(e) {
   const r = Math.round(e * 3) / 3;
   if (Math.abs(r) < 0.34) return 'correct';

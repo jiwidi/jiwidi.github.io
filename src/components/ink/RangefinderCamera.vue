@@ -45,7 +45,17 @@
         </p>
       </section>
 
+      <section class="m3-film" aria-labelledby="m3-film-title">
+        <h3 id="m3-film-title">On film, if you release now</h3>
+        <canvas ref="preview" role="img" :aria-label="`Film preview: ${formatStops(error)}`" />
+        <p class="m3-finder-note">
+          <span :class="exposureClass">{{ formatStops(error) }}</span>
+          · {{ formatAperture(APERTURES[apertureIdx]) }} · {{ formatSpeed(SPEEDS[speedIdx]) }} · ISO 400 black and white
+        </p>
+      </section>
+
       <section class="m3-settings" aria-label="Camera settings">
+        <div class="m3-sliders">
         <label class="m3-setting">
           <span>Focus</span>
           <input type="range" min="0" max="1" step="0.005" :value="focusV" @input="onFocus">
@@ -61,10 +71,19 @@
           <input type="range" min="0" :max="SPEEDS.length - 1" step="1" :value="speedIdx" @input="onSpeed">
           <output>{{ formatSpeed(SPEEDS[speedIdx]) }}</output>
         </label>
+        </div>
+        <div class="m3-effects">
         <p class="m3-meter">
-          Bright overcast, ISO 400. The M3 has no meter: sunny 16 says f/8 at 1/250.
+          Bright overcast, ISO 400. The M3 has no meter: sunny 16 says f/8 at 1/250. {{ meterHint }}
           <span :class="exposureClass">{{ formatStops(error) }}</span>
         </p>
+        <dl class="m3-readout" aria-label="What these settings do to the photograph">
+          <div v-for="row in effects" :key="row.label">
+            <dt>{{ row.label }}</dt>
+            <dd :class="row.ok === true ? 'is-ok' : row.ok === false ? 'is-off' : ''">{{ row.value }}</dd>
+          </div>
+        </dl>
+        </div>
       </section>
     </div>
     <div class="m3-actions">
@@ -80,11 +99,17 @@
 
     <section v-if="expanded && shots.length" class="m3-sheet" aria-labelledby="m3-sheet-title">
       <h3 id="m3-sheet-title">Contact sheet · roll {{ roll }}</h3>
+      <figure class="m3-print">
+        <img :src="selected.src" :alt="`Frame ${selected.frame}, enlarged: ${selected.caption}`" width="600" height="400">
+        <figcaption><b>Frame {{ selected.frame }}</b> {{ selected.caption }}<span>{{ selected.notes }}</span></figcaption>
+      </figure>
       <ol>
         <li v-for="shot in shots" :key="shot.frame">
-          <img :src="shot.src" :alt="`Frame ${shot.frame}: ${shot.caption}`" width="150" height="100">
-          <span>{{ shot.frame }}</span>
-          <small>{{ shot.caption }}</small>
+          <button type="button" :aria-pressed="shot.frame === selected.frame" :aria-label="`Enlarge frame ${shot.frame}`" @click="selectedFrame = shot.frame">
+            <img :src="shot.src" alt="" width="150" height="100">
+            <span>{{ shot.frame }}</span>
+            <small>{{ shot.caption }}</small>
+          </button>
         </li>
       </ol>
     </section>
@@ -95,14 +120,16 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 import {
   APERTURES, FRAME_PITCH, ROLL, SPEEDS, distanceAt, exposureError, formatAperture, formatDistance,
-  formatSpeed, formatStops, shutterPlan,
+  formatMm, formatSpeed, formatStops, shutterPlan,
 } from '/src/lib/camera/optics.js';
-import { drawViewfinder, exposeFrame, isAligned } from '/src/lib/camera/sceneArt.js';
+import { STILL_TIME, drawViewfinder, isAligned } from '/src/lib/camera/sceneArt.js';
+import { exposeFrame, measure } from '/src/lib/camera/print.js';
 import { placeLabels } from '/src/lib/camera/labels.js';
 import { LABELS, LEVER_STROKE, PARTS } from '/src/lib/camera/m3/layout.js';
 
 const stage = ref(null);
 const finder = ref(null);
+const preview = ref(null);
 const loading = ref(true);
 const failed = ref(false);
 const ready3d = ref(false);
@@ -115,7 +142,7 @@ const flash = ref(false);
 const expanded = ref(false);
 
 const focusV = ref(1);
-const apertureIdx = ref(4);
+const apertureIdx = ref(APERTURES.indexOf(8));
 const speedIdx = ref(8);
 const frame = ref(0);
 const roll = ref(1);
@@ -123,12 +150,50 @@ const loaded = ref(true);
 const cocked = ref(false);
 const busy = ref(null);
 const shots = ref([]);
+const selectedFrame = ref(null);
+const selected = computed(() => shots.value.find((shot) => shot.frame === selectedFrame.value) ?? shots.value.at(-1));
 const status = ref('Wind on to bring frame 1 into the gate.');
 
 const distance = computed(() => distanceAt(focusV.value));
 const aligned = computed(() => isAligned(distance.value));
 const error = computed(() => exposureError(APERTURES[apertureIdx.value], SPEEDS[speedIdx.value]));
 const exposureClass = computed(() => (Math.abs(error.value) < 0.34 ? 'is-ok' : Math.abs(error.value) < 1.5 ? 'is-near' : 'is-off'));
+/* How the film copes with an exposure error. Negative film has wide
+   latitude on the over side and very little on the under side. */
+function negativeNote(error) {
+  if (error > 4.5) return { value: 'very dense, highlights blocked', ok: false };
+  if (error > 2.5) return { value: 'dense, the sky blocks up', ok: false };
+  if (error > 0.7) return { value: 'dense, prints fine', ok: true };
+  if (error >= -0.7) return { value: 'normal', ok: true };
+  if (error >= -1.7) return { value: 'thin, weak shadows', ok: null };
+  return { value: 'thin, shadows lost', ok: false };
+}
+/* The lens scales, done live: what the current settings do to the frame. */
+function effectsOf(focus, aperture, speed) {
+  const m = measure({ focus, aperture, speed });
+  const [near, far] = m.depth;
+  const rows = [
+    { label: 'Depth of field', value: `${formatDistance(near)} – ${formatDistance(far)}`, ok: null },
+    { label: 'Subject at 2.4 m', value: m.sharp(m.subjectBlur) ? 'sharp' : `${formatMm(m.subjectBlur)} blur`, ok: m.sharp(m.subjectBlur) },
+    { label: 'Gulls in flight', value: m.sharp(m.gulls) ? `frozen (${formatMm(m.gulls)})` : `${formatMm(m.gulls)} streak`, ok: m.sharp(m.gulls) },
+    { label: 'Hand shake', value: m.sharp(m.shake) ? 'steady' : `${formatMm(m.shake)} blur`, ok: m.sharp(m.shake) },
+  ];
+  rows.push({ label: 'Negative', ...negativeNote(exposureError(aperture, speed)) });
+  if (m.reciprocity >= 0.25) rows.push({ label: 'Reciprocity', value: `−${m.reciprocity.toFixed(1)} stop`, ok: false });
+  return rows;
+}
+/* Sunny 16 worked out for the chosen f-stop: the speed that exposes
+   correctly, or why no speed on the M3 dial can. */
+const meterHint = computed(() => {
+  const n = APERTURES[apertureIdx.value];
+  const best = SPEEDS.reduce((a, t) => (Math.abs(exposureError(n, t)) < Math.abs(exposureError(n, a)) ? t : a));
+  const off = exposureError(n, best);
+  if (Math.abs(off) < 0.6) return `At ${formatAperture(n)} use ${formatSpeed(best)}.`;
+  return off > 0
+    ? `At ${formatAperture(n)} even 1/1000 is ${Math.round(off)} stops over. The negative copes, but an ND filter would fix it.`
+    : `At ${formatAperture(n)} even 1 s is ${Math.round(-off)} stops too dark.`;
+});
+const effects = computed(() => effectsOf(distance.value, APERTURES[apertureIdx.value], SPEEDS[speedIdx.value]));
 const canWind = computed(() => !busy.value && loaded.value && !cocked.value && frame.value < ROLL);
 
 const CURTAIN = 21;
@@ -236,6 +301,7 @@ async function shoot() {
     return;
   }
   busy.value = 'exposing';
+  const moment = sceneTime();
   const speed = SPEEDS[speedIdx.value];
   const travel = xray.value || exploded.value ? 950 : 240;
   const plan = shutterPlan(speed, travel);
@@ -252,20 +318,22 @@ async function shoot() {
   });
   flash.value = false;
   model?.setExposureRays(false);
-  recordFrame(speed);
+  recordFrame(speed, moment);
   cocked.value = false;
   await tween(120, (t) => model?.setRelease((1 - t) * 1.4));
   busy.value = null;
 }
 
-function recordFrame(speed) {
+function recordFrame(speed, time) {
   const n = frame.value;
   const aperture = APERTURES[apertureIdx.value];
-  const { print, negative } = exposeFrame({ focus: distance.value, aperture, speed, error: error.value, seed: n + roll.value * 37 });
+  const { print, negative } = exposeFrame({ focus: distance.value, aperture, speed, error: error.value, seed: n + roll.value * 37, time });
   negatives.set(n, negative);
   model?.setFilm(filmPos, negatives);
   const caption = `${formatAperture(aperture)} · ${formatSpeed(speed)} · ${formatDistance(distance.value)} · ${formatStops(error.value)}`;
-  shots.value = [...shots.value, { frame: n, src: print.toDataURL('image/jpeg', 0.86), caption }];
+  const notes = effectsOf(distance.value, aperture, speed).map((row) => `${row.label}: ${row.value}.`).join(' ');
+  shots.value = [...shots.value, { frame: n, src: print.toDataURL('image/jpeg', 0.9), caption, notes }];
+  selectedFrame.value = n;
   const sharp = aligned.value ? 'sharp' : 'focus missed';
   status.value = n >= ROLL
     ? `Frame ${n} exposed. That was the last frame: rewind the film.`
@@ -295,6 +363,7 @@ function load() {
   frame.value = 0;
   if (shots.value.length) roll.value += 1;
   shots.value = [];
+  selectedFrame.value = null;
   loaded.value = true;
   cocked.value = false;
   model?.setFilm(0, negatives);
@@ -309,16 +378,19 @@ function onFocus(event) {
   focusV.value = Number(event.target.value);
   model?.setFocus(focusV.value);
   paintFinder();
+  requestPreview();
   render();
 }
 function onAperture(event) {
   apertureIdx.value = Number(event.target.value);
   model?.setAperture(apertureIdx.value);
+  requestPreview();
   render();
 }
 function onSpeed(event) {
   speedIdx.value = Number(event.target.value);
   model?.setSpeed(speedIdx.value);
+  requestPreview();
   render();
 }
 function cycle(kind) {
@@ -326,15 +398,54 @@ function cycle(kind) {
   if (kind === 'aperture') onAperture({ target: { value: (apertureIdx.value + 1) % APERTURES.length } });
 }
 
-function paintFinder() {
-  const canvas = finder.value;
-  if (!canvas) return;
+/* --- viewfinder and film preview --- */
+/* One scene clock drives the gulls in the finder, the preview and the
+   exposure, so a frame records the gulls where they were at release. */
+const sceneTime = () => (reduced() ? STILL_TIME : performance.now() / 1000);
+const FINDER_MS = 33;
+const PREVIEW_MS = 160;
+const PREVIEW_MAX_W = 480;
+let finderRaf = 0, previewRaf = 0, lastFinder = 0, lastPreview = 0;
+
+function fitCanvas(canvas, ratio, maxWidth = Infinity) {
+  if (!canvas) return false;
   const { width } = canvas.getBoundingClientRect();
-  if (!width) return;
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
-  const w = Math.round(width * ratio), h = Math.round(width * ratio * (2 / 3));
+  if (!width) return false;
+  const w = Math.round(Math.min(maxWidth, width * ratio)), h = Math.round((w * 2) / 3);
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-  drawViewfinder(canvas, distance.value);
+  return true;
+}
+function paintFinder() {
+  if (fitCanvas(finder.value, Math.min(window.devicePixelRatio || 1, 2))) drawViewfinder(finder.value, distance.value, sceneTime());
+}
+function paintPreview() {
+  previewRaf = 0;
+  const canvas = preview.value;
+  if (!fitCanvas(canvas, 1, PREVIEW_MAX_W)) return;
+  const { print } = exposeFrame({
+    focus: distance.value, aperture: APERTURES[apertureIdx.value], speed: SPEEDS[speedIdx.value],
+    error: error.value, seed: 7, time: sceneTime(), width: canvas.width, negative: false,
+  });
+  canvas.getContext('2d').drawImage(print, 0, 0, canvas.width, canvas.height);
+}
+function requestPreview() {
+  if (finderRaf) lastPreview = 0;
+  else if (!previewRaf) previewRaf = requestAnimationFrame(paintPreview);
+}
+/* While the bench is open the gulls fly: redraw the finder at ~30 fps and
+   the film preview at ~6 fps. Reduced motion keeps them still. */
+function liveLoop(now) {
+  finderRaf = 0;
+  if (!expanded.value || disposed || reduced() || document.hidden) return;
+  if (now - lastFinder >= FINDER_MS && finder.value) { lastFinder = now; drawViewfinder(finder.value, distance.value, sceneTime()); }
+  if (now - lastPreview >= PREVIEW_MS) { lastPreview = now; paintPreview(); }
+  finderRaf = requestAnimationFrame(liveLoop);
+}
+const resumeLive = () => { if (!document.hidden && expanded.value) startLive(); };
+function startLive() {
+  paintFinder();
+  paintPreview();
+  if (!finderRaf && expanded.value) finderRaf = requestAnimationFrame(liveLoop);
 }
 
 /* --- views --- */
@@ -352,7 +463,7 @@ async function toggleExpanded() {
     expanded.value = next;
     if (!next) { labels.value = false; hovered.value = null; model?.setHighlight(null); }
     await nextTick();
-    paintFinder();
+    if (next) startLive();
     render();
   };
   if (document.startViewTransition && !reduced()) await document.startViewTransition(apply).finished;
@@ -425,6 +536,7 @@ function syncTheme() {
 
 function resize() {
   paintFinder();
+  requestPreview();
   if (!renderer) return;
   const { width, height } = stage.value.getBoundingClientRect();
   renderer.setSize(width, height, false);
@@ -515,6 +627,7 @@ function bindPointer() {
 
 onMounted(async () => {
   preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.addEventListener('visibilitychange', resumeLive);
   resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stage.value);
   paintFinder();
@@ -570,6 +683,9 @@ onBeforeUnmount(() => {
   disposed = true;
   request.cancelled = true;
   cancelAnimationFrame(raf);
+  cancelAnimationFrame(finderRaf);
+  cancelAnimationFrame(previewRaf);
+  document.removeEventListener('visibilitychange', resumeLive);
   tweens.clear();
   removeListeners();
   resizeObserver?.disconnect();
@@ -723,8 +839,9 @@ onBeforeUnmount(() => {
 
 .m3-deck {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 22px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "finder film" "settings settings";
+  gap: 18px 22px;
   padding: 16px 0 12px;
   border-top: 1px solid var(--rule_soft);
 }
@@ -746,7 +863,22 @@ onBeforeUnmount(() => {
 .m3-finder-note { margin: 10px 0 0; font: 10px/1.5 var(--font-mono); color: var(--muted); }
 .m3-finder-note.is-ok { color: var(--accent); }
 
-.m3-settings { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.m3-finder { grid-area: finder; min-width: 0; }
+.m3-film { grid-area: film; min-width: 0; }
+/* The preview reads as a small print: paper border, no rounded finder mask. */
+.m3-film canvas {
+  display: block;
+  width: calc(100% - 12px);
+  margin: 6px;
+  aspect-ratio: 3 / 2;
+  background: #f2efe6;
+  box-shadow: 0 0 0 6px #f2efe6, 0 0 0 7px var(--rule_soft);
+}
+.m3-film .m3-finder-note span { font-weight: 600; }
+.m3-film .is-ok { color: var(--accent); }
+.m3-film .is-off { color: var(--control-red); }
+.m3-settings { grid-area: settings; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 28px; min-width: 0; }
+.m3-sliders, .m3-effects { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .m3-setting { display: grid; grid-template-columns: 62px minmax(0, 1fr) 58px; align-items: center; gap: 10px; font: 10px var(--font-mono); color: var(--muted); }
 .m3-setting input { width: 100%; min-width: 0; accent-color: var(--accent); }
 .m3-setting output { color: var(--fg); font-variant-numeric: tabular-nums; text-align: right; }
@@ -755,6 +887,12 @@ onBeforeUnmount(() => {
 .m3-meter .is-ok { color: var(--accent); }
 .m3-meter .is-near { color: var(--fg); }
 .m3-meter .is-off { color: var(--control-red); }
+.m3-readout { display: grid; gap: 3px; margin: 0; font: 10px/1.5 var(--font-mono); }
+.m3-readout div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dotted var(--rule_soft); padding-bottom: 2px; }
+.m3-readout dt { color: var(--muted); }
+.m3-readout dd { margin: 0; color: var(--fg); font-variant-numeric: tabular-nums; text-align: right; }
+.m3-readout .is-ok { color: var(--accent); }
+.m3-readout .is-off { color: var(--control-red); }
 .m3-actions {
   display: flex;
   align-items: center;
@@ -798,15 +936,24 @@ onBeforeUnmount(() => {
   background: #141716;
   scrollbar-width: thin;
 }
-.m3-sheet li { flex: 0 0 150px; display: grid; gap: 3px; color: #c9cfcb; }
-.m3-sheet img { width: 150px; height: 100px; display: block; outline: 1px solid rgba(255, 255, 255, 0.08); }
+.m3-print { margin: 0 0 10px; padding: 14px; background: #141716; display: grid; gap: 10px; justify-items: center; }
+.m3-print img { width: min(600px, 100% - 16px); height: auto; aspect-ratio: 3 / 2; display: block; border: 8px solid #f2efe6; }
+.m3-print figcaption { width: 100%; max-width: 616px; margin: 0; font: 10px/1.6 var(--font-mono); letter-spacing: 0; text-transform: none; opacity: 1; color: #c9cfcb; }
+.m3-print figcaption b { color: #f0c27a; font-weight: 600; margin-right: 6px; }
+.m3-print figcaption span { display: block; color: #9aa39e; }
+.m3-sheet li { flex: 0 0 150px; }
+.m3-sheet li button { display: grid; gap: 3px; width: 100%; padding: 0; border: 0; background: none; color: #c9cfcb; text-align: left; cursor: pointer; }
+.m3-sheet li button[aria-pressed="true"] img { outline: 2px solid #f0c27a; }
+.m3-sheet li button:hover img { outline-color: rgba(240, 194, 122, 0.6); }
+.m3-sheet li img { width: 150px; height: 100px; display: block; outline: 1px solid rgba(255, 255, 255, 0.08); }
 .m3-sheet li span { font: 600 10px var(--font-mono); color: #f0c27a; }
 .m3-sheet small { font: 9px/1.4 var(--font-mono); color: #9aa39e; }
 
 button:focus-visible, .m3-stage:focus-visible, .m3-setting input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 @media (max-width: 700px) {
-  .m3-deck { grid-template-columns: minmax(0, 1fr); }
+  .m3-deck { grid-template-columns: minmax(0, 1fr); grid-template-areas: "finder" "film" "settings"; }
+  .m3-settings { grid-template-columns: minmax(0, 1fr); }
   .m3 { justify-self: center; }
   .m3-stage { height: 208px; }
   .is-expanded .m3-stage { height: 340px; }

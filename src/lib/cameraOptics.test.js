@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  NEAR, blurMm, distanceAt, exposureError, extension, mirrorAngle, rangefinderShift,
+  COC, NEAR, blurMm, depthOfField, reciprocityStops, shakeMm, distanceAt, exposureError, extension, mirrorAngle, rangefinderShift,
   rollRadius, shutterPlan, sliderAt, formatStops,
 } from './camera/optics.js';
 
@@ -50,4 +50,21 @@ test('fast speeds expose through a slit; slow speeds open the whole gate', () =>
 test('film roll grows from its core', () => {
   assert.equal(rollRadius(0, 6), 6);
   assert.ok(rollRadius(1400, 6) > 9 && rollRadius(1400, 6) < 10.5);
+});
+
+test('depth of field is about ±15 cm at f/2 and 2.4 m, and grows when stopped down', () => {
+  const [near, far] = depthOfField(2400, 2);
+  assert.ok(near > 2250 && near < 2300 && far > 2520 && far < 2580, `${near}–${far}`);
+  const [near16, far16] = depthOfField(2400, 16);
+  assert.ok(near16 < near && far16 > far);
+  assert.equal(depthOfField(Infinity, 8)[1], Infinity);
+});
+
+test('long exposures lose speed to reciprocity and gain hand shake', () => {
+  assert.equal(reciprocityStops(1 / 250), 0);
+  close(reciprocityStops(1), 1);
+  // EV 14 scene at ISO 400, f/8 for 1 s: 14 − 6 stops, minus 1 for reciprocity.
+  close(exposureError(8, 1), 14 - 6 - 1);
+  assert.ok(shakeMm(1 / 60) < COC);
+  assert.ok(shakeMm(1 / 4) > 10 * COC);
 });

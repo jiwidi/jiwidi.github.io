@@ -1,11 +1,18 @@
 // A small painted scene at known distances. The viewfinder draws it sharp
-// with the rangefinder ghost; the film frame draws it through the lens:
-// per-layer defocus, exposure, grain and hand shake.
-import { blurMm, rangefinderShift } from './optics.js';
+// with the rangefinder ghost. print.js exposes it through the lens.
+import { rangefinderShift } from './optics.js';
 
 export const SUBJECT = 2400;
-const FRAME_W = 300;               // virtual frame units, 3:2 like 36 × 24
-const FRAME_H = 200;
+export const FRAME_W = 300;        // virtual frame units, 3:2 like 36 × 24
+export const FRAME_H = 200;
+/* Two gulls, ~1 m wingspan, 14 m away, flying at 8 m/s:
+   8000 × 50 / 14000 ≈ 28 mm/s across the film. */
+export const GULL_FILM_SPEED = 28;
+const GULL_UNITS_PER_S = (GULL_FILM_SPEED * FRAME_W) / 36;   // ≈ 233 frame units per second
+const GULL_LOOP = 4.4;             // s: one pass across the finder, then a pause
+const GULL_ENTRY = 210;            // frame units right of the drawn position at the start of a pass
+/* A scene time with the gulls in the middle of the frame, for still views. */
+export const STILL_TIME = GULL_ENTRY / GULL_UNITS_PER_S;
 const VF_PAD_X = 46;               // the finder shows more than the 50 mm frame
 const VF_PAD_Y = 31;
 const PATCH = { x: 123, y: 82, w: 54, h: 36 };
@@ -25,7 +32,7 @@ function disc(ctx, x, y, r) {
   ctx.fill();
 }
 
-const LAYERS = [
+export const LAYERS = [
   { d: Infinity, draw(ctx) {
     const sky = ctx.createLinearGradient(0, -40, 0, 150);
     sky.addColorStop(0, '#a9c6d6');
@@ -51,6 +58,26 @@ const LAYERS = [
     blob(ctx, [[246, 106], [273, 88], [300, 106]]);
     ctx.fillStyle = '#3e4f45';
     ctx.fillRect(266, 116, 9, 16);
+  } },
+  { d: 14000, motion: [-GULL_FILM_SPEED, 3], draw(ctx, t = STILL_TIME) {
+    const pass = t % GULL_LOOP;
+    const dx = GULL_ENTRY - pass * GULL_UNITS_PER_S;
+    const dy = pass * GULL_UNITS_PER_S * (3 / GULL_FILM_SPEED);
+    ctx.strokeStyle = ctx.fillStyle = '#46534e';
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = ctx.lineJoin = 'round';
+    for (const [x0, y0, s, phase] of [[186, 46, 1, 0], [210, 30, 0.8, 1.3]]) {
+      const x = x0 + dx, y = y0 + dy - GULL_ENTRY * 3 / GULL_FILM_SPEED;
+      const flap = Math.sin(t * Math.PI * 2 * 2.3 + phase) * 4 * s;
+      ctx.beginPath();
+      ctx.moveTo(x - 14 * s, y - s + flap);
+      ctx.quadraticCurveTo(x - 7 * s, y - 9 * s + flap * 0.4, x, y);
+      ctx.quadraticCurveTo(x + 7 * s, y - 9 * s + flap * 0.4, x + 14 * s, y - s + flap);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(x, y + 0.6 * s, 3.4 * s, 1.8 * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
   } },
   { d: 7000, draw(ctx) {
     const field = ctx.createLinearGradient(0, 130, 0, 260);
@@ -101,50 +128,16 @@ const LAYERS = [
   } },
 ];
 
-const canvasPool = new Map();
-function scratch(key, w, h) {
-  let c = canvasPool.get(key);
-  if (!c) { c = document.createElement('canvas'); canvasPool.set(key, c); }
-  if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
-  const ctx = c.getContext('2d');
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, w, h);
-  return [c, ctx];
-}
-
-/* Defocus by drawing small and scaling up: cheap, and works where
-   CanvasRenderingContext2D.filter does not. */
-function drawBlurred(target, layer, w, h, radius) {
-  const unit = w / FRAME_W;
-  if (radius < 0.6) {
-    target.save();
-    target.scale(unit, unit);
-    layer.draw(target);
-    target.restore();
-    return;
-  }
-  const s = 1 / (1 + radius * 0.75);
-  const sw = Math.max(2, Math.round(w * s)), sh = Math.max(2, Math.round(h * s));
-  const [small, ctx] = scratch('blur', sw, sh);
-  ctx.scale(sw / FRAME_W, sh / FRAME_H);
-  layer.draw(ctx);
-  target.save();
-  target.imageSmoothingEnabled = true;
-  target.imageSmoothingQuality = 'high';
-  target.drawImage(small, 0, 0, w, h);
-  target.restore();
-}
-
 /* Draw the viewfinder: the scene sharp (a rangefinder never looks through
    the lens), the 50 mm bright-line frame and the double-image patch. */
-export function drawViewfinder(canvas, focus) {
+export function drawViewfinder(canvas, focus, time = STILL_TIME) {
   const ctx = canvas.getContext('2d');
   const w = canvas.width, h = canvas.height;
   const sx = w / (FRAME_W + VF_PAD_X * 2), sy = h / (FRAME_H + VF_PAD_Y * 2);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, w, h);
   ctx.setTransform(sx, 0, 0, sy, VF_PAD_X * sx, VF_PAD_Y * sy);
-  LAYERS.forEach((layer) => layer.draw(ctx));
+  LAYERS.forEach((layer) => layer.draw(ctx, time));
 
   ctx.save();
   ctx.beginPath();
@@ -157,7 +150,7 @@ export function drawViewfinder(canvas, focus) {
     const shift = Math.max(-SHIFT_LIMIT, Math.min(SHIFT_LIMIT, rangefinderShift(layer.d, focus) * SHIFT_SCALE));
     ctx.save();
     ctx.translate(shift, 0);
-    layer.draw(ctx);
+    layer.draw(ctx, time);
     ctx.restore();
   }
   ctx.restore();
@@ -179,53 +172,4 @@ export function drawViewfinder(canvas, focus) {
 
 export function isAligned(focus) {
   return Math.abs(rangefinderShift(SUBJECT, focus) * SHIFT_SCALE) < 3;
-}
-
-/* Expose one frame. Returns the print (positive) and the negative as it
-   sits on the film, both as canvases the caller may keep. */
-export function exposeFrame({ focus, aperture, speed, error, seed = 1 }) {
-  const w = 300, h = 200;
-  const [comp, ctx] = scratch('comp', w, h);
-  for (const layer of LAYERS) {
-    const radius = Math.min(16, (blurMm(layer.d, focus, aperture) / 36) * w);
-    drawBlurred(ctx, layer, w, h, radius);
-  }
-  const shake = speed >= 1 / 15 ? 1.6 * (Math.log2(speed * 15) + 1.4) : 0;
-  const print = document.createElement('canvas');
-  print.width = w; print.height = h;
-  const out = print.getContext('2d');
-  const steps = shake ? 7 : 1;
-  for (let i = 0; i < steps; i++) {
-    out.globalAlpha = 1 / (i + 1);
-    const t = steps === 1 ? 0 : i / (steps - 1) - 0.5;
-    out.drawImage(comp, t * shake, t * shake * 0.45);
-  }
-  out.globalAlpha = 1;
-
-  const image = out.getImageData(0, 0, w, h);
-  const negative = document.createElement('canvas');
-  negative.width = w; negative.height = h;
-  const nctx = negative.getContext('2d');
-  const neg = nctx.createImageData(w, h);
-  const gain = 2 ** error;
-  let state = seed * 9301 + 49297;
-  const random = () => ((state = (state * 9301 + 49297) % 233280) / 233280);
-  for (let i = 0; i < image.data.length; i += 4) {
-    const px = (i / 4) % w, py = Math.floor(i / 4 / w);
-    const lum = (0.3 * image.data[i] + 0.59 * image.data[i + 1] + 0.11 * image.data[i + 2]) / 255;
-    const vignette = 1 - 0.28 * (((px - w / 2) / w) ** 2 + ((py - h / 2) / h) ** 2) * 2.2;
-    // Film responds in stops: more light pushes every tone toward white.
-    const exposed = 1 - (1 - Math.min(1, lum * vignette)) ** gain;
-    const p = Math.max(0, Math.min(1, exposed + (random() - 0.5) * 0.07));
-    const v = Math.round(p * 255);
-    image.data[i] = image.data[i + 1] = image.data[i + 2] = v;
-    const density = 1 - p;
-    neg.data[i] = 255 - density * 190;
-    neg.data[i + 1] = 196 - density * 160;
-    neg.data[i + 2] = 118 - density * 108;
-    neg.data[i + 3] = 255;
-  }
-  out.putImageData(image, 0, 0);
-  nctx.putImageData(neg, 0, 0);
-  return { print, negative };
 }
